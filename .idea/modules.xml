@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/calendar-predict1.iml" filepath="$PROJECT_DIR$/.idea/calendar-predict1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/calendar-predict.iml" filepath="$PROJECT_DIR$/.idea/modules/calendar-predict.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/calendar-predict.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/calendar-predict.app.iml" />
     </modules>
   </component>
 </project>
