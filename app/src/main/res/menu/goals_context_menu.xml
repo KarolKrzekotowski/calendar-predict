@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/edytuj_cel"
+        android:title="@string/edytuj_cel"
+        />
+    <item android:id="@+id/usun"
+        android:title="@string/usu_cel" />
+</menu>

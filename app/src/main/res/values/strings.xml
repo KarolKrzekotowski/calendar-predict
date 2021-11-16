@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">calendar-predict</string>
-    <string name="new_goal">Nowy cel...</string>
+    <string name="new_goal">Nowy cel…</string>
     <string name="my_goals">Moje cele</string>
     <string name="dodaj_nowy_cel">Dodaj nowy cel</string>
     <string name="podaj_ilo">Podaj ilość:</string>
@@ -14,4 +14,6 @@
     <string name="wybierz_typ_celu">Wybierz typ celu:</string>
     <string name="potwierd">Potwierdź</string>
     <string name="wpisz_kategori">Wpisz kategorię</string>
+    <string name="edytuj_cel">Edytuj cel…</string>
+    <string name="usu_cel">Usuń cel</string>
 </resources>

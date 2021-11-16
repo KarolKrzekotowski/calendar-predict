@@ -1,11 +1,13 @@
+package com.example.calendar_predict
+
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import com.example.calendar_predict.AddGoalActivity
-import java.util.*
+
+import java.util.Calendar
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
 

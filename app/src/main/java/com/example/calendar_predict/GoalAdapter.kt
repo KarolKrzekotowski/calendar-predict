@@ -6,8 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalDate
+import java.time.LocalTime
 
 class GoalAdapter(private val goalList: MutableList<Goal>)  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
     var context: Context? = null
@@ -47,10 +48,23 @@ class GoalAdapter(private val goalList: MutableList<Goal>)  : RecyclerView.Adapt
         }
 
         val nextDue = viewHolder.nextDueTextView
-        nextDue.text = goal.kind.toString()
 
-        viewHolder.itemView.setOnLongClickListener{
-            Toast.makeText(context, "You triggered me! ~" + goal.name + "LongClickListener", Toast.LENGTH_LONG).show()
+        val date = LocalDate.now()
+        val time = LocalTime.now()
+
+        val secsTillDayEnd = LocalTime.of(23, 59, 59).toSecondOfDay() - time.toSecondOfDay()
+        val daysTillWeekEnd = 7 - date.dayOfWeek.value
+        //pierwszy dzień następnego miesiąca - minus dziś - 1
+        val daysTillMonthEnd = LocalDate.of(date.year + date.monthValue / 12, (date.monthValue) % 12 + 1, 1).toEpochDay() - date.toEpochDay() - 1
+        nextDue.text = when(goal.kind) {
+            GoalKind.DAY -> "Pozostało ${secsTillDayEnd / 3600} godzin i ${(secsTillDayEnd % 3600) / 60} minut"
+            GoalKind.WEEK -> "Pozostało $daysTillWeekEnd dni i ${secsTillDayEnd / 3600} godzin"
+            GoalKind.MONTH -> "Pozostało $daysTillMonthEnd dni i ${secsTillDayEnd / 3600} godzin"
+        }
+
+        viewHolder.itemView.setOnLongClickListener {
+            Goals.showPopup(it, position)
+
             return@setOnLongClickListener true
         }
     }
