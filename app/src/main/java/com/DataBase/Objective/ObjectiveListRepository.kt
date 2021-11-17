@@ -1,8 +1,7 @@
-package com.DataBase
+package com.DataBase.Objective
 
 import androidx.lifecycle.LiveData
-import com.DataBase.Objective.Objective
-import com.DataBase.Objective.ObjectiveWithCategory
+import com.DataBase.AppDBDao
 
 class ObjectiveListRepository(private val appDBDao: AppDBDao) {
     val allObjectivesWithCategory: LiveData<List<ObjectiveWithCategory>> = appDBDao.readAllObjectivesWithCategories()

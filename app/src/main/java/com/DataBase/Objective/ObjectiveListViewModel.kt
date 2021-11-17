@@ -1,11 +1,10 @@
-package com.DataBase
+package com.DataBase.Objective
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.DataBase.Objective.Objective
-import com.DataBase.Objective.ObjectiveWithCategory
+import com.DataBase.AppDataBase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
