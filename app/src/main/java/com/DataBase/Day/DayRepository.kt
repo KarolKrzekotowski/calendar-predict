@@ -18,6 +18,8 @@ class DayRepository(private val appDBDao: AppDBDao) {
         calendar[Calendar.MILLISECOND] = 0
 
         daysWithActivities = appDBDao.readDayWithActivities(calendar.time)
+
+
     }
 
     suspend fun addActivity(activity: Activity){
@@ -30,5 +32,9 @@ class DayRepository(private val appDBDao: AppDBDao) {
 
     suspend fun deleteActivity(activity: Activity){
         appDBDao.deleteActivity(activity)
+    }
+
+    suspend fun addDay(day: Day){
+        appDBDao.addDay(day)
     }
 }

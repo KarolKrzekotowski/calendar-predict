@@ -33,12 +33,11 @@ abstract class AppDataBase : RoomDatabase() {
                     context.applicationContext,
                     AppDataBase::class.java,
                     "calendar_predict_database"
-                )
-                    .createFromAsset("database/calendar_predict_database.db")
-                    .build()
+                ).build()
                 INSTANCE = instance
                 return instance
             }
         }
     }
 }
+//     .createFromAsset("database/calendar_predict_database.db")
