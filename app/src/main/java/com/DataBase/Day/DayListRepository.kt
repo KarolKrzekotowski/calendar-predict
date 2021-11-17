@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import com.DataBase.AppDBDao
 
 class DayListRepository(private val appDBDao: AppDBDao) {
-    val allDaysWithActivities: LiveData<List<DayWithActivities>> = appDBDao.readDayWithActivities()
+    val allDaysWithActivities: LiveData<List<DayWithActivities>> = appDBDao.readAllDaysWithActivities()
 
     suspend fun addDay(day: Day){
         appDBDao.addDay(day)

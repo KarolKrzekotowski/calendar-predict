@@ -8,6 +8,7 @@ import com.DataBase.Day.Day
 import com.DataBase.Day.DayWithActivities
 import com.DataBase.Objective.Objective
 import com.DataBase.Objective.ObjectiveWithCategory
+import java.util.*
 
 @Dao
 interface AppDBDao {
@@ -62,8 +63,12 @@ interface AppDBDao {
     suspend fun deleteDay(day: Day)
 
     @Transaction
+    @Query("select * from day_table where date = :date")
+    fun readDayWithActivities(date: Date):LiveData<DayWithActivities>
+
+    @Transaction
     @Query("select * from day_table")
-    fun readDayWithActivities():LiveData<List<DayWithActivities>>
+    fun readAllDaysWithActivities():LiveData<List<DayWithActivities>>
 
 //    @Query("select * from category_table where id in (:categories)")
 //    suspend fun loadCategories(categories: List<Category>): List<Category>
