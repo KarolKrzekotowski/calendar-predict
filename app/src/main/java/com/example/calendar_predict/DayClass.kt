@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.DataBase.Activity.Activity
 import com.DataBase.Day.DayViewModel
 
 
@@ -31,8 +32,11 @@ class DayClass : Fragment() {
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = adapter
 
+        //var day_id = dayViewModel.dayWithActivities.value.day.id
+
         dayViewModel = ViewModelProvider(this).get(DayViewModel::class.java)
 
+       // var activity = Activity(0, )
 //        dayViewModel.dayWithActivities.observe(viewLifecycleOwner, Observer { data ->
 //            if(data != null){
 //                adapter.setData(data.activityWithCategory)

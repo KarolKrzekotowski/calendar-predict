@@ -33,7 +33,9 @@ abstract class AppDataBase : RoomDatabase() {
                     context.applicationContext,
                     AppDataBase::class.java,
                     "calendar_predict_database"
-                ).build()
+                )
+                    .createFromAsset("database/calendar_predict_database.db")
+                    .build()
                 INSTANCE = instance
                 return instance
             }
