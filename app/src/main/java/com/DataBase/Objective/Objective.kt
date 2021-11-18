@@ -12,9 +12,9 @@ import java.util.*
 data class Objective(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val category_id: Int,
-    val date_from : Date,
-    val date_to : Date,
-    val kind : Char,
-    val targetAmount: Int
+    var category_id: Int,
+    var date_from : Date,
+    var date_to : Date,
+    var kind : String,
+    var targetAmount: Int
 ): Parcelable

@@ -10,6 +10,6 @@ import kotlinx.android.parcel.Parcelize
 data class Rating(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val day_id: Int,
-    val rate : Int
+    var day_id: Int,
+    var rate : Int
 ): Parcelable

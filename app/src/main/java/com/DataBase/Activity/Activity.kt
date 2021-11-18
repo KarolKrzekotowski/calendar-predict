@@ -12,9 +12,9 @@ import java.util.*
 data class Activity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val day_id: Int,
-    val category_id: Int,
-    val hour_from: Date,
-    val hour_to: Date,
-    val name: String
+    var day_id: Int,
+    var category_id: Int,
+    var hour_from: Date,
+    var hour_to: Date,
+    var name: String
 ): Parcelable

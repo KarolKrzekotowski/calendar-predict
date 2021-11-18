@@ -12,6 +12,6 @@ import java.util.*
 data class Day(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val date: Date,
-    val evaluated : Int
+    var date: Date,
+    var evaluated : Int
 ): Parcelable

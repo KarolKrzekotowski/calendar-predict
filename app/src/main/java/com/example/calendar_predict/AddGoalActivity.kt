@@ -1,19 +1,25 @@
 package com.example.calendar_predict
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.DataBase.Category.CategoryViewModel
+import com.DataBase.Objective.Objective
+import com.DataBase.Objective.ObjectiveWithCategory
 import com.example.calendar_predict.databinding.ActivityAddGoalBinding
-import java.time.LocalDate
+import java.util.*
 
 class AddGoalActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddGoalBinding
     var amount = 15
-    var finishDate: LocalDate? = null
+    var finishDate: Date? = null
     var editingMode = false
+    var goal: ObjectiveWithCategory? = null
+
+    private lateinit var categoryViewModel: CategoryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,13 +28,17 @@ class AddGoalActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+
         val extras = intent.extras
         if (extras != null) {
             editingMode = true
             //check previously selected GoalKind box
-            val toCheck = when(extras.getSerializable("kind") as GoalKind) {
-                GoalKind.WEEK -> binding.weekly
-                GoalKind.MONTH -> binding.monthly
+
+            goal = extras.getParcelable<ObjectiveWithCategory>("goal")
+            val toCheck = when(goal!!.objective.kind) {
+                "WEEK" -> binding.weekly
+                "MONTH" -> binding.monthly
                 else -> binding.daily
             }
 
@@ -41,16 +51,15 @@ class AddGoalActivity : AppCompatActivity() {
                 box.isChecked = (box == toCheck)
             }
 
-            val category = extras.getString("name")
-            binding.editTextTaskName.setText(category, TextView.BufferType.EDITABLE)
+            binding.editTextTaskName.setText(goal!!.category.name, TextView.BufferType.EDITABLE)
 
-            amount = extras.getInt("amount")
+            amount = goal!!.objective.targetAmount
             binding.targetMinutes.text = "$amount minut"
 
-            finishDate = extras.getSerializable("date") as LocalDate?
+            finishDate = goal!!.objective.date_to
             if (finishDate != null) {
                 binding.checkBox.isChecked = true
-                binding.selectedDateTimeDeadline.text = "Data wygaśnięcia: ${finishDate!!.dayOfMonth}:${finishDate!!.monthValue}:${finishDate!!.year}\n"
+                binding.selectedDateTimeDeadline.text = "Data wygaśnięcia: ${finishDate!!.day}:${finishDate!!.month}:${finishDate!!.year}\n"
             }
 
             binding.iconPickerTextView.text = "Edytuj cel..."
@@ -82,7 +91,18 @@ class AddGoalActivity : AppCompatActivity() {
         }
     }
     fun setDate(year: Int, month: Int, day: Int) {
-        finishDate = LocalDate.of(year, month, day)
+
+        val calendar = java.util.Calendar.getInstance()
+        calendar[java.util.Calendar.YEAR] = year
+        calendar[java.util.Calendar.MONTH] = month
+        calendar[java.util.Calendar.DAY_OF_MONTH] = day
+        calendar[java.util.Calendar.HOUR_OF_DAY] = 0
+        calendar[java.util.Calendar.MINUTE] = 0
+        calendar[java.util.Calendar.SECOND] = 0
+        calendar[java.util.Calendar.MILLISECOND] = 0
+
+
+        finishDate = calendar.time
         binding.selectedDateTimeDeadline.text = "Data wygaśnięcia: $day:$month:$year\n"
     }
     fun cancelDateSetting() {
@@ -114,21 +134,24 @@ class AddGoalActivity : AppCompatActivity() {
         //TODO: select category instead of writing
         //TODO: update instead of inserting
 
+
+
         val name = binding.editTextTaskName.text.toString()
         val goalKind = when {
-            binding.daily.isChecked -> GoalKind.DAY
-            binding.weekly.isChecked -> GoalKind.WEEK
-            binding.monthly.isChecked -> GoalKind.MONTH
-            else -> GoalKind.DAY
+            binding.daily.isChecked -> "DAY"
+            binding.weekly.isChecked -> "WEEK"
+            binding.monthly.isChecked -> "MONTH"
+            else -> "DAY"
         }
 
-//        if (editingMode) {
-//
-//        } else {
-//
-//        }
+        if (editingMode) {
+            goal!!.objective.targetAmount = amount
+            categoryViewModel.updateObjective(goal!!.objective)
+        } else {
+            categoryViewModel.addObjective(Objective(0, 1, finishDate!!, finishDate!!, goalKind, amount))
+        }
         if (name != "") {
-            Goals.addGoalToList(Goal(name, goalKind, 0, amount, finishDate))
+//            Goals.addGoalToList(Goal(name, goalKind, 0, amount, finishDate))
 
             finish()
         }

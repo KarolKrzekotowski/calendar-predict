@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.DataBase.Objective.Objective
+import com.DataBase.Objective.ObjectiveWithCategory
 import java.time.LocalDate
 import java.time.LocalTime
 
-class GoalAdapter(private val goalList: MutableList<Goal>)  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
+class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
     var context: Context? = null
+    private var goalList = emptyList<ObjectiveWithCategory>()
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
 
@@ -34,13 +37,13 @@ class GoalAdapter(private val goalList: MutableList<Goal>)  : RecyclerView.Adapt
     // Involves populating data into the item through holder
     override fun onBindViewHolder(viewHolder: GoalAdapter.ViewHolder, position: Int) {
         // Get the data model based on position
-        val goal: Goal = goalList[position]
+        val goal: ObjectiveWithCategory = goalList[position]
         // Set item views based on your views and data model
         val title = viewHolder.goalNameTextView
-        title.text = goal.name
+        title.text = goal.category.name
         val amount = viewHolder.amountDoneTextView
-        amount.text = goal.amountDone.toString() + " / " + goal.targetAmount
-        if (goal.amountDone < goal.targetAmount) {
+        amount.text = "15 / " + " / " + goal.objective.targetAmount
+        if (15 < goal.objective.targetAmount) {
             amount.setTextColor(Color.RED)
         }
         else {
@@ -56,14 +59,16 @@ class GoalAdapter(private val goalList: MutableList<Goal>)  : RecyclerView.Adapt
         val daysTillWeekEnd = 7 - date.dayOfWeek.value
         //pierwszy dzień następnego miesiąca - minus dziś - 1
         val daysTillMonthEnd = LocalDate.of(date.year + date.monthValue / 12, (date.monthValue) % 12 + 1, 1).toEpochDay() - date.toEpochDay() - 1
-        nextDue.text = when(goal.kind) {
-            GoalKind.DAY -> "Pozostało ${secsTillDayEnd / 3600} godzin i ${(secsTillDayEnd % 3600) / 60} minut"
-            GoalKind.WEEK -> "Pozostało $daysTillWeekEnd dni i ${secsTillDayEnd / 3600} godzin"
-            GoalKind.MONTH -> "Pozostało $daysTillMonthEnd dni i ${secsTillDayEnd / 3600} godzin"
+
+        nextDue.text = when(goal.objective.kind) {
+            "DAY" -> "Pozostało ${secsTillDayEnd / 3600} godzin i ${(secsTillDayEnd % 3600) / 60} minut"
+            "WEEK" -> "Pozostało $daysTillWeekEnd dni i ${secsTillDayEnd / 3600} godzin"
+            "MONTH" -> "Pozostało $daysTillMonthEnd dni i ${secsTillDayEnd / 3600} godzin"
+            else -> ""
         }
 
         viewHolder.itemView.setOnLongClickListener {
-            Goals.showPopup(it, position)
+            Goals.showPopup(it, goal)
 
             return@setOnLongClickListener true
         }
@@ -74,17 +79,22 @@ class GoalAdapter(private val goalList: MutableList<Goal>)  : RecyclerView.Adapt
         return goalList.size
     }
 
-    fun addGoalToList(goal: Goal) {
-        goalList.add(goal)
+//    fun addGoalToList(goal: Goal) {
+//        goalList.add(goal)
+//    }
+
+    fun getGoal(position: Int): ObjectiveWithCategory {
+        return goalList[position]
     }
 
-    fun getGoalList(): MutableList<Goal> {
-        return goalList
+    fun setData(data: List<ObjectiveWithCategory>){
+        this.goalList = data
+        notifyDataSetChanged()
     }
 
-    fun sortByTitle() {
-        goalList.sortWith { t1, t2 ->
-            t1.name.compareTo(t2.name)
-        }
-    }
+//    fun sortByTitle() {
+//        goalList.sortWith { t1, t2 ->
+//            t1.name.compareTo(t2.name)
+//        }
+//    }
 }

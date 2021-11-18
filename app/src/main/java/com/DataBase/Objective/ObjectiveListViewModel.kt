@@ -22,19 +22,19 @@ class ObjectiveListViewModel(application: Application):AndroidViewModel(applicat
         allObjectiveWithCategory = objectiveListRepository.allObjectivesWithCategory
     }
 
-    fun addCategory(objective: Objective){
+    fun addObjective(objective: Objective){
         viewModelScope.launch(Dispatchers.IO){
             objectiveListRepository.addObjective(objective)
         }
     }
 
-    fun updateCategory(objective: Objective){
+    fun updateObjective(objective: Objective){
         viewModelScope.launch(Dispatchers.IO){
             objectiveListRepository.updateObjective(objective)
         }
     }
 
-    fun deleteCategory(objective: Objective){
+    fun deleteObjective(objective: Objective){
         viewModelScope.launch(Dispatchers.IO){
             objectiveListRepository.deleteObjective(objective)
         }

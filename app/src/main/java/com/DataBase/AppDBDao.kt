@@ -34,10 +34,12 @@ interface AppDBDao {
 
     @Delete
     suspend fun deleteObjective(objective: Objective)
-
-    @Transaction
+/*
     @Query("select * from objective_table O " +
             "join category_table T on O.category_id = T.id")
+ */
+    @Transaction
+    @Query("select * from objective_table")
     fun readAllObjectivesWithCategories(): LiveData<List<ObjectiveWithCategory>>
 
     //Activity
