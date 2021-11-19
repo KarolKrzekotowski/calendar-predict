@@ -32,25 +32,15 @@ class AddGoalActivity : AppCompatActivity() {
         setContentView(view)
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         val categories = categoryViewModel.allCategories
-//        val actualCategories = categories.
-
-        if (categories.value != null) {
-            for (category in categories.value!!) {
-                spinnerList.add(GoalsCategorySpinner(category))
-            }
+        for (category in categories) {
+            spinnerList.add(GoalsCategorySpinner(category))
         }
-
-        Log.e("56789", "Kategorii jest: " + categories.value + (categories != null))
-        Log.e("56789", "lista ma elementów: " + (spinnerList.size))
-
-//        val id = (binding.spinner.selectedItem as GoalsCategorySpinner).category.id
-
-
+        binding.spinner.adapter = GoalsCategorySpinnerAdapter(this, spinnerList)
         val extras = intent.extras
         if (extras != null) {
             editingMode = true
-            //check previously selected GoalKind box
 
+            //check previously selected GoalKind box
             goal = extras.getParcelable("goal")
             val toCheck = when(goal!!.objective.kind) {
                 GoalKind.WEEK.string -> binding.weekly
@@ -67,8 +57,8 @@ class AddGoalActivity : AppCompatActivity() {
                 box.isChecked = (box == toCheck)
             }
 
-//            todo: set spinner
-            binding.spinner.setSelection(goal!!.category.id)
+            //can be problematic if we allow to delete categories
+            binding.spinner.setSelection(goal!!.category.id - 1)
 
             amount = goal!!.objective.targetAmount
             binding.targetMinutes.text = "$amount minut"

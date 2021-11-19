@@ -3,6 +3,8 @@ package com.example.calendar_predict
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import java.io.File
 
 class GoalsCategorySpinnerAdapter(val context: Context, var dataSource: List<GoalsCategorySpinner>) : BaseAdapter() {
 
@@ -28,10 +31,17 @@ class GoalsCategorySpinnerAdapter(val context: Context, var dataSource: List<Goa
             vh = view.tag as ItemHolder
         }
 
-//        todo parse icon and set
+//        todo parse icon and set, remove setimagedrawable, might require permission to storage
 //        vh.img.setBackgroundResource(dataSource[position].category.name)
+//        val imgFile = File(dataSource[position].category.icon)
+//        if(imgFile.exists())
+//        {
+//            vh.img.setImageURI(Uri.fromFile(imgFile))
+//        }
+
         vh.img.setImageDrawable(ColorDrawable(Color.RED))
-        vh.layout.setBackgroundColor(dataSource[position].category.colour)
+
+        vh.layout.setBackgroundColor(Color.parseColor("#" + Integer.toHexString(dataSource[position].category.colour)))
         vh.name.text = dataSource[position].category.name
 
         return view
