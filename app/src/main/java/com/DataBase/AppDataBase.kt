@@ -35,6 +35,7 @@ abstract class AppDataBase : RoomDatabase() {
                     "calendar_predict_database"
                 )
                     .createFromAsset("database/calendar_predict_database.db")
+                    .allowMainThreadQueries()
                     .build()
                 INSTANCE = instance
                 return instance

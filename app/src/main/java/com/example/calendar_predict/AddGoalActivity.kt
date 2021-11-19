@@ -30,7 +30,6 @@ class AddGoalActivity : AppCompatActivity() {
         binding = ActivityAddGoalBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         val categories = categoryViewModel.allCategories
 //        val actualCategories = categories.
@@ -45,6 +44,7 @@ class AddGoalActivity : AppCompatActivity() {
         Log.e("56789", "lista ma elementów: " + (spinnerList.size))
 
 //        val id = (binding.spinner.selectedItem as GoalsCategorySpinner).category.id
+
 
         val extras = intent.extras
         if (extras != null) {

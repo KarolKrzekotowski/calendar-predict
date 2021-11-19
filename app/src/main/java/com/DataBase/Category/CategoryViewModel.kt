@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class CategoryViewModel(application: Application): AndroidViewModel(application) {
 
-    val allCategories: LiveData<List<Category>>
+    val allCategories: List<Category>
     private val categoryListRepository: CategoryListRepository
 
     init {
