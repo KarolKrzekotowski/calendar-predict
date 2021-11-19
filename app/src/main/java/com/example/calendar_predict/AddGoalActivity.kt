@@ -68,7 +68,7 @@ class AddGoalActivity : AppCompatActivity() {
             }
 
 //            todo: set spinner
-//            binding.editTextTaskName.setText(goal!!.category.name, TextView.BufferType.EDITABLE)
+            binding.spinner.setSelection(goal!!.category.id)
 
             amount = goal!!.objective.targetAmount
             binding.targetMinutes.text = "$amount minut"
@@ -147,8 +147,6 @@ class AddGoalActivity : AppCompatActivity() {
 
 
     fun addTask(view: android.view.View) {
-        //TODO: select category instead of writing
-//        val name = binding.editTextTaskName.text.toString()
         val id = (binding.spinner.selectedItem as GoalsCategorySpinner).category.id
         val goalKind = when {
             binding.daily.isChecked -> GoalKind.DAY
@@ -159,8 +157,8 @@ class AddGoalActivity : AppCompatActivity() {
 
         if (editingMode) {
             if (finishDate == null) {
-                //TODO nullable date
                 goal!!.objective.category_id = id
+                //TODO nullable date
 //                    goal!!.objective.date_to = null
                 goal!!.objective.kind = goalKind.string
                 goal!!.objective.targetAmount = amount
@@ -175,8 +173,6 @@ class AddGoalActivity : AppCompatActivity() {
                 categoryViewModel.updateObjective(goal!!.objective)
             }
         } else {
-            //TODO category id
-            //TODO: start date
             if (finishDate == null) {
                 //TODO nullable date
 //                    categoryViewModel.addObjective(Objective(0, id, null, null, goalKind, amount))
