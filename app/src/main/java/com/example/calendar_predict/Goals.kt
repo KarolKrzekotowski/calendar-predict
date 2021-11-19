@@ -22,10 +22,10 @@ import com.DataBase.Objective.Objective
 import com.DataBase.Objective.ObjectiveListViewModel
 import com.DataBase.Objective.ObjectiveWithCategory
 import com.example.calendar_predict.databinding.GoalsBinding
-import java.time.LocalDate
 
 class Goals: AppCompatActivity() {
     private lateinit var binding: GoalsBinding
+    private lateinit var adapter: GoalAdapter
     lateinit var objectiveListViewModel: ObjectiveListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +54,7 @@ class Goals: AppCompatActivity() {
 
         objectiveListViewModel = ViewModelProvider(this).get(ObjectiveListViewModel::class.java)
 
+        //TODO: nie zaciągać przeterminowanych celów
         objectiveListViewModel.allObjectiveWithCategory.observe(this, Observer { it->
             adapter.setData(it)
         })
@@ -65,21 +66,7 @@ class Goals: AppCompatActivity() {
     }
 
     companion object {
-        private lateinit var adapter: GoalAdapter
         private lateinit var instance: Goals
-
-
-        fun addGoalToList(goal: Objective) {
-            instance.objectiveListViewModel.addObjective(goal)
-            //TODO: insert goal to db
-//            GlobalScope.launch {
-//                instance?.taskDao?.insertAll(DatabaseTask(task.name, task.icon, task.taskPriority, when {task.date != null -> task.date.toEpochSecond(
-//                    ZoneOffset.UTC)
-//                    else -> 0} ))
-//            }
-//            adapter.addGoalToList(goal)
-//            adapter.notifyDataSetChanged()
-        }
 
         fun showPopup(v: View, objectiveWithCategory: ObjectiveWithCategory) {
             val popup = PopupMenu(instance.applicationContext, v, Gravity.END)
@@ -93,20 +80,8 @@ class Goals: AppCompatActivity() {
                             .setTitle("Usuwanie celu")
                             .setMessage("Czy na pewno chcesz usunąć ten cel?")
                             .setPositiveButton("Potwierdż") { _, _ ->
-                                val goal = objectiveWithCategory
-                                //val goal = adapter.getGoalList()[position]
-
-                                //TODO: remove goal from db
-//                                GlobalScope.launch {
-//                                    val tmpTask = instance!!.taskDao.findByName(task.name, task.icon, task.taskPriority, when {task.date != null -> task.date.toEpochSecond(
-//                                        ZoneOffset.UTC) else -> 0})
-//                                    instance!!.taskDao.delete(tmpTask)
-//                                }
-
                                 Log.e("1234567890", objectiveWithCategory.objective.id.toString())
-                                instance.objectiveListViewModel.deleteObjective(goal.objective)
-//                                adapter.getGoalList().removeAt(position)
-//                                adapter.notifyDataSetChanged()
+                                instance.objectiveListViewModel.deleteObjective(objectiveWithCategory.objective)
                             }
                             .setNegativeButton("Anuluj", null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -114,11 +89,8 @@ class Goals: AppCompatActivity() {
                             .show()
                     }
                     R.id.edytuj_cel -> {
-                        //val goal = adapter.getGoalList()[position]
-                        val goal = objectiveWithCategory
-
                         val intent = Intent(instance, AddGoalActivity::class.java)
-                        intent.putExtra("goal", goal)
+                        intent.putExtra("goal", objectiveWithCategory)
 
                         startActivity(instance, intent, null)
                     }
