@@ -12,7 +12,7 @@ import com.example.calendar_predict.R
 
 class RecyclerDayAdapter(): RecyclerView.Adapter<RecyclerDayAdapter.ViewHolder>() {
     var context: Context?=null
-    private var DayActivitiesList = emptyList<ActivityWithCategory>()
+    private var dayActivitiesList = emptyList<ActivityWithCategory>()
 
 
 
@@ -39,7 +39,7 @@ class RecyclerDayAdapter(): RecyclerView.Adapter<RecyclerDayAdapter.ViewHolder>(
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 
-        val activity: ActivityWithCategory= DayActivitiesList[position]
+        val activity: ActivityWithCategory= dayActivitiesList[position]
         val name = viewHolder.nazwa
         val start = viewHolder.poczatek
         val end = viewHolder.koniec
@@ -53,15 +53,15 @@ class RecyclerDayAdapter(): RecyclerView.Adapter<RecyclerDayAdapter.ViewHolder>(
     }
 
     override fun getItemCount(): Int {
-        return DayActivitiesList.size
+        return dayActivitiesList.size
     }
 
     fun setData(data: List<ActivityWithCategory>){
-        this.DayActivitiesList = data
+        this.dayActivitiesList = data
         notifyDataSetChanged()
     }
     fun getData(position: Int): ActivityWithCategory {
-        return DayActivitiesList[position]
+        return dayActivitiesList[position]
     }
 
 }

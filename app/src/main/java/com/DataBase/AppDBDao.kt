@@ -55,7 +55,7 @@ interface AppDBDao {
 
     //Day
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addDay(day: Day)
+    fun addDay(day: Day)
 
     @Update
     suspend fun updateDay(day: Day)
@@ -63,6 +63,11 @@ interface AppDBDao {
 
     @Delete
     suspend fun deleteDay(day: Day)
+
+    @Transaction
+    @Query("select * from day_table where date = :date")
+    fun readDay(date: Date): Day?
+
 
     @Transaction
     @Query("select * from day_table where date = :date")
