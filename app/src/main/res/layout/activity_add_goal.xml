@@ -37,24 +37,37 @@
         app:layout_constraintTop_toBottomOf="@+id/checkBox"
         app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/editTextTaskName"
+<!--    <EditText-->
+<!--        android:id="@+id/editTextTaskName"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:autofillHints="category"-->
+<!--        android:ems="10"-->
+<!--        android:hint="@string/wpisz_kategori"-->
+<!--        android:importantForAutofill="no"-->
+<!--        android:inputType="text"-->
+<!--        android:paddingHorizontal="10dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.079"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/iconPickerTextView"-->
+<!--        app:layout_constraintVertical_bias="0.053" />-->
+
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:autofillHints="category"
-        android:ems="10"
-        android:hint="@string/wpisz_kategori"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:paddingHorizontal="10dp"
-        android:textColor="@color/black"
-        android:textSize="24sp"
+        android:layout_height="150dp"
+        android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iconPickerTextView"
-        app:layout_constraintVertical_bias="0.053" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
         android:id="@+id/confrimAddButton"
@@ -86,7 +99,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTaskName"
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
         app:layout_constraintVertical_bias="0.00999999" />
 
     <LinearLayout
