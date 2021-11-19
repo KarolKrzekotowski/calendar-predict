@@ -35,10 +35,10 @@ class AddGoalActivity : AppCompatActivity() {
             editingMode = true
             //check previously selected GoalKind box
 
-            goal = extras.getParcelable<ObjectiveWithCategory>("goal")
+            goal = extras.getParcelable("goal")
             val toCheck = when(goal!!.objective.kind) {
-                "WEEK" -> binding.weekly
-                "MONTH" -> binding.monthly
+                GoalKind.WEEK.string -> binding.weekly
+                GoalKind.MONTH.string -> binding.monthly
                 else -> binding.daily
             }
 
@@ -130,29 +130,47 @@ class AddGoalActivity : AppCompatActivity() {
 
 
     fun addTask(view: android.view.View) {
-        //TODO: insert goal to db
         //TODO: select category instead of writing
-        //TODO: update instead of inserting
-
-
-
         val name = binding.editTextTaskName.text.toString()
         val goalKind = when {
-            binding.daily.isChecked -> "DAY"
-            binding.weekly.isChecked -> "WEEK"
-            binding.monthly.isChecked -> "MONTH"
-            else -> "DAY"
+            binding.daily.isChecked -> GoalKind.DAY
+            binding.weekly.isChecked -> GoalKind.WEEK
+            binding.monthly.isChecked -> GoalKind.MONTH
+            else -> GoalKind.DAY
         }
 
-        if (editingMode) {
-            goal!!.objective.targetAmount = amount
-            categoryViewModel.updateObjective(goal!!.objective)
-        } else {
-            categoryViewModel.addObjective(Objective(0, 1, finishDate!!, finishDate!!, goalKind, amount))
-        }
         if (name != "") {
-//            Goals.addGoalToList(Goal(name, goalKind, 0, amount, finishDate))
-
+            if (editingMode) {
+                if (finishDate == null) {
+                    //TODO nullable date
+                    goal!!.objective.category_id = 1
+//                    goal!!.objective.date_from = null
+//                    goal!!.objective.date_to = null
+                    goal!!.objective.kind = goalKind.string
+                    goal!!.objective.targetAmount = amount
+                    categoryViewModel.updateObjective(goal!!.objective)
+                }
+                else {
+                    //TODO category id
+                    //TODO date from
+                    goal!!.objective.category_id = 1
+                    goal!!.objective.date_from = finishDate!!
+                    goal!!.objective.date_to = finishDate!!
+                    goal!!.objective.kind = goalKind.string
+                    goal!!.objective.targetAmount = amount
+                    categoryViewModel.updateObjective(goal!!.objective)
+                }
+            } else {
+                //TODO category id
+                //TODO: start date
+                if (finishDate == null) {
+                    //TODO nullable date
+//                    categoryViewModel.addObjective(Objective(0, 1, null, null, goalKind, amount))
+                }
+                else {
+                    categoryViewModel.addObjective(Objective(0, 1, finishDate!!, finishDate!!, goalKind.string, amount))
+                }
+            }
             finish()
         }
         else

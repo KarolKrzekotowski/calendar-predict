@@ -61,9 +61,9 @@ class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
         val daysTillMonthEnd = LocalDate.of(date.year + date.monthValue / 12, (date.monthValue) % 12 + 1, 1).toEpochDay() - date.toEpochDay() - 1
 
         nextDue.text = when(goal.objective.kind) {
-            "DAY" -> "Pozostało ${secsTillDayEnd / 3600} godzin i ${(secsTillDayEnd % 3600) / 60} minut"
-            "WEEK" -> "Pozostało $daysTillWeekEnd dni i ${secsTillDayEnd / 3600} godzin"
-            "MONTH" -> "Pozostało $daysTillMonthEnd dni i ${secsTillDayEnd / 3600} godzin"
+            GoalKind.DAY.string -> "Pozostało ${secsTillDayEnd / 3600} godzin i ${(secsTillDayEnd % 3600) / 60} minut"
+            GoalKind.WEEK.string -> "Pozostało $daysTillWeekEnd dni i ${secsTillDayEnd / 3600} godzin"
+            GoalKind.MONTH.string -> "Pozostało $daysTillMonthEnd dni i ${secsTillDayEnd / 3600} godzin"
             else -> ""
         }
 
