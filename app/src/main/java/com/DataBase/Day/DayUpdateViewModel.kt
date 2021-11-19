@@ -4,12 +4,14 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.DataBase.Activity.Activity
 import com.DataBase.AppDataBase
+import com.DataBase.Category.Category
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
 class DayUpdateViewModel(application: Application, date: Date): AndroidViewModel(application)  {
     var dayWithActivities: LiveData<DayWithActivities>
+    var allCategories: List<Category>
     private val dayUpdateRepository: DayUpdateRepository
 
     init {
@@ -20,6 +22,7 @@ class DayUpdateViewModel(application: Application, date: Date): AndroidViewModel
         dayUpdateRepository = DayUpdateRepository(appDBDao, date)
 
         dayWithActivities = dayUpdateRepository.daysWithActivities
+        allCategories = dayUpdateRepository.categories
         //Log.e("12345676890", dayRepository.daysWithActivities.value.toString())
     }
 

@@ -1,6 +1,7 @@
 package com.example.calendar_predict
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
@@ -27,8 +28,8 @@ class AddGoalActivity : AppCompatActivity() {
         binding = ActivityAddGoalBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+
 
         val extras = intent.extras
         if (extras != null) {

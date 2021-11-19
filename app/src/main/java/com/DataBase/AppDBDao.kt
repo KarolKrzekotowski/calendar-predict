@@ -23,7 +23,7 @@ interface AppDBDao {
     suspend fun deleteCategory(category: Category)
 
     @Query("select * from category_table")
-    fun readAllCategories(): LiveData<List<Category>>
+    fun readAllCategories(): List<Category>
 
     //Objective
     @Insert(onConflict = OnConflictStrategy.REPLACE)

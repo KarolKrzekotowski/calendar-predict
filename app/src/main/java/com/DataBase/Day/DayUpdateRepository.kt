@@ -8,7 +8,7 @@ import java.util.*
 
 class DayUpdateRepository(private val appDBDao: AppDBDao, date: Date) {
     val daysWithActivities: LiveData<DayWithActivities>
-    val categories: LiveData<List<Category>>
+    val categories: List<Category>
 
     init {
         daysWithActivities = appDBDao.readDayWithActivities(date)
