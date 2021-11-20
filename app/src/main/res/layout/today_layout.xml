@@ -19,7 +19,7 @@
             android:text="poczatek" />
 
         <TextView
-            android:id="@+id/koniec"
+            android:id="@+id/zakonczenie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="koniec" />

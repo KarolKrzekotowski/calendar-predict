@@ -29,8 +29,7 @@
         android:layout_height="141dp"
         android:backgroundTint="#00BCD4"
         android:fontFamily="sans-serif-black"
-        android:onClick="EndOfTheDay"
-        android:text="Podsumuj"
+        android:text="@string/podsumuj"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,12 +39,11 @@
         app:layout_constraintVertical_bias="0.994" />
 
     <Button
-        android:id="@+id/edit"
+        android:id="@+id/kurczak"
         android:layout_width="197dp"
         android:layout_height="141dp"
         android:layout_marginEnd="164dp"
-        android:onClick="EditDay"
-        android:text="Edytuj"
+        android:text="@string/edytuj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -61,7 +59,7 @@
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:paddingHorizontal="5dp"
-        android:text="Data"
+        android:text="@string/data"
         android:textAlignment="center"
         android:textColor="#00BCD4"
         android:textSize="36sp"
