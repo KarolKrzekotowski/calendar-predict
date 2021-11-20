@@ -6,8 +6,8 @@ import com.DataBase.Objective.Objective
 import com.DataBase.Objective.ObjectiveWithCategory
 
 class CategoryListRepository(private val appDBDao: AppDBDao) {
-    val allCategories: LiveData<List<Category>> =
-        appDBDao.readAllCategories()
+    val allCategories: List<Category> =
+appDBDao.readAllCategories()
 
     suspend fun addObjective(objective: Objective) {
         appDBDao.addObjective(objective)

@@ -1,6 +1,7 @@
 package com.example.calendar_predict
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
@@ -10,6 +11,7 @@ import com.DataBase.Category.CategoryViewModel
 import com.DataBase.Objective.Objective
 import com.DataBase.Objective.ObjectiveWithCategory
 import com.example.calendar_predict.databinding.ActivityAddGoalBinding
+import java.time.Instant
 import java.util.*
 
 class AddGoalActivity : AppCompatActivity() {
@@ -18,6 +20,7 @@ class AddGoalActivity : AppCompatActivity() {
     var finishDate: Date? = null
     var editingMode = false
     var goal: ObjectiveWithCategory? = null
+    private var spinnerList: MutableList<GoalsCategorySpinner> = mutableListOf()
 
     private lateinit var categoryViewModel: CategoryViewModel
 
@@ -27,14 +30,17 @@ class AddGoalActivity : AppCompatActivity() {
         binding = ActivityAddGoalBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
-
+        val categories = categoryViewModel.allCategories
+        for (category in categories) {
+            spinnerList.add(GoalsCategorySpinner(category))
+        }
+        binding.spinner.adapter = GoalsCategorySpinnerAdapter(this, spinnerList)
         val extras = intent.extras
         if (extras != null) {
             editingMode = true
-            //check previously selected GoalKind box
 
+            //check previously selected GoalKind box
             goal = extras.getParcelable("goal")
             val toCheck = when(goal!!.objective.kind) {
                 GoalKind.WEEK.string -> binding.weekly
@@ -51,7 +57,8 @@ class AddGoalActivity : AppCompatActivity() {
                 box.isChecked = (box == toCheck)
             }
 
-            binding.editTextTaskName.setText(goal!!.category.name, TextView.BufferType.EDITABLE)
+            //can be problematic if we allow to delete categories
+            binding.spinner.setSelection(goal!!.category.id - 1)
 
             amount = goal!!.objective.targetAmount
             binding.targetMinutes.text = "$amount minut"
@@ -130,8 +137,7 @@ class AddGoalActivity : AppCompatActivity() {
 
 
     fun addTask(view: android.view.View) {
-        //TODO: select category instead of writing
-        val name = binding.editTextTaskName.text.toString()
+        val id = (binding.spinner.selectedItem as GoalsCategorySpinner).category.id
         val goalKind = when {
             binding.daily.isChecked -> GoalKind.DAY
             binding.weekly.isChecked -> GoalKind.WEEK
@@ -139,43 +145,32 @@ class AddGoalActivity : AppCompatActivity() {
             else -> GoalKind.DAY
         }
 
-        if (name != "") {
-            if (editingMode) {
-                if (finishDate == null) {
-                    //TODO nullable date
-                    goal!!.objective.category_id = 1
-//                    goal!!.objective.date_from = null
+        if (editingMode) {
+            if (finishDate == null) {
+                goal!!.objective.category_id = id
+                //TODO nullable date
 //                    goal!!.objective.date_to = null
-                    goal!!.objective.kind = goalKind.string
-                    goal!!.objective.targetAmount = amount
-                    categoryViewModel.updateObjective(goal!!.objective)
-                }
-                else {
-                    //TODO category id
-                    //TODO date from
-                    goal!!.objective.category_id = 1
-                    goal!!.objective.date_from = finishDate!!
-                    goal!!.objective.date_to = finishDate!!
-                    goal!!.objective.kind = goalKind.string
-                    goal!!.objective.targetAmount = amount
-                    categoryViewModel.updateObjective(goal!!.objective)
-                }
-            } else {
-                //TODO category id
-                //TODO: start date
-                if (finishDate == null) {
-                    //TODO nullable date
-//                    categoryViewModel.addObjective(Objective(0, 1, null, null, goalKind, amount))
-                }
-                else {
-                    categoryViewModel.addObjective(Objective(0, 1, finishDate!!, finishDate!!, goalKind.string, amount))
-                }
+                goal!!.objective.kind = goalKind.string
+                goal!!.objective.targetAmount = amount
+                categoryViewModel.updateObjective(goal!!.objective)
             }
-            finish()
+            else {
+                //TODO date from
+                goal!!.objective.category_id = id
+                goal!!.objective.date_to = finishDate!!
+                goal!!.objective.kind = goalKind.string
+                goal!!.objective.targetAmount = amount
+                categoryViewModel.updateObjective(goal!!.objective)
+            }
+        } else {
+            if (finishDate == null) {
+                //TODO nullable date
+//                    categoryViewModel.addObjective(Objective(0, id, null, null, goalKind, amount))
+            }
+            else {
+                categoryViewModel.addObjective(Objective(0, id, Date.from(Instant.now()), finishDate!!, goalKind.string, amount))
+            }
         }
-        else
-        {
-            Toast.makeText(this, "Nadaj jakąś nazwę kategorii", Toast.LENGTH_LONG).show()
-        }
+        finish()
     }
 }
