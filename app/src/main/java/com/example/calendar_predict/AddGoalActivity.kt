@@ -155,7 +155,6 @@ class AddGoalActivity : AppCompatActivity() {
                 categoryViewModel.updateObjective(goal!!.objective)
             }
             else {
-                //TODO date from
                 goal!!.objective.category_id = id
                 goal!!.objective.date_to = finishDate!!
                 goal!!.objective.kind = goalKind.string

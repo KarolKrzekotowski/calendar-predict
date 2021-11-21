@@ -12,12 +12,24 @@
         <activity
             android:name=".AddGoalActivity"
             android:exported="false" />
-        <activity android:name=".dzien.AddDayActivity"/>
-        <activity android:name=".dzien.EditDay"/>
-        <activity android:name=".dzien.GradeDay"/>
-        <activity android:name=".Goals" />
-        <activity android:name=".Settings" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".dzien.AddDayActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".dzien.EditDay"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".dzien.GradeDay"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".Goals"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".Settings"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
