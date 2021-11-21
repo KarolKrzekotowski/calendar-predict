@@ -70,7 +70,8 @@ class DayClass : Fragment() {
 
             val intent = Intent(getActivity(),EditDay::class.java)
             intent.putExtra("day",day.toString())
-            intent.putExtra("month",(month+1).toString())
+            //intent.putExtra("month",(month+1).toString())
+            intent.putExtra("month",(month).toString())
             intent.putExtra("year",year.toString())
             startActivity(intent)
         }

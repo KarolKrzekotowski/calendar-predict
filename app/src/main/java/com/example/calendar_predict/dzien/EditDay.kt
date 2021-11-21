@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.DataBase.Activity.ActivityWithCategory
 import com.DataBase.Day.DayViewModel
+import com.DataBase.Day.DayViewModelFactory
 import com.DataBase.Day.DayWithActivities
 import com.example.calendar_predict.databinding.EditDayBinding
+import java.util.Calendar
 
 class EditDay: AppCompatActivity() {
 
@@ -57,9 +59,22 @@ class EditDay: AppCompatActivity() {
         adapter = EditDayAdapter()
         rvActivity.adapter = adapter
         rvActivity.layoutManager = LinearLayoutManager(this)
-        dayViewModel = ViewModelProvider(this).get(DayViewModel::class.java)
+
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.YEAR] = year!!.toInt()
+        calendar[Calendar.MONTH] = month!!.toInt()
+        calendar[Calendar.DAY_OF_MONTH] = day!!.toInt()
+        calendar[Calendar.HOUR_OF_DAY] = 0
+        calendar[Calendar.MINUTE] = 0
+        calendar[Calendar.SECOND] = 0
+        calendar[Calendar.MILLISECOND] = 0
+
+        val factory = DayViewModelFactory(application, calendar.time)
+        dayViewModel = ViewModelProvider(this, factory).get(DayViewModel::class.java)
+
 
         dayViewModel.dayWithActivities.observe(this,{it->
+            //Log.e("1234456780", it.activityWithCategory)
             adapter.setData(it.activityWithCategory)
         })
 

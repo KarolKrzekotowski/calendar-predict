@@ -6,6 +6,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.DataBase.Activity.Activity
+import com.DataBase.Day.DayUpdateViewModel
+import com.DataBase.Day.DayUpdateViewModelFactory
+
 
 import com.example.calendar_predict.R
 import kotlinx.android.synthetic.main.add_activity.*
@@ -28,6 +33,8 @@ class AddDayActivity: AppCompatActivity() {
     var category = ""
 
     var calendar = Calendar.getInstance()
+
+    lateinit var dayUpdateViewModel: DayUpdateViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +73,14 @@ class AddDayActivity: AppCompatActivity() {
             },minute2,hour2,true)
             timepicker2.show()
         }
+
+        calendar[Calendar.HOUR_OF_DAY] = 0
+        calendar[Calendar.MINUTE] = 0
+        calendar[Calendar.SECOND] = 0
+        calendar[Calendar.MILLISECOND] = 0
+
+        val factory = DayUpdateViewModelFactory(application, calendar.time)
+        dayUpdateViewModel = ViewModelProvider(this, factory).get(DayUpdateViewModel::class.java)
     }
 
     fun displayCorrectTime(hour : Int,minute : Int): String{
@@ -101,7 +116,28 @@ class AddDayActivity: AppCompatActivity() {
             Toast.makeText(this, "Brak kategorii ", Toast.LENGTH_SHORT).show()
         }
         else {
-            //Todo przygotuj ładunek do bazy i zapisz
+
+            val calendarFrom = Calendar.getInstance()
+            //calendarFrom[Calendar.YEAR] = year!!.toInt()
+            calendarFrom[Calendar.MONTH] = month!!.toInt()
+            calendarFrom[Calendar.DAY_OF_MONTH] = day!!.toInt()
+            calendarFrom[Calendar.HOUR_OF_DAY] = 0
+            calendarFrom[Calendar.MINUTE] = 0
+            calendarFrom[Calendar.SECOND] = 0
+            calendarFrom[Calendar.MILLISECOND] = 0
+
+            val calendarTo = Calendar.getInstance()
+            //calendarTo[Calendar.YEAR] = year!!.toInt()
+            calendarTo[Calendar.MONTH] = month!!.toInt()
+            calendarTo[Calendar.DAY_OF_MONTH] = day!!.toInt()
+            calendarTo[Calendar.HOUR_OF_DAY] = 0
+            calendarTo[Calendar.MINUTE] = 0
+            calendarTo[Calendar.SECOND] = 0
+            calendarTo[Calendar.MILLISECOND] = 0
+
+
+            var activity = Activity(0,  dayUpdateViewModel.day.id, 1, calendarFrom.time, calendarTo.time, name!!)
+            dayUpdateViewModel.addActivity(activity)
 
 
             finish()
