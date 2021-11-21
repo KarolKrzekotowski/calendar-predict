@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Calendar">
+    tools:context=".dzien.Calendar">
 
 
     <CalendarView
-        android:id="@+id/calendarView"
+        android:id="@+id/calendarViewpage"
         android:layout_width="388dp"
         android:layout_height="392dp"
+        android:onClick="pickDate"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.695"

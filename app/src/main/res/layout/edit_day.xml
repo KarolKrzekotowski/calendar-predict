@@ -8,9 +8,9 @@
     tools:context=".dzien.EditDay">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/dayrecycler"
-        android:layout_width="303dp"
-        android:layout_height="446dp"
+        android:id="@+id/dayEditRecycler"
+        android:layout_width="412dp"
+        android:layout_height="436dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.453" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/EdycjaDnia"
         android:layout_width="263dp"
         android:layout_height="70dp"
         android:text="EdycjaDnia"
@@ -33,32 +33,26 @@
         android:id="@+id/button3"
         android:layout_width="294dp"
         android:layout_height="71dp"
+        android:onClick="acceptChanges"
         android:text="Zatwierdź"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.572"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.907" />
+        app:layout_constraintVertical_bias="0.992" />
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="275dp"
-        android:layout_height="51dp"
-        android:text="Anuluj"
+        android:layout_width="271dp"
+        android:layout_height="72dp"
+        android:onClick="addActivity"
+        android:text="Dodaj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.991" />
+        app:layout_constraintVertical_bias="0.884" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/catgeoryrecycler"
-        android:layout_width="104dp"
-        android:layout_height="440dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.429" />
 </androidx.constraintlayout.widget.ConstraintLayout>

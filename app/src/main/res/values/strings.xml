@@ -16,4 +16,7 @@
     <string name="wpisz_kategori">Wpisz kategorię</string>
     <string name="edytuj_cel">Edytuj cel…</string>
     <string name="usu_cel">Usuń cel</string>
+    <string name="edytuj">Edytuj</string>
+    <string name="podsumuj">Podsumuj</string>
+    <string name="data">Data</string>
 </resources>

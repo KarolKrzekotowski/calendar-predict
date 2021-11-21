@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+        <item android:id="@+id/edytuj_aktywność"
+            android:title="edytuj aktywność"
+            />
+        <item android:id="@+id/usun_aktywność"
+            android:title="usuń aktywność" />
+
+</menu>

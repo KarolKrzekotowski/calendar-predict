@@ -18,7 +18,7 @@ class RecyclerDayAdapter(): RecyclerView.Adapter<RecyclerDayAdapter.ViewHolder>(
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var poczatek: TextView =itemView.findViewById(R.id.poczatek)
-        var koniec: TextView = itemView.findViewById(R.id.koniec)
+        var koniec: TextView = itemView.findViewById(R.id.zakonczenie)
         var nazwa: TextView = itemView.findViewById(R.id.nazwa)
 
     }

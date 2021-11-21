@@ -77,16 +77,16 @@ class Goals: AppCompatActivity() {
                 when (item.itemId) {
                     R.id.usun -> {
                         AlertDialog.Builder(instance)
-                            .setTitle("Usuwanie celu")
-                            .setMessage("Czy na pewno chcesz usunąć ten cel?")
-                            .setPositiveButton("Potwierdż") { _, _ ->
-                                Log.e("1234567890", objectiveWithCategory.objective.id.toString())
-                                instance.objectiveListViewModel.deleteObjective(objectiveWithCategory.objective)
-                            }
-                            .setNegativeButton("Anuluj", null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .create()
-                            .show()
+                                .setTitle("Usuwanie celu")
+                                .setMessage("Czy na pewno chcesz usunąć ten cel?")
+                                .setPositiveButton("Potwierdż") { _, _ ->
+                                    Log.e("1234567890", objectiveWithCategory.objective.id.toString())
+                                    instance.objectiveListViewModel.deleteObjective(objectiveWithCategory.objective)
+                                }
+                                .setNegativeButton("Anuluj", null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .create()
+                                .show()
                     }
                     R.id.edytuj_cel -> {
                         val intent = Intent(instance, AddGoalActivity::class.java)

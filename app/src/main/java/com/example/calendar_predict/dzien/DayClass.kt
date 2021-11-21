@@ -1,9 +1,11 @@
 package com.example.calendar_predict.dzien
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,13 +16,17 @@ import com.DataBase.Day.DayViewModelFactory
 import com.example.calendar_predict.R
 import java.util.*
 
+import java.util.Calendar
 
 class DayClass : Fragment() {
 
     private lateinit var dayViewModel: DayViewModel
 
     var recyclerView: RecyclerView?=null
-
+    var calendar = Calendar.getInstance()
+    var day = calendar.get(Calendar.DAY_OF_MONTH)
+    var month = calendar.get(Calendar.MONTH)
+    var year = calendar.get(Calendar.YEAR)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,16 +61,31 @@ class DayClass : Fragment() {
         })
 
 
+
+
+
+
+        val edycja:Button = view.findViewById(R.id.kurczak)
+        edycja.setOnClickListener{
+
+            val intent = Intent(getActivity(),EditDay::class.java)
+            intent.putExtra("day",day.toString())
+            intent.putExtra("month",(month+1).toString())
+            intent.putExtra("year",year.toString())
+            startActivity(intent)
+        }
+
+
+        val podsumowanie:Button = view.findViewById(R.id.podsumuj)
+        podsumowanie.setOnClickListener{
+            val myintent = Intent(getActivity(),GradeDay::class.java)
+            startActivity(myintent)
+        }
         return view
     }
 
 
-    fun EndOfTheDay(view: View){
 
-    }
 
-    fun EditDay(view: View){
-
-    }
 
 }

@@ -12,6 +12,7 @@
         <activity
             android:name=".AddGoalActivity"
             android:exported="false" />
+        <activity android:name=".dzien.AddDayActivity"/>
         <activity android:name=".dzien.EditDay"/>
         <activity android:name=".dzien.GradeDay"/>
         <activity android:name=".Goals" />
