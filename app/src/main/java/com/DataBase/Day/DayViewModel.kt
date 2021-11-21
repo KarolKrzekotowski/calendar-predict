@@ -24,6 +24,24 @@ class DayViewModel(application: Application, date: Date): AndroidViewModel(appli
         dayWithActivities = dayRepository.daysWithActivities
         //Log.e("12345676890", dayRepository.daysWithActivities.value.toString())
     }
+
+    fun addActivity(activity: Activity){
+        viewModelScope.launch(Dispatchers.IO){
+            dayRepository.addActivity(activity)
+        }
+    }
+
+    fun updateActivity(activity: Activity){
+        viewModelScope.launch(Dispatchers.IO){
+            dayRepository.updateActivity(activity)
+        }
+    }
+
+    fun deleteActivity(activity: Activity){
+        viewModelScope.launch(Dispatchers.IO){
+            dayRepository.deleteActivity(activity)
+        }
+    }
 }
 
 class DayViewModelFactory(private val mApplication: Application, private val date: Date) :
@@ -32,6 +50,3 @@ class DayViewModelFactory(private val mApplication: Application, private val dat
         return DayViewModel(mApplication, date) as T
     }
 }
-//class DayViewModelFactory(private val date: Date): ViewModelProvider.NewInstanceFactory() {
-//    override fun <T : ViewModel?> create(modelClass: Class<T>): T = DayViewModelFactory(date) as T
-//}

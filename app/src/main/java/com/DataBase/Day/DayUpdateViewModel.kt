@@ -13,6 +13,7 @@ class DayUpdateViewModel(application: Application, date: Date): AndroidViewModel
     var dayWithActivities: LiveData<DayWithActivities>
     var allCategories: List<Category>
     private val dayUpdateRepository: DayUpdateRepository
+    var day: Day
 
     init {
         val appDBDao = AppDataBase.getDatabase(
@@ -23,6 +24,7 @@ class DayUpdateViewModel(application: Application, date: Date): AndroidViewModel
 
         dayWithActivities = dayUpdateRepository.daysWithActivities
         allCategories = dayUpdateRepository.categories
+        day = dayUpdateRepository.day!!
         //Log.e("12345676890", dayRepository.daysWithActivities.value.toString())
     }
 

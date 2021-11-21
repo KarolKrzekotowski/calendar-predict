@@ -9,15 +9,20 @@ import java.util.*
 class DayUpdateRepository(private val appDBDao: AppDBDao, date: Date) {
     val daysWithActivities: LiveData<DayWithActivities>
     val categories: List<Category>
+    var day: Day?
 
     init {
         daysWithActivities = appDBDao.readDayWithActivities(date)
         categories = appDBDao.readAllCategories()
 
-        if(appDBDao.readDay(date) == null){
+        day = appDBDao.readDay(date)
+
+        if(day == null){
             var newDay = Day(0, date, 0)
 
             appDBDao.addDay(newDay)
+
+            day = appDBDao.readDay(date)
         }
     }
 
