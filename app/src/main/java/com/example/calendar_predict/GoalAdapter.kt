@@ -26,15 +26,11 @@ class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalAdapter.ViewHolder {
         context = parent.context
         val inflater = LayoutInflater.from(context)
-        // Inflate the custom layout
         val taskView = inflater.inflate(R.layout.goal, parent, false)
 
-
-        // Return a new holder instance
         return ViewHolder(taskView)
     }
 
-    // Involves populating data into the item through holder
     override fun onBindViewHolder(viewHolder: GoalAdapter.ViewHolder, position: Int) {
         // Get the data model based on position
         val goal: ObjectiveWithCategory = goalList[position]
@@ -52,13 +48,10 @@ class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
 
         val nextDue = viewHolder.nextDueTextView
 
-        val date = LocalDate.now()
-        val time = LocalTime.now()
-
-        val secsTillDayEnd = LocalTime.of(23, 59, 59).toSecondOfDay() - time.toSecondOfDay()
-        val daysTillWeekEnd = 7 - date.dayOfWeek.value
+        val secsTillDayEnd = getSecsTillDayEnd()
+        val daysTillWeekEnd = getDaysTillWeekEnd()
         //pierwszy dzień następnego miesiąca - minus dziś - 1
-        val daysTillMonthEnd = LocalDate.of(date.year + date.monthValue / 12, (date.monthValue) % 12 + 1, 1).toEpochDay() - date.toEpochDay() - 1
+        val daysTillMonthEnd = getDaysTillMonthEnd()
 
         nextDue.text = when(goal.objective.kind) {
             GoalKind.DAY.string -> "Pozostało ${secsTillDayEnd / 3600} godzin i ${(secsTillDayEnd % 3600) / 60} minut"
@@ -79,9 +72,18 @@ class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
         return goalList.size
     }
 
-//    fun addGoalToList(goal: Goal) {
-//        goalList.add(goal)
-//    }
+    fun getSecsTillDayEnd(): Int {
+        return LocalTime.of(23, 59, 59).toSecondOfDay() - LocalTime.now().toSecondOfDay()
+    }
+
+    fun getDaysTillWeekEnd(): Int {
+        return  7 - LocalDate.now().dayOfWeek.value
+    }
+
+    fun getDaysTillMonthEnd(): Long {
+        val date = LocalDate.now()
+        return LocalDate.of(date.year + date.monthValue / 12, (date.monthValue) % 12 + 1, 1).toEpochDay() - date.toEpochDay() - 1
+    }
 
     fun getGoal(position: Int): ObjectiveWithCategory {
         return goalList[position]
@@ -91,10 +93,4 @@ class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
         this.goalList = data
         notifyDataSetChanged()
     }
-
-//    fun sortByTitle() {
-//        goalList.sortWith { t1, t2 ->
-//            t1.name.compareTo(t2.name)
-//        }
-//    }
 }
