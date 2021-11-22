@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +12,8 @@ import com.DataBase.Activity.Activity
 import com.DataBase.Activity.ActivityWithCategory
 import com.DataBase.Day.DayUpdateViewModel
 import com.DataBase.Day.DayUpdateViewModelFactory
+import com.example.calendar_predict.GoalsCategorySpinner
+import com.example.calendar_predict.GoalsCategorySpinnerAdapter
 
 
 import com.example.calendar_predict.R
@@ -31,7 +34,6 @@ class AddDayActivity: AppCompatActivity() {
     var name:String?=""
     var hour_from = ""
     var hour_to = ""
-    var category = ""
     var aktywnosc : ActivityWithCategory?= null
     var godzina1=0
     var godzina2 = 0
@@ -42,16 +44,26 @@ class AddDayActivity: AppCompatActivity() {
     var editMode = false
     var editId =0
 
+    private var spinnerList: MutableList<GoalsCategorySpinner> = mutableListOf()
+
     var calendar = Calendar.getInstance()
 
     lateinit var dayUpdateViewModel: DayUpdateViewModel
+    lateinit var spinner: Spinner
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_activity)
+        val factory = DayUpdateViewModelFactory(application, calendar.time)
+        dayUpdateViewModel = ViewModelProvider(this, factory).get(DayUpdateViewModel::class.java)
 
-
-
+        val categories = dayUpdateViewModel.allCategories
+        for (category in categories) {
+            spinnerList.add(GoalsCategorySpinner(category))
+        }
+        spinner = findViewById(R.id.spinner2)
+        spinner.adapter = GoalsCategorySpinnerAdapter(this, spinnerList)
 
         val datereceived =intent.extras
         if (datereceived!=null) {
@@ -79,7 +91,7 @@ class AddDayActivity: AppCompatActivity() {
 
                 nameofactivity.setText(aktywnosc!!.activity.name)
 
-                mark.setText(aktywnosc!!.activity.category_id.toString())
+                spinner.setSelection(aktywnosc!!.activity.category_id)
                 calendardate.text =
                     (calendarFrom2[Calendar.DAY_OF_MONTH].toString() + "  " + calendarFrom2[Calendar.MONTH].toString())
                 hour = godzina1
@@ -98,9 +110,6 @@ class AddDayActivity: AppCompatActivity() {
             calendar[Calendar.SECOND] = 0
             calendar[Calendar.MILLISECOND] = 0
             Log.i("tutaj","jestem")
-            val factory = DayUpdateViewModelFactory(application, calendar.time)
-            dayUpdateViewModel = ViewModelProvider(this, factory).get(DayUpdateViewModel::class.java)
-
 
         }
 
@@ -152,17 +161,13 @@ class AddDayActivity: AppCompatActivity() {
         name = nameofactivity.text.toString()
         hour_from = start.text.toString()
         hour_to = zakonczenie.text.toString()
-        category = mark.text.toString()
         Log.i("od",hour.toString())
-        if (hour>hour2 || (hour==hour2 && minute> minute2)  ){
+        if (hour>hour2 || (hour==hour2 && minute> minute2)){
             Toast.makeText(this, "Błędne godziny ", Toast.LENGTH_SHORT).show()
 
         }
         else if(name ==""){
             Toast.makeText(this, "Brak nazwy ", Toast.LENGTH_SHORT).show()
-        }
-        else if(category==""){
-            Toast.makeText(this, "Brak kategorii ", Toast.LENGTH_SHORT).show()
         }
         else {
 
@@ -189,7 +194,7 @@ class AddDayActivity: AppCompatActivity() {
                 var activity = Activity(
                     0,
                     dayUpdateViewModel.day.id,
-                    1,
+                    spinner.selectedItemPosition,
                     calendarFrom.time,
                     calendarTo.time,
                     name!!
@@ -200,7 +205,7 @@ class AddDayActivity: AppCompatActivity() {
                 finish()
                 }
                 else{
-                   var activity = Activity(editId,dayUpdateViewModel.day.id,1,calendarFrom.time,calendarTo.time,name!!)
+                   var activity = Activity(editId,dayUpdateViewModel.day.id,spinner.selectedItemPosition,calendarFrom.time,calendarTo.time,name!!)
                     dayUpdateViewModel.addActivity(activity)
                     finish()
                 }
