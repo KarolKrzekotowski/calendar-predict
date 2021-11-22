@@ -8,7 +8,7 @@
     <Button
         android:id="@+id/button8"
         android:layout_width="408dp"
-        android:layout_height="86"
+        android:layout_height="70dp"
         android:onClick="openWyloguj"
         android:text="Wyloguj się"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,8 +20,8 @@
 
     <Button
         android:id="@+id/button9"
-        android:layout_width="408"
-        android:layout_height="86dp"
+        android:layout_width="408dp"
+        android:layout_height="70dp"
         android:onClick="openZnajomi"
         android:text="Znajomi"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +34,7 @@
     <Button
         android:id="@+id/button10"
         android:layout_width="408dp"
-        android:layout_height="86"
+        android:layout_height="70dp"
         android:onClick="openExport"
         android:text="Export"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,7 +47,7 @@
     <Button
         android:id="@+id/button11"
         android:layout_width="408dp"
-        android:layout_height="86"
+        android:layout_height="70dp"
         android:onClick="openWydarzenia"
         android:text="Wydarzenia"
         app:layout_constraintBottom_toBottomOf="parent"
