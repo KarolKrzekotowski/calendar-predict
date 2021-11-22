@@ -216,7 +216,7 @@ class AddDayActivity: AppCompatActivity() {
                 var activity1 = Activity(
                         0,
                         dayUpdateViewModel.day.id,
-                        1,
+                        dayUpdateViewModel.allCategories[spinner.selectedItemPosition].id,
                         calendarFrom.time,
                         calendarTo.time,
                         name!!
@@ -245,7 +245,7 @@ class AddDayActivity: AppCompatActivity() {
 
             }
             else{
-                var activity2 = Activity(editId,dayUpdateViewModel.day.id,1,calendarFrom.time,calendarTo.time,name!!)
+                var activity2 = Activity(editId,dayUpdateViewModel.day.id,dayUpdateViewModel.allCategories[spinner.selectedItemPosition].id,calendarFrom.time,calendarTo.time,name!!)
 
                 for(list in DayEditActivitiesList ) {
 
