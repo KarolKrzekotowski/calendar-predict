@@ -8,6 +8,9 @@
         <entry key="..\:/Semestr5/ProgramowanieZespolowe/calendar-predict/app/src/main/res/layout/goals.xml" value="0.20878623188405798" />
         <entry key="..\:/Semestr5/ProgramowanieZespolowe/calendar-predict/app/src/main/res/layout/goals_category_spinner_item.xml" value="0.20260416666666667" />
         <entry key="..\:/Semestr5/ProgramowanieZespolowe/calendar-predict/app/src/main/res/menu/goals_context_menu.xml" value="0.20520833333333333" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.29528985507246375" />
+        <entry key="app/src/main/res/layout/calendar_page.xml" value="0.29528985507246375" />
+        <entry key="app/src/main/res/layout/settings.xml" value="0.1" />
       </map>
     </option>
   </component>
