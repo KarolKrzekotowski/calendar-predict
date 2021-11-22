@@ -88,9 +88,9 @@ class EditDay: AppCompatActivity() {
                         AlertDialog.Builder(instance)
                             .setTitle("usuwanie aktywności")
                             .setMessage("Czy na pewno usunąć aktywność?")
-                            .setPositiveButton("Potwierdź"){ _ ,_ ->
-                                instance.dayViewModel.deleteActivity(ActivityWithCategory.activity)
-                            }
+/*                            .setPositiveButton("Potwierdź"){ _ ,_ ->
+                                instance.dayViewModel.SdeleteActivity(ActivityWithCategory.activity)
+                            }*/
                             .setNegativeButton("Anuluj",null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .create()
