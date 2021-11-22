@@ -9,8 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.DataBase.Activity.Activity
 import com.DataBase.Activity.ActivityWithCategory
-import com.DataBase.Day.DayUpdateViewModel
-import com.DataBase.Day.DayUpdateViewModelFactory
+import com.DataBase.Day.*
 
 
 import com.example.calendar_predict.R
@@ -41,10 +40,15 @@ class AddDayActivity: AppCompatActivity() {
     var calendarTo2 = Calendar.getInstance()
     var editMode = false
     var editId =0
+    var dateConflict = false
+    private var DayEditActivitiesList = emptyList<ActivityWithCategory>()
 
     var calendar = Calendar.getInstance()
 
     lateinit var dayUpdateViewModel: DayUpdateViewModel
+    lateinit var  activityWithCategory: ActivityWithCategory
+    lateinit var dayViewModel:DayViewModel
+    lateinit var dayListViewModel: DayListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +104,14 @@ class AddDayActivity: AppCompatActivity() {
             Log.i("tutaj","jestem")
             val factory = DayUpdateViewModelFactory(application, calendar.time)
             dayUpdateViewModel = ViewModelProvider(this, factory).get(DayUpdateViewModel::class.java)
+
+            val factory1 = DayViewModelFactory(application,calendar.time)
+            dayViewModel = ViewModelProvider(this,factory1).get(DayViewModel::class.java)
+
+            dayViewModel.dayWithActivities.observe(this,{it ->
+                 DayEditActivitiesList =it.activityWithCategory
+
+            })
 
 
         }
@@ -186,7 +198,7 @@ class AddDayActivity: AppCompatActivity() {
                 calendarTo[Calendar.MILLISECOND] = 0
                 if (editMode == false) {
 
-                var activity = Activity(
+                var activity1 = Activity(
                     0,
                     dayUpdateViewModel.day.id,
                     1,
@@ -194,15 +206,57 @@ class AddDayActivity: AppCompatActivity() {
                     calendarTo.time,
                     name!!
                 )
-                dayUpdateViewModel.addActivity(activity)
+                    for(list in DayEditActivitiesList ) {
+
+//                        if ((list.activity.hour_from >= activity1.hour_from && list.activity.hour_from <= activity1.hour_to)
+//                            || (activity1.hour_from >= list.activity.hour_from && activity1.hour_from <= list.activity.hour_to))
+//                         {
+
+//                        }
+                        if ((activity1.hour_from<list.activity.hour_from && activity1.hour_to<= list.activity.hour_from) ||
+                            (activity1.hour_from>list.activity.hour_from && activity1.hour_from >= list.activity.hour_to)){
+                            continue
+                        }
+                        else{
+                            dateConflict=true
+                        }
+                    }
+                 if (dateConflict){
+                     Toast.makeText(this,"Zmień plan i ponów dodanie aktywności1",Toast.LENGTH_SHORT).show()
+                     finish()
+                 }
+                    else{
+                        Log.i("tutaj","tuwysadza")
+                     dayUpdateViewModel.addActivity(activity1)
+                     finish()
+                 }
 
 
-                finish()
                 }
                 else{
-                   var activity = Activity(editId,dayUpdateViewModel.day.id,1,calendarFrom.time,calendarTo.time,name!!)
-                    dayUpdateViewModel.addActivity(activity)
-                    finish()
+                    var activity2 = Activity(editId,dayUpdateViewModel.day.id,1,calendarFrom.time,calendarTo.time,name!!)
+                    for(list in DayEditActivitiesList ) {
+
+
+                        if ((activity2.hour_from < list.activity.hour_from && activity2.hour_to <= list.activity.hour_from) ||
+                            (activity2.hour_from > list.activity.hour_from && activity2.hour_from >= list.activity.hour_to)){
+                            continue
+
+                        }
+                        else{
+                            dateConflict =true
+                        }
+                    }
+                    if(dateConflict){
+                        Toast.makeText(this,"Zmień plan i ponów dodanie aktywności2",Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    else{
+                        dayUpdateViewModel.updateActivity(activity2)
+                        finish()
+                    }
+
+
                 }
 
 

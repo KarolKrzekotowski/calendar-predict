@@ -80,7 +80,7 @@ class EditDay: AppCompatActivity() {
         dayViewModel.dayWithActivities.observe(this,{it->
             //Log.e("1234456780", it.activityWithCategory)
             if (it != null) {
-                adapter.setData(it.activityWithCategory)
+                adapter.setData(it.activityWithCategory.sortedBy { it.activity.hour_from })
             }
         })
 
