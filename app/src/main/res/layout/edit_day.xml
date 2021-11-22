@@ -23,6 +23,9 @@
         android:layout_width="263dp"
         android:layout_height="70dp"
         android:text="EdycjaDnia"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,41 +34,41 @@
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="294dp"
-        android:layout_height="71dp"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
         android:onClick="acceptChanges"
         android:text="Zatwierdź"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.572"
+        app:layout_constraintHorizontal_bias="0.850"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.992" />
+        app:layout_constraintVertical_bias="0.993" />
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="149dp"
-        android:layout_height="68dp"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
         android:onClick="addActivity"
         android:text="Dodaj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.282"
+        app:layout_constraintHorizontal_bias="0.150"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.885" />
+        app:layout_constraintVertical_bias="0.993" />
 
     <Button
         android:id="@+id/podsumowanko"
-        android:layout_width="143dp"
-        android:layout_height="74dp"
+        android:layout_width="340dp"
+        android:layout_height="64dp"
         android:onClick="sumuj"
         android:text="Podsumuj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.832"
+        app:layout_constraintHorizontal_bias="0.500"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.893" />
+        app:layout_constraintVertical_bias="0.869" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -89,6 +89,8 @@ class AddDayActivity: AppCompatActivity() {
             }
             else{
                 calendardate.setText(together)
+                calendar[Calendar.MONTH] =month!!.toInt()
+                calendar[Calendar.DAY_OF_MONTH] = day!!.toInt()
 
             }
             calendar[Calendar.HOUR_OF_DAY] = 0

@@ -22,6 +22,7 @@ import com.DataBase.Day.DayViewModel
 import com.DataBase.Day.DayViewModelFactory
 import com.DataBase.Day.DayWithActivities
 import com.example.calendar_predict.databinding.EditDayBinding
+
 import java.time.LocalDateTime
 import java.util.Calendar
 
@@ -34,7 +35,7 @@ class EditDay: AppCompatActivity() {
 
     private lateinit var adapter: EditDayAdapter
     lateinit var  dayViewModel: DayViewModel
-    private lateinit var binding:EditDayBinding
+    private lateinit var binding: EditDayBinding
     var calendarcheck:Calendar = Calendar.getInstance()
     val calendar = Calendar.getInstance()
 
@@ -54,7 +55,7 @@ class EditDay: AppCompatActivity() {
         year = datereceived?.getString("year")
         day = datereceived?.getString("day")
         month = datereceived?.getString("month")
-        together =(day.toString()+" "+month.toString()+ "  "+ year.toString())
+        together =(day.toString()+" "+(month!!.toInt()+1).toString()+ "  "+ year.toString())
         EdycjaDnia.text = together
 
         //adapter

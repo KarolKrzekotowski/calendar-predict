@@ -86,12 +86,7 @@ class DayClass : Fragment() {
         }
 
 
-        val podsumowanie:Button = view.findViewById(R.id.podsumuj)
-        podsumowanie.setOnClickListener{
-            val myintent = Intent(getActivity(),GradeDay::class.java)
-            startActivity(myintent)
-        }
-        podsumowanie.setVisibility(View.INVISIBLE)
+
         return view
     }
 
