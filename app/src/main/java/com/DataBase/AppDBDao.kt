@@ -69,14 +69,18 @@ interface AppDBDao {
     @Query("select * from day_table where date = :date")
     fun readDay(date: Date): Day?
 
-
     @Transaction
     @Query("select * from day_table where date = :date")
     fun readDayWithActivities(date: Date):LiveData<DayWithActivities>
 
+
     @Transaction
     @Query("select * from day_table")
     fun readAllDaysWithActivities():LiveData<List<DayWithActivities>>
+
+    @Transaction
+    @Query("select * from day_table")
+    fun readAllDays():LiveData<List<Day>>
 
 //Rating
 

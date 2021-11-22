@@ -79,7 +79,9 @@ class EditDay: AppCompatActivity() {
 
         dayViewModel.dayWithActivities.observe(this,{it->
             //Log.e("1234456780", it.activityWithCategory)
-            adapter.setData(it.activityWithCategory)
+            if (it != null) {
+                adapter.setData(it.activityWithCategory)
+            }
         })
 
         if(calendarcheck.time<calendar.time){

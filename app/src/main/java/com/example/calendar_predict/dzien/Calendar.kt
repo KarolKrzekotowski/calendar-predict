@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import android.widget.CalendarView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.DataBase.Day.AllDaysViewModel
+import com.DataBase.Day.Day
 import com.DataBase.Day.DayUpdateViewModel
 import com.DataBase.Day.DayUpdateViewModelFactory
 import com.example.calendar_predict.R
@@ -22,8 +25,10 @@ class Calendar :Fragment() {
     var year=""
     var month = 0
     var dayOfMonth =""
-    private lateinit var dayUpdateViewModel: DayUpdateViewModel
+    private lateinit var allDaysViewModel: AllDaysViewModel
     var calendar = Calendar.getInstance()
+    var myDays: List<Day> = emptyList<Day>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,12 +53,20 @@ class Calendar :Fragment() {
             calendar[Calendar.SECOND] = 0
             calendar[Calendar.MILLISECOND] = 0
 
-            val factory = DayUpdateViewModelFactory(requireActivity().application, calendar.time)
-            dayUpdateViewModel =
-                ViewModelProvider(this, factory).get(DayUpdateViewModel::class.java)
+            allDaysViewModel = ViewModelProvider(this).get(AllDaysViewModel::class.java)
+
+
+            allDaysViewModel.days.observe(viewLifecycleOwner, Observer { data ->
+                myDays = data
+            })
+
             Log.i("evaluacja", dayOfMonth.toString()+month)
-            Log.i("evaluacja", dayUpdateViewModel.day.evaluated.toString())
-            if (dayUpdateViewModel.day.evaluated==1){
+            //Log.i("evaluacja", myDay.toString())
+
+
+            var tempDay = myDays.filter {it.date == calendar.time}
+
+            if (tempDay.isNotEmpty() && tempDay[0].evaluated == 1){
                 Toast.makeText(context,"Dzień został już oceniony, brak możliwości edycji",Toast.LENGTH_SHORT).show()
             }
             else {

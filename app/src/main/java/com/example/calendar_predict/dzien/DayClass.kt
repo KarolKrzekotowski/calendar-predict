@@ -62,9 +62,9 @@ class DayClass : Fragment() {
 
 //        var activity = Activity(0,2,1,May 04 09:51:52 CDT 2009,13 )
         dayViewModel.dayWithActivities.observe(viewLifecycleOwner, Observer { data ->
-
-            adapter.setData(data.activityWithCategory)
-
+            if (data != null) {
+                adapter.setData(data.activityWithCategory)
+            }
         })
 
 
