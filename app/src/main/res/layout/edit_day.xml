@@ -44,15 +44,28 @@
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="271dp"
-        android:layout_height="72dp"
+        android:layout_width="149dp"
+        android:layout_height="68dp"
         android:onClick="addActivity"
         android:text="Dodaj"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintHorizontal_bias="0.282"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.884" />
+        app:layout_constraintVertical_bias="0.885" />
+
+    <Button
+        android:id="@+id/podsumowanko"
+        android:layout_width="143dp"
+        android:layout_height="74dp"
+        android:onClick="sumuj"
+        android:text="Podsumuj"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.832"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.893" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

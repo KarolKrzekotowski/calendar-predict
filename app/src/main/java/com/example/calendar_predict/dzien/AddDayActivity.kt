@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.DataBase.Activity.Activity
+import com.DataBase.Activity.ActivityWithCategory
 import com.DataBase.Day.DayUpdateViewModel
 import com.DataBase.Day.DayUpdateViewModelFactory
 
@@ -31,6 +32,15 @@ class AddDayActivity: AppCompatActivity() {
     var hour_from = ""
     var hour_to = ""
     var category = ""
+    var aktywnosc : ActivityWithCategory?= null
+    var godzina1=0
+    var godzina2 = 0
+    var minuta1 = 0
+    var minuta2 = 0
+    var calendarFrom2 =Calendar.getInstance()
+    var calendarTo2 = Calendar.getInstance()
+    var editMode = false
+    var editId =0
 
     var calendar = Calendar.getInstance()
 
@@ -42,13 +52,55 @@ class AddDayActivity: AppCompatActivity() {
 
 
 
+
         val datereceived =intent.extras
-        day = datereceived?.getString("day")
-        month = datereceived?.getString("month")
-        together =(day.toString()+" "+month.toString()).toString()
-        calendardate.text = together
-        Log.i("123456","$day")
-        Log.i("123456","$month")
+        if (datereceived!=null) {
+
+            day = datereceived?.getString("day")
+            month = datereceived?.getString("month")
+            aktywnosc = datereceived?.getParcelable("activity")
+            together = (day+" "+month)
+            if(aktywnosc!=null) {
+
+                editMode = true
+
+                calendarFrom2.time = aktywnosc!!.activity.hour_from
+                godzina1 = calendarFrom2[Calendar.HOUR_OF_DAY]
+                minuta1 = calendarFrom2[Calendar.MINUTE]
+                day =calendarFrom2[Calendar.DAY_OF_MONTH].toString()
+                month = calendarFrom2[Calendar.MONTH].toString()
+                editId = aktywnosc!!.activity.id
+
+                calendarTo2.time = aktywnosc!!.activity.hour_to
+                godzina2 = calendarTo2[Calendar.HOUR_OF_DAY]
+                minuta2 = calendarTo2[Calendar.MINUTE]
+                start.setText(displayCorrectTime(godzina1, minuta1))
+                zakonczenie.setText((displayCorrectTime(godzina2, minuta2)))
+
+                nameofactivity.setText(aktywnosc!!.activity.name)
+
+                mark.setText(aktywnosc!!.activity.category_id.toString())
+                calendardate.text =
+                    (calendarFrom2[Calendar.DAY_OF_MONTH].toString() + "  " + calendarFrom2[Calendar.MONTH].toString())
+                hour = godzina1
+                hour2 = godzina2
+                minute = minuta1
+                minute2 = minuta2
+            }
+            else{
+                calendardate.setText(together)
+
+            }
+            calendar[Calendar.HOUR_OF_DAY] = 0
+            calendar[Calendar.MINUTE] = 0
+            calendar[Calendar.SECOND] = 0
+            calendar[Calendar.MILLISECOND] = 0
+            Log.i("tutaj","jestem")
+            val factory = DayUpdateViewModelFactory(application, calendar.time)
+            dayUpdateViewModel = ViewModelProvider(this, factory).get(DayUpdateViewModel::class.java)
+
+
+        }
 
 
 
@@ -74,13 +126,7 @@ class AddDayActivity: AppCompatActivity() {
             timepicker2.show()
         }
 
-        calendar[Calendar.HOUR_OF_DAY] = 0
-        calendar[Calendar.MINUTE] = 0
-        calendar[Calendar.SECOND] = 0
-        calendar[Calendar.MILLISECOND] = 0
 
-        val factory = DayUpdateViewModelFactory(application, calendar.time)
-        dayUpdateViewModel = ViewModelProvider(this, factory).get(DayUpdateViewModel::class.java)
     }
 
     fun displayCorrectTime(hour : Int,minute : Int): String{
@@ -105,6 +151,7 @@ class AddDayActivity: AppCompatActivity() {
         hour_from = start.text.toString()
         hour_to = zakonczenie.text.toString()
         category = mark.text.toString()
+        Log.i("od",hour.toString())
         if (hour>hour2 || (hour==hour2 && minute> minute2)  ){
             Toast.makeText(this, "Błędne godziny ", Toast.LENGTH_SHORT).show()
 
@@ -117,30 +164,48 @@ class AddDayActivity: AppCompatActivity() {
         }
         else {
 
-            val calendarFrom = Calendar.getInstance()
-            //calendarFrom[Calendar.YEAR] = year!!.toInt()
-            calendarFrom[Calendar.MONTH] = month!!.toInt()
-            calendarFrom[Calendar.DAY_OF_MONTH] = day!!.toInt()
-            calendarFrom[Calendar.HOUR_OF_DAY] = 0
-            calendarFrom[Calendar.MINUTE] = 0
-            calendarFrom[Calendar.SECOND] = 0
-            calendarFrom[Calendar.MILLISECOND] = 0
 
-            val calendarTo = Calendar.getInstance()
-            //calendarTo[Calendar.YEAR] = year!!.toInt()
-            calendarTo[Calendar.MONTH] = month!!.toInt()
-            calendarTo[Calendar.DAY_OF_MONTH] = day!!.toInt()
-            calendarTo[Calendar.HOUR_OF_DAY] = 0
-            calendarTo[Calendar.MINUTE] = 0
-            calendarTo[Calendar.SECOND] = 0
-            calendarTo[Calendar.MILLISECOND] = 0
+                val calendarFrom = Calendar.getInstance()
+                //calendarFrom[Calendar.YEAR] = year!!.toInt()
+                calendarFrom[Calendar.MONTH] = month!!.toInt()
+                calendarFrom[Calendar.DAY_OF_MONTH] = day!!.toInt()
+                calendarFrom[Calendar.HOUR_OF_DAY] = hour.toInt()
+                calendarFrom[Calendar.MINUTE] = minute.toInt()
+                calendarFrom[Calendar.SECOND] = 0
+                calendarFrom[Calendar.MILLISECOND] = 0
+
+                val calendarTo = Calendar.getInstance()
+                //calendarTo[Calendar.YEAR] = year!!.toInt()
+                calendarTo[Calendar.MONTH] = month!!.toInt()
+                calendarTo[Calendar.DAY_OF_MONTH] = day!!.toInt()
+                calendarTo[Calendar.HOUR_OF_DAY] = hour2
+                calendarTo[Calendar.MINUTE] = minute2.toInt()
+                calendarTo[Calendar.SECOND] = 0
+                calendarTo[Calendar.MILLISECOND] = 0
+                if (editMode == false) {
+
+                var activity = Activity(
+                    0,
+                    dayUpdateViewModel.day.id,
+                    1,
+                    calendarFrom.time,
+                    calendarTo.time,
+                    name!!
+                )
+                dayUpdateViewModel.addActivity(activity)
 
 
-            var activity = Activity(0,  dayUpdateViewModel.day.id, 1, calendarFrom.time, calendarTo.time, name!!)
-            dayUpdateViewModel.addActivity(activity)
+                finish()
+                }
+                else{
+                   var activity = Activity(editId,dayUpdateViewModel.day.id,1,calendarFrom.time,calendarTo.time,name!!)
+                    dayUpdateViewModel.addActivity(activity)
+                    finish()
+                }
 
 
-            finish()
+
+
         }
     }
 }

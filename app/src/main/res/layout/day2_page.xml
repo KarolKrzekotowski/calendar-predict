@@ -7,12 +7,14 @@
     android:background="#ADC6C4"
     android:backgroundTint="#5C26C6DA"
     android:forceDarkAllowed="false"
+
     tools:context=".dzien.DayClass">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="415dp"
+        android:layout_width="0dp"
         android:layout_height="535dp"
+        android:outlineSpotShadowColor="#C51A1A"
         app:layout_constraintBottom_toTopOf="@+id/podsumuj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

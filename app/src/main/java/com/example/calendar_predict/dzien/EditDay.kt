@@ -22,6 +22,7 @@ import com.DataBase.Day.DayViewModel
 import com.DataBase.Day.DayViewModelFactory
 import com.DataBase.Day.DayWithActivities
 import com.example.calendar_predict.databinding.EditDayBinding
+import java.time.LocalDateTime
 import java.util.Calendar
 
 class EditDay: AppCompatActivity() {
@@ -34,6 +35,8 @@ class EditDay: AppCompatActivity() {
     private lateinit var adapter: EditDayAdapter
     lateinit var  dayViewModel: DayViewModel
     private lateinit var binding:EditDayBinding
+    var calendarcheck:Calendar = Calendar.getInstance()
+    val calendar = Calendar.getInstance()
 
 
 
@@ -60,7 +63,7 @@ class EditDay: AppCompatActivity() {
         rvActivity.adapter = adapter
         rvActivity.layoutManager = LinearLayoutManager(this)
 
-        val calendar = Calendar.getInstance()
+
         calendar[Calendar.YEAR] = year!!.toInt()
         calendar[Calendar.MONTH] = month!!.toInt()
         calendar[Calendar.DAY_OF_MONTH] = day!!.toInt()
@@ -68,7 +71,7 @@ class EditDay: AppCompatActivity() {
         calendar[Calendar.MINUTE] = 0
         calendar[Calendar.SECOND] = 0
         calendar[Calendar.MILLISECOND] = 0
-
+        Log.i("tutaj",month.toString())
         val factory = DayViewModelFactory(application, calendar.time)
         dayViewModel = ViewModelProvider(this, factory).get(DayViewModel::class.java)
 
@@ -78,20 +81,24 @@ class EditDay: AppCompatActivity() {
             adapter.setData(it.activityWithCategory)
         })
 
+        if(calendarcheck.time<calendar.time){
+            podsumowanko.setVisibility(View.INVISIBLE)
 
 
-
-
+        }
 
 
 
 
     }
 
+
     companion object{
         private lateinit var instance: EditDay
 
-        fun showPopup(v:View,ActivityWithCategory: ActivityWithCategory){
+
+
+        fun showPopup(v:View, activityWithCategory: ActivityWithCategory){
             val popup = PopupMenu(instance.applicationContext, v , Gravity.END)
             val inflater:MenuInflater = popup.menuInflater
             inflater.inflate(R.menu.edit_day_menu,popup.menu)
@@ -104,7 +111,7 @@ class EditDay: AppCompatActivity() {
                             .setTitle("usuwanie aktywności")
                             .setMessage("Czy na pewno usunąć aktywność?")
                             .setPositiveButton("Potwierdź"){ _ ,_ ->
-                                instance.dayViewModel.deleteActivity(ActivityWithCategory.activity)
+                                instance.dayViewModel.deleteActivity(activityWithCategory.activity)
                             }
                             .setNegativeButton("Anuluj",null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -113,7 +120,7 @@ class EditDay: AppCompatActivity() {
                     }
                     R.id.edytuj_aktywność ->{
                         val editintent = Intent(instance,AddDayActivity::class.java)
-                        editintent.putExtra("activity",ActivityWithCategory )
+                        editintent.putExtra("activity",activityWithCategory )
                         startActivity(instance,editintent,null)
 
                     }
@@ -129,7 +136,14 @@ class EditDay: AppCompatActivity() {
 
 
 
+    fun sumuj(view:View){
+        val myintent = Intent(this,GradeDay::class.java)
+        myintent.putExtra("day",day.toString())
+        myintent.putExtra("month",month.toString())
+        myintent.putExtra("year",year.toString())
 
+        startActivity(myintent)
+    }
 
 
     fun addActivity(view:View){
