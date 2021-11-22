@@ -8,6 +8,7 @@ import com.DataBase.Day.Day
 import com.DataBase.Day.DayWithActivities
 import com.DataBase.Objective.Objective
 import com.DataBase.Objective.ObjectiveWithCategory
+import com.DataBase.Rating.Rating
 import java.util.*
 
 @Dao
@@ -77,6 +78,8 @@ interface AppDBDao {
     @Query("select * from day_table")
     fun readAllDaysWithActivities():LiveData<List<DayWithActivities>>
 
-//    @Query("select * from category_table where id in (:categories)")
-//    suspend fun loadCategories(categories: List<Category>): List<Category>
+//Rating
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addRating(rating: Rating)
 }

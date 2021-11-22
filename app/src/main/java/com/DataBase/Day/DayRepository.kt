@@ -18,4 +18,16 @@ class DayRepository(private val appDBDao: AppDBDao, date: Date) {
             appDBDao.addDay(newDay)
         }
     }
+
+    suspend fun addActivity(activity: Activity){
+        appDBDao.addActivity(activity)
+    }
+
+    suspend fun updateActivity(activity: Activity){
+        appDBDao.updateActivity(activity)
+    }
+
+    suspend fun deleteActivity(activity: Activity){
+        appDBDao.deleteActivity(activity)
+    }
 }

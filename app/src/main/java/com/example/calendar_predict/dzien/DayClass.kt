@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.DataBase.Day.DayViewModel
 import com.DataBase.Day.DayViewModelFactory
 import com.example.calendar_predict.R
+import kotlinx.android.synthetic.main.day2_page.*
+import java.time.LocalDateTime
 import java.util.*
 
 import java.util.Calendar
@@ -48,6 +52,9 @@ class DayClass : Fragment() {
         calendar[Calendar.MINUTE] = 0
         calendar[Calendar.SECOND] = 0
         calendar[Calendar.MILLISECOND] = 0
+        val dzionek = Calendar.getInstance()
+        val godzina =dzionek[Calendar.HOUR_OF_DAY]
+        val minuta = dzionek[Calendar.MINUTE]
 
 //        dayViewModel = DayViewModelFactory(calendar.time)
         val factory = DayViewModelFactory(requireActivity().application, calendar.time)
@@ -63,14 +70,17 @@ class DayClass : Fragment() {
 
 
 
+        val datka:TextView = view.findViewById(R.id.dzien)
 
+        datka.setText((godzina.toString() +" : "+ minuta.toString()))
 
         val edycja:Button = view.findViewById(R.id.kurczak)
         edycja.setOnClickListener{
 
             val intent = Intent(getActivity(),EditDay::class.java)
             intent.putExtra("day",day.toString())
-            intent.putExtra("month",(month+1).toString())
+            //intent.putExtra("month",(month+1).toString())
+            intent.putExtra("month",(month).toString())
             intent.putExtra("year",year.toString())
             startActivity(intent)
         }
@@ -81,6 +91,7 @@ class DayClass : Fragment() {
             val myintent = Intent(getActivity(),GradeDay::class.java)
             startActivity(myintent)
         }
+        podsumowanie.setVisibility(View.INVISIBLE)
         return view
     }
 
