@@ -4,12 +4,19 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AbsSpinner
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.DataBase.Activity.Activity
 import com.DataBase.Activity.ActivityWithCategory
-import com.DataBase.Day.*
+import com.DataBase.Day.DayUpdateViewModel
+import com.DataBase.Day.DayUpdateViewModelFactory
+import com.DataBase.Day.DayViewModel
+import com.DataBase.Day.DayViewModelFactory
+import com.example.calendar_predict.GoalsCategorySpinner
+import com.example.calendar_predict.GoalsCategorySpinnerAdapter
 
 
 import com.example.calendar_predict.R
@@ -41,14 +48,15 @@ class AddDayActivity: AppCompatActivity() {
     var editMode = false
     var editId =0
     var dateConflict = false
+    lateinit var dayViewModel:DayViewModel
     private var DayEditActivitiesList = emptyList<ActivityWithCategory>()
 
     var calendar = Calendar.getInstance()
+    ///////////////////////////////////////////////////////
+    private var spinnerList: MutableList<GoalsCategorySpinner> = mutableListOf()
 
     lateinit var dayUpdateViewModel: DayUpdateViewModel
-    lateinit var  activityWithCategory: ActivityWithCategory
-    lateinit var dayViewModel:DayViewModel
-    lateinit var dayListViewModel: DayListViewModel
+    lateinit var  spinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,9 +91,9 @@ class AddDayActivity: AppCompatActivity() {
 
                 nameofactivity.setText(aktywnosc!!.activity.name)
 
-                mark.setText(aktywnosc!!.activity.category_id.toString())
+//                mark.setText(aktywnosc!!.activity.category_id.toString())
                 calendardate.text =
-                    (calendarFrom2[Calendar.DAY_OF_MONTH].toString() + "  " + calendarFrom2[Calendar.MONTH].toString())
+                        (calendarFrom2[Calendar.DAY_OF_MONTH].toString() + "  " + calendarFrom2[Calendar.MONTH].toString())
                 hour = godzina1
                 hour2 = godzina2
                 minute = minuta1
@@ -109,10 +117,16 @@ class AddDayActivity: AppCompatActivity() {
             dayViewModel = ViewModelProvider(this,factory1).get(DayViewModel::class.java)
 
             dayViewModel.dayWithActivities.observe(this,{it ->
-                 DayEditActivitiesList =it.activityWithCategory
-
+                DayEditActivitiesList = it.activityWithCategory
             })
 
+            ////////////////////////////////
+            val categories = dayUpdateViewModel.allCategories
+            for (category in categories) {
+                spinnerList.add(GoalsCategorySpinner(category))
+            }
+            spinner= findViewById(R.id.spinner2)
+            spinner.adapter = GoalsCategorySpinnerAdapter(this, spinnerList)
 
         }
 
@@ -123,9 +137,9 @@ class AddDayActivity: AppCompatActivity() {
         pickTimeButton.setOnClickListener{
 
             val timepicker = TimePickerDialog(this,{view, mHour, mMinute ->
-               hour = mHour
-               minute = mMinute
-               start.setText(displayCorrectTime(hour,minute))
+                hour = mHour
+                minute = mMinute
+                start.setText(displayCorrectTime(hour,minute))
             },minute,hour,true)
             timepicker.show()
         }
@@ -164,7 +178,8 @@ class AddDayActivity: AppCompatActivity() {
         name = nameofactivity.text.toString()
         hour_from = start.text.toString()
         hour_to = zakonczenie.text.toString()
-        category = mark.text.toString()
+//        category = mark.text.toString()
+        category =1.toString()
         Log.i("od",hour.toString())
         if (hour>hour2 || (hour==hour2 && minute> minute2)  ){
             Toast.makeText(this, "Błędne godziny ", Toast.LENGTH_SHORT).show()
@@ -179,85 +194,85 @@ class AddDayActivity: AppCompatActivity() {
         else {
 
 
-                val calendarFrom = Calendar.getInstance()
-                //calendarFrom[Calendar.YEAR] = year!!.toInt()
-                calendarFrom[Calendar.MONTH] = month!!.toInt()
-                calendarFrom[Calendar.DAY_OF_MONTH] = day!!.toInt()
-                calendarFrom[Calendar.HOUR_OF_DAY] = hour.toInt()
-                calendarFrom[Calendar.MINUTE] = minute.toInt()
-                calendarFrom[Calendar.SECOND] = 0
-                calendarFrom[Calendar.MILLISECOND] = 0
+            val calendarFrom = Calendar.getInstance()
+            //calendarFrom[Calendar.YEAR] = year!!.toInt()
+            calendarFrom[Calendar.MONTH] = month!!.toInt()
+            calendarFrom[Calendar.DAY_OF_MONTH] = day!!.toInt()
+            calendarFrom[Calendar.HOUR_OF_DAY] = hour.toInt()
+            calendarFrom[Calendar.MINUTE] = minute.toInt()
+            calendarFrom[Calendar.SECOND] = 0
+            calendarFrom[Calendar.MILLISECOND] = 0
 
-                val calendarTo = Calendar.getInstance()
-                //calendarTo[Calendar.YEAR] = year!!.toInt()
-                calendarTo[Calendar.MONTH] = month!!.toInt()
-                calendarTo[Calendar.DAY_OF_MONTH] = day!!.toInt()
-                calendarTo[Calendar.HOUR_OF_DAY] = hour2
-                calendarTo[Calendar.MINUTE] = minute2.toInt()
-                calendarTo[Calendar.SECOND] = 0
-                calendarTo[Calendar.MILLISECOND] = 0
-                if (editMode == false) {
+            val calendarTo = Calendar.getInstance()
+            //calendarTo[Calendar.YEAR] = year!!.toInt()
+            calendarTo[Calendar.MONTH] = month!!.toInt()
+            calendarTo[Calendar.DAY_OF_MONTH] = day!!.toInt()
+            calendarTo[Calendar.HOUR_OF_DAY] = hour2
+            calendarTo[Calendar.MINUTE] = minute2.toInt()
+            calendarTo[Calendar.SECOND] = 0
+            calendarTo[Calendar.MILLISECOND] = 0
+            if (editMode == false) {
 
                 var activity1 = Activity(
-                    0,
-                    dayUpdateViewModel.day.id,
-                    1,
-                    calendarFrom.time,
-                    calendarTo.time,
-                    name!!
+                        0,
+                        dayUpdateViewModel.day.id,
+                        1,
+                        calendarFrom.time,
+                        calendarTo.time,
+                        name!!
                 )
-                    for(list in DayEditActivitiesList ) {
-
-//                        if ((list.activity.hour_from >= activity1.hour_from && list.activity.hour_from <= activity1.hour_to)
-//                            || (activity1.hour_from >= list.activity.hour_from && activity1.hour_from <= list.activity.hour_to))
-//                         {
-
-//                        }
-                        if ((activity1.hour_from<list.activity.hour_from && activity1.hour_to<= list.activity.hour_from) ||
-                            (activity1.hour_from>list.activity.hour_from && activity1.hour_from >= list.activity.hour_to)){
-                            continue
-                        }
-                        else{
-                            dateConflict=true
-                        }
+                for(list in DayEditActivitiesList ) {
+                    if ((activity1.hour_from < list.activity.hour_from && activity1.hour_to <= list.activity.hour_from) ||
+                            (activity1.hour_from > list.activity.hour_from && activity1.hour_from >= list.activity.hour_to)) {
+                        continue
+                    } else {
+                        dateConflict = true
+                        break
                     }
-                 if (dateConflict){
-                     Toast.makeText(this,"Zmień plan i ponów dodanie aktywności1",Toast.LENGTH_SHORT).show()
-                     finish()
-                 }
-                    else{
-                        Log.i("tutaj","tuwysadza")
-                     dayUpdateViewModel.addActivity(activity1)
-                     finish()
-                 }
-
-
+                }
+                if (dateConflict){
+                    Toast.makeText(this,"Zmień plan i ponów dodanie aktywności1",Toast.LENGTH_SHORT).show()
+                    finish()
                 }
                 else{
-                    var activity2 = Activity(editId,dayUpdateViewModel.day.id,1,calendarFrom.time,calendarTo.time,name!!)
-                    for(list in DayEditActivitiesList ) {
+                    dayUpdateViewModel.addActivity(activity1)
+                    finish()
+                }
 
 
-                        if ((activity2.hour_from < list.activity.hour_from && activity2.hour_to <= list.activity.hour_from) ||
+
+
+
+            }
+            else{
+                var activity2 = Activity(editId,dayUpdateViewModel.day.id,1,calendarFrom.time,calendarTo.time,name!!)
+
+                for(list in DayEditActivitiesList ) {
+
+
+                    if ((activity2.hour_from < list.activity.hour_from && activity2.hour_to <= list.activity.hour_from) ||
                             (activity2.hour_from > list.activity.hour_from && activity2.hour_from >= list.activity.hour_to)){
-                            continue
+                        continue
 
-                        }
-                        else{
-                            dateConflict =true
-                        }
-                    }
-                    if(dateConflict){
-                        Toast.makeText(this,"Zmień plan i ponów dodanie aktywności2",Toast.LENGTH_SHORT).show()
-                        finish()
                     }
                     else{
-                        dayUpdateViewModel.updateActivity(activity2)
-                        finish()
+                        dateConflict =true
+                        break
                     }
-
-
                 }
+                if (dateConflict){
+                    Toast.makeText(this,"Zmień plan i ponów dodanie aktywności2",Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else{
+                    dayUpdateViewModel.updateActivity(activity2)
+                    finish()
+                }
+
+
+
+
+            }
 
 
 
