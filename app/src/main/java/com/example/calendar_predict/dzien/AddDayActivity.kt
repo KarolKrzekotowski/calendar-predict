@@ -245,6 +245,7 @@ class AddDayActivity: AppCompatActivity() {
 
             }
             else{
+                var counterOfConflict = 0
                 var activity2 = Activity(editId,dayUpdateViewModel.day.id,dayUpdateViewModel.allCategories[spinner.selectedItemPosition].id,calendarFrom.time,calendarTo.time,name!!)
 
                 for(list in DayEditActivitiesList ) {
@@ -255,9 +256,13 @@ class AddDayActivity: AppCompatActivity() {
                         continue
 
                     }
-                    else{
-                        dateConflict =true
-                        break
+                    else if (activity2.id!=list.activity.id){
+                        dateConflict=true
+
+                    }else
+                    {
+                        counterOfConflict++
+
                     }
                 }
                 if (dateConflict){
