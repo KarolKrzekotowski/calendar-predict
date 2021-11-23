@@ -57,7 +57,7 @@ class AddDayActivity: AppCompatActivity() {
 
     lateinit var dayUpdateViewModel: DayUpdateViewModel
     lateinit var  spinner: Spinner
-
+    val interval =15
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_activity)
@@ -136,11 +136,16 @@ class AddDayActivity: AppCompatActivity() {
 
         pickTimeButton.setOnClickListener{
 
-            val timepicker = TimePickerDialog(this,{view, mHour, mMinute ->
+
+                var     timepicker = TimePickerDialog(this,{view, mHour, mMinute ->
                 hour = mHour
-                minute = mMinute
+                minute = (mMinute/interval) * interval
+                    if (minute ==60) {
+                        minute = 0
+                    }
                 start.setText(displayCorrectTime(hour,minute))
-            },minute,hour,true)
+            },hour,minute,true)
+
             timepicker.show()
         }
 
@@ -148,9 +153,13 @@ class AddDayActivity: AppCompatActivity() {
 
             val timepicker2 = TimePickerDialog(this,{view, kHour, kMinute ->
                 hour2 = kHour
-                minute2 = kMinute
+
+                minute2 = (kMinute/interval) * interval
+                if (minute2 ==60) {
+                    minute2 = 0
+                }
                 zakonczenie.setText(displayCorrectTime(hour2,minute2))
-            },minute2,hour2,true)
+            },hour2,minute2,true)
             timepicker2.show()
         }
 

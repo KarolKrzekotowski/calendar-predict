@@ -72,7 +72,7 @@ class DayClass : Fragment() {
 
         val datka:TextView = view.findViewById(R.id.dzien)
 
-        datka.setText((godzina.toString() +" : "+ minuta.toString()))
+        datka.setText(displayCorrectTime(godzina,minuta))
 
         val edycja:Button = view.findViewById(R.id.kurczak)
         edycja.setOnClickListener{
@@ -89,6 +89,22 @@ class DayClass : Fragment() {
 
 
         return view
+    }
+    fun displayCorrectTime(hour : Int,minute : Int): String{
+
+        var minuteString = minute.toString()
+        var hourString = hour.toString()
+
+        if(minute<10){
+            minuteString = "0$minute"
+        }
+        when {
+            hour<10 -> hourString = "0$hour"
+            hour>23 -> {
+                hourString = "00"
+            }
+        }
+        return "$hourString:$minuteString"
     }
 
 
