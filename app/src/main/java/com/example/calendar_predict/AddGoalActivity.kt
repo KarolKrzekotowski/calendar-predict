@@ -21,6 +21,7 @@ class AddGoalActivity : AppCompatActivity() {
     var editingMode = false
     var goal: ObjectiveWithCategory? = null
     private var spinnerList: MutableList<GoalsCategorySpinner> = mutableListOf()
+    var calendar2=Calendar.getInstance()
 
     private lateinit var categoryViewModel: CategoryViewModel
 
@@ -64,9 +65,13 @@ class AddGoalActivity : AppCompatActivity() {
             binding.targetMinutes.text = "$amount minut"
 
             finishDate = goal!!.objective.date_to
+
+            calendar2.time =finishDate
+
+
             if (finishDate != null) {
                 binding.checkBox.isChecked = true
-                binding.selectedDateTimeDeadline.text = "Data wygaśnięcia: ${finishDate!!.day}:${finishDate!!.month}:${finishDate!!.year}\n"
+                binding.selectedDateTimeDeadline.text = "Data wygaśnięcia:" +((calendar2[Calendar.DAY_OF_MONTH]).toString()+":"+(calendar2[Calendar.MONTH]+1).toString()+":"+ calendar2[Calendar.YEAR].toString())
             }
 
             binding.iconPickerTextView.text = "Edytuj cel..."
@@ -108,9 +113,9 @@ class AddGoalActivity : AppCompatActivity() {
         calendar[java.util.Calendar.SECOND] = 0
         calendar[java.util.Calendar.MILLISECOND] = 0
 
-
+        var monthplus1 = month+1
         finishDate = calendar.time
-        binding.selectedDateTimeDeadline.text = "Data wygaśnięcia: $day:$month:$year\n"
+        binding.selectedDateTimeDeadline.text = "Data wygaśnięcia: $day:$monthplus1:$year\n"
     }
     fun cancelDateSetting() {
         binding.checkBox.isChecked = false
