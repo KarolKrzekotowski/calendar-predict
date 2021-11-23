@@ -13,17 +13,14 @@ import com.example.calendar_predict.R
 
 import kotlinx.android.synthetic.main.edit_day.*
 import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.DataBase.Activity.ActivityWithCategory
 import com.DataBase.Day.DayViewModel
 import com.DataBase.Day.DayViewModelFactory
-import com.DataBase.Day.DayWithActivities
 import com.example.calendar_predict.databinding.EditDayBinding
 
-import java.time.LocalDateTime
 import java.util.Calendar
 
 class EditDay: AppCompatActivity() {
@@ -56,10 +53,10 @@ class EditDay: AppCompatActivity() {
         day = datereceived?.getString("day")
         month = datereceived?.getString("month")
         together =(day.toString()+" "+(month!!.toInt()+1).toString()+ "  "+ year.toString())
-        EdycjaDnia.text = together
+        EdycjaDniaS.text = together
 
         //adapter
-        val rvActivity = findViewById<View>(R.id.dayEditRecycler) as RecyclerView
+        val rvActivity = findViewById<View>(R.id.dayEditRecyclerS) as RecyclerView
         adapter = EditDayAdapter()
         rvActivity.adapter = adapter
         rvActivity.layoutManager = LinearLayoutManager(this)

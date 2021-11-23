@@ -8,7 +8,7 @@
     tools:context=".dzien.EditDay">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/dayEditRecycler"
+        android:id="@+id/dayEditRecyclerS"
         android:layout_width="412dp"
         android:layout_height="436dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.453" />
 
     <TextView
-        android:id="@+id/EdycjaDnia"
+        android:id="@+id/EdycjaDniaS"
         android:layout_width="263dp"
         android:layout_height="70dp"
         android:text="EdycjaDnia"

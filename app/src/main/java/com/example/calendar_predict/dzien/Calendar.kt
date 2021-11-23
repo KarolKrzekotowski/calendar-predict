@@ -68,6 +68,12 @@ class Calendar :Fragment() {
 
             if (tempDay.isNotEmpty() && tempDay[0].evaluated == 1){
                 Toast.makeText(context,"Dzień został już oceniony, brak możliwości edycji",Toast.LENGTH_SHORT).show()
+                val myintent = Intent(getActivity(),SurvivedDay::class.java)
+                myintent.putExtra("day", dayOfMonth.toString())
+                //intent.putExtra("month",(month+1).toString())
+                myintent.putExtra("month", month.toString())
+                myintent.putExtra("year", year.toString())
+                startActivity(myintent)
             }
             else {
 

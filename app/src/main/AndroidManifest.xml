@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Calendarpredict">
+        <activity android:name=".dzien.SurvivedDay"/>
         <activity
             android:name=".AddGoalActivity"
             android:exported="false" />
