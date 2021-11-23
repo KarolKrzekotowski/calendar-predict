@@ -29,7 +29,7 @@ class EditDay: AppCompatActivity() {
     var day:String?=null
     var month:String?=null
     var year:String?=null
-
+    var edycja:String?=null
     private lateinit var adapter: EditDayAdapter
     lateinit var  dayViewModel: DayViewModel
     private lateinit var binding: EditDayBinding
@@ -52,6 +52,7 @@ class EditDay: AppCompatActivity() {
         year = datereceived?.getString("year")
         day = datereceived?.getString("day")
         month = datereceived?.getString("month")
+        edycja = datereceived?.getString("edycja",0.toString())
         together =(day.toString()+" "+(month!!.toInt()+1).toString()+ "  "+ year.toString())
         EdycjaDniaS.text = together
 
@@ -85,6 +86,10 @@ class EditDay: AppCompatActivity() {
             podsumowanko.setVisibility(View.INVISIBLE)
 
 
+        }
+
+        if(edycja=="1"){
+            podsumowanko.visibility = View.INVISIBLE
         }
 
 

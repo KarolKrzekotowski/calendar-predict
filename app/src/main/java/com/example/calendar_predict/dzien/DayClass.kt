@@ -82,6 +82,7 @@ class DayClass : Fragment() {
             //intent.putExtra("month",(month+1).toString())
             intent.putExtra("month",(month).toString())
             intent.putExtra("year",year.toString())
+            intent.putExtra("edycja","1")
             startActivity(intent)
         }
 
