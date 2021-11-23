@@ -1,6 +1,7 @@
 package com.example.calendar_predict.dzien
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +60,8 @@ class SurvivedDayAdapter(): RecyclerView.Adapter<SurvivedDayAdapter.ViewHolder>(
         name.text = activity.activity.name
         start.text = time1
         end.text = time2
-
+        var backgroundColor = Integer.toHexString(activity.category.colour)
+        holder.itemView.setBackgroundColor(Color.parseColor("#"+ backgroundColor))
 
 
 

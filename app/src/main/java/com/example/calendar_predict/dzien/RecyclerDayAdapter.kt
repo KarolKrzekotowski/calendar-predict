@@ -1,6 +1,7 @@
 package com.example.calendar_predict.dzien
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,6 +57,13 @@ class RecyclerDayAdapter(): RecyclerView.Adapter<RecyclerDayAdapter.ViewHolder>(
         name.text = activity.activity.name
         start.text = time1
         end.text = time2
+
+        var backgroundColor = Integer.toHexString(activity.category.colour)
+        viewHolder.itemView.setBackgroundColor(Color.parseColor("#"+ backgroundColor))
+
+
+
+
 
 
 

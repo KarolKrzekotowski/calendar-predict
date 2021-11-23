@@ -1,6 +1,7 @@
 package com.example.calendar_predict.dzien
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -50,6 +51,8 @@ class EditDayAdapter(): RecyclerView.Adapter<EditDayAdapter.ViewHolder>() {
         start.text = (time1)
         var time2 = displayCorrectTime(calendarium2.get(Calendar.HOUR_OF_DAY), calendarium2.get(Calendar.MINUTE))
         end.text = (time2)
+        var backgroundColor = Integer.toHexString(activity.category.colour)
+        viewHolder.itemView.setBackgroundColor(Color.parseColor("#"+ backgroundColor))
 
         viewHolder.itemView.setOnLongClickListener{
             EditDay.showPopup(it, activity )
