@@ -54,17 +54,35 @@ class SurvivedDayAdapter(): RecyclerView.Adapter<SurvivedDayAdapter.ViewHolder>(
         calendarium.time=od
         calendarium2.time = od2
 
+        var time1 = displayCorrectTime(calendarium.get(Calendar.HOUR_OF_DAY), calendarium.get(Calendar.MINUTE))
+        var time2 = displayCorrectTime(calendarium2.get(Calendar.HOUR_OF_DAY), calendarium2.get(Calendar.MINUTE))
         name.text = activity.activity.name
-
-        start.text = (calendarium.get(Calendar.HOUR_OF_DAY).toString()+ " : " + calendarium.get(Calendar.MINUTE)).toString()
-        end.text = (calendarium2.get(Calendar.HOUR_OF_DAY).toString()+ " : " + calendarium2.get(Calendar.MINUTE)).toString()
-
+        start.text = time1
+        end.text = time2
 
 
 
 
 
 
+
+    }
+
+    fun displayCorrectTime(hour : Int,minute : Int): String{
+
+        var minuteString = minute.toString()
+        var hourString = hour.toString()
+
+        if(minute<10){
+            minuteString = "0$minute"
+        }
+        when {
+            hour<10 -> hourString = "0$hour"
+            hour>23 -> {
+                hourString = "00"
+            }
+        }
+        return "$hourString:$minuteString"
     }
 
 

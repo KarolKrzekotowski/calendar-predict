@@ -71,7 +71,7 @@ class AddDayActivity: AppCompatActivity() {
             day = datereceived?.getString("day")
             month = datereceived?.getString("month")
             aktywnosc = datereceived?.getParcelable("activity")
-            together = (day+" "+month)
+            together = (day+" "+(month?.toInt()?.plus(1)).toString())
             if(aktywnosc!=null) {
 
                 editMode = true
