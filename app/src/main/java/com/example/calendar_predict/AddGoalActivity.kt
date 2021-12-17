@@ -21,7 +21,7 @@ class AddGoalActivity : AppCompatActivity() {
     var editingMode = false
     var goal: ObjectiveWithCategory? = null
     private var spinnerList: MutableList<GoalsCategorySpinner> = mutableListOf()
-    var calendar2=Calendar.getInstance()
+    var calendar2: Calendar = Calendar.getInstance()
 
     private lateinit var categoryViewModel: CategoryViewModel
 
@@ -113,9 +113,9 @@ class AddGoalActivity : AppCompatActivity() {
         calendar[java.util.Calendar.SECOND] = 0
         calendar[java.util.Calendar.MILLISECOND] = 0
 
-        var monthplus1 = month+1
+
         finishDate = calendar.time
-        binding.selectedDateTimeDeadline.text = "Data wygaśnięcia: $day:$monthplus1:$year\n"
+        binding.selectedDateTimeDeadline.text = "Data wygaśnięcia: $day:${month+1}:$year\n"
     }
     fun cancelDateSetting() {
         binding.checkBox.isChecked = false
