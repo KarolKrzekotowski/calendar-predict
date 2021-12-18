@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.DataBase.Activity.ActivityWithCategory
+import com.DataBase.Day.DayViewModel
+import com.DataBase.Day.DayViewModelFactory
 import com.DataBase.Objective.ObjectiveListViewModel
 import com.example.calendar_predict.*
 import com.example.calendar_predict.DayActivityPagerAdapter
@@ -33,6 +35,9 @@ class EditDay: AppCompatActivity() {
     var year:String?=null
     var edycja:String?=null
     private lateinit var binding: EditDayBinding
+    lateinit var  dayViewModel: DayViewModel
+
+
     val calendar: Calendar = Calendar.getInstance()
 
     var tabLayout: TabLayout? = null
@@ -80,7 +85,10 @@ class EditDay: AppCompatActivity() {
         if (viewModel == null) {
             viewModel = ViewModelProvider(this)[ObjectiveListViewModel::class.java]
         }
-        val pagerAdapter = DayActivityPagerAdapter(this, supportFragmentManager, tabLayout!!.tabCount, DayClass.getViewmodel(calendar), viewModel, calendar)
+
+        val factory = DayViewModelFactory(application, calendar.time)
+        dayViewModel = ViewModelProvider(this, factory).get(DayViewModel::class.java)
+        val pagerAdapter = DayActivityPagerAdapter(this, supportFragmentManager, tabLayout!!.tabCount, dayViewModel, viewModel, calendar)
         viewPager!!.adapter =  pagerAdapter
         viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
