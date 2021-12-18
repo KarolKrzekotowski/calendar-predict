@@ -49,7 +49,9 @@ class DayUpdateViewModel(application: Application, date: Date): AndroidViewModel
 
 class DayUpdateViewModelFactory(private val mApplication: Application, private val date: Date) :
     ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        val rond = 4 + 2
         return DayUpdateViewModel(mApplication, date) as T
     }
+
 }

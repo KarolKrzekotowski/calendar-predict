@@ -16,10 +16,13 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.DataBase.Activity.ActivityWithCategory
 import com.DataBase.Day.DayViewModel
 import com.DataBase.Day.DayViewModelFactory
+import com.example.calendar_predict.DayActivityPagerAdapter
 import com.example.calendar_predict.databinding.EditDayBinding
+import com.google.android.material.tabs.TabLayout
 
 import java.util.Calendar
 
@@ -30,12 +33,11 @@ class EditDay: AppCompatActivity() {
     var month:String?=null
     var year:String?=null
     var edycja:String?=null
-    private lateinit var adapter: EditDayAdapter
-    lateinit var  dayViewModel: DayViewModel
     private lateinit var binding: EditDayBinding
-    var calendarcheck:Calendar = Calendar.getInstance()
     val calendar = Calendar.getInstance()
 
+    var tabLayout: TabLayout? = null
+    var viewPager: ViewPager? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +48,6 @@ class EditDay: AppCompatActivity() {
         init()
     }
     private fun init() {
-        instance = this
 
         val datereceived =intent.extras
         year = datereceived?.getString("year")
@@ -57,10 +58,7 @@ class EditDay: AppCompatActivity() {
         EdycjaDniaS.text = together
 
         //adapter
-        val rvActivity = findViewById<View>(R.id.dayEditRecyclerS) as RecyclerView
-        adapter = EditDayAdapter()
-        rvActivity.adapter = adapter
-        rvActivity.layoutManager = LinearLayoutManager(this)
+//
 
 
         calendar[Calendar.YEAR] = year!!.toInt()
@@ -71,75 +69,28 @@ class EditDay: AppCompatActivity() {
         calendar[Calendar.SECOND] = 0
         calendar[Calendar.MILLISECOND] = 0
         Log.i("tutaj",month.toString())
-        val factory = DayViewModelFactory(application, calendar.time)
-        dayViewModel = ViewModelProvider(this, factory).get(DayViewModel::class.java)
 
-
-        dayViewModel.dayWithActivities.observe(this,{it->
-            //Log.e("1234456780", it.activityWithCategory)
-            if (it != null) {
-                adapter.setData(it.activityWithCategory.sortedBy { it.activity.hour_from })
+        tabLayout = findViewById(R.id.tabLayout2)
+        viewPager = findViewById(R.id.viewPager2)
+        //TODO my fragments
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Dzień"))
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Codzienne"))
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Długoterminowe"))
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Sugestie"))
+        val pagerAdapter = DayActivityPagerAdapter(this, supportFragmentManager, tabLayout!!.tabCount, DayClass.getViewmodel())
+        viewPager!!.adapter =  pagerAdapter
+        viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewPager!!.currentItem = tab.position
             }
-        })
-
-        if(calendarcheck.time<calendar.time){
-            podsumowanko.setVisibility(View.INVISIBLE)
-
-
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
         }
-
-        if(edycja=="1"){
-            podsumowanko.visibility = View.INVISIBLE
-        }
-
-
+        )
 
 
     }
-
-
-    companion object{
-        private lateinit var instance: EditDay
-
-
-
-        fun showPopup(v:View, activityWithCategory: ActivityWithCategory){
-            val popup = PopupMenu(instance.applicationContext, v , Gravity.END)
-            val inflater:MenuInflater = popup.menuInflater
-            inflater.inflate(R.menu.edit_day_menu,popup.menu)
-
-
-            popup.setOnMenuItemClickListener { item ->
-                when(item.itemId){
-                    R.id.usun_aktywność ->{
-                        AlertDialog.Builder(instance)
-                            .setTitle("usuwanie aktywności")
-                            .setMessage("Czy na pewno usunąć aktywność?")
-                            .setPositiveButton("Potwierdź"){ _ ,_ ->
-                                instance.dayViewModel.deleteActivity(activityWithCategory.activity)
-                            }
-                            .setNegativeButton("Anuluj",null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .create()
-                            .show()
-                    }
-                    R.id.edytuj_aktywność ->{
-                        val editintent = Intent(instance,AddDayActivity::class.java)
-                        editintent.putExtra("activity",activityWithCategory )
-                        startActivity(instance,editintent,null)
-
-                    }
-                }
-                true
-            }
-            popup.show()
-        }
-    }
-
-
-
-
-
 
     fun sumuj(view:View){
         val myintent = Intent(this,GradeDay::class.java)
@@ -167,4 +118,11 @@ class EditDay: AppCompatActivity() {
         finish()
     }
 
+    override fun getDefaultViewModelProviderFactory(): DayViewModelFactory {
+        return DayViewModelFactory(application, calendar.time)
+    }
+
+    fun getEdycjaa(): String? {
+        return edycja
+    }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.DataBase.Activity.ActivityWithCategory
+import com.example.calendar_predict.DayAddedActivitiyFragment
 import com.example.calendar_predict.R
 import java.util.Calendar
 
@@ -55,7 +56,7 @@ class EditDayAdapter(): RecyclerView.Adapter<EditDayAdapter.ViewHolder>() {
         viewHolder.itemView.setBackgroundColor(Color.parseColor("#"+ backgroundColor))
 
         viewHolder.itemView.setOnLongClickListener{
-            EditDay.showPopup(it, activity )
+            DayAddedActivitiyFragment.showPopup(it, activity )
 
             return@setOnLongClickListener true
         }

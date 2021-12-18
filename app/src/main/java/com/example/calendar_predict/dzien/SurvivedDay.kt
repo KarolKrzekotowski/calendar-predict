@@ -10,7 +10,6 @@ import com.DataBase.Day.DayViewModelFactory
 import com.example.calendar_predict.databinding.SurvivedDayBinding
 import kotlinx.android.synthetic.main.edit_day.*
 import kotlinx.android.synthetic.main.edit_day.EdycjaDniaS
-import kotlinx.android.synthetic.main.edit_day.dayEditRecyclerS
 import kotlinx.android.synthetic.main.survived_day.*
 import java.util.Calendar
 
@@ -19,12 +18,12 @@ var month:String?=null
 var year:String?=null
 var together:String?=null
 
-private lateinit var adapter: SurvivedDayAdapter
-lateinit var  dayViewModel: DayViewModel
-private lateinit var binding: SurvivedDayBinding
-val calendar = Calendar.getInstance()
 
 class SurvivedDay : AppCompatActivity() {
+    private lateinit var adapter: SurvivedDayAdapter
+    lateinit var  dayViewModel: DayViewModel
+    private lateinit var binding: SurvivedDayBinding
+    val calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

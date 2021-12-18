@@ -46,7 +46,7 @@ class DayViewModel(application: Application, date: Date): AndroidViewModel(appli
 
 class DayViewModelFactory(private val mApplication: Application, private val date: Date) :
     ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return DayViewModel(mApplication, date) as T
     }
 }

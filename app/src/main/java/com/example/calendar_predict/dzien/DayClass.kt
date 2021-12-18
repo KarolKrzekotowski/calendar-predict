@@ -34,25 +34,23 @@ class DayClass : Fragment() {
     var day = calendar.get(Calendar.DAY_OF_MONTH)
     var month = calendar.get(Calendar.MONTH)
     var year = calendar.get(Calendar.YEAR)
-    var tabLayout: TabLayout? = null
-    var viewPager: ViewPager? = null
+    private lateinit var adapter: RecyclerView.Adapter<RecyclerDayAdapter.ViewHolder>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view: View = inflater.inflate(R.layout.day2_page, container, false)
+        instance = this
 
-
-        val adapter = RecyclerDayAdapter()
+        adapter = RecyclerDayAdapter()
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = adapter
 
 //        var day_id = dayViewModel.dayWithActivities.value?.day?.id
 
-        val calendar = Calendar.getInstance()
         calendar[Calendar.HOUR_OF_DAY] = 0
         calendar[Calendar.MINUTE] = 0
         calendar[Calendar.SECOND] = 0
@@ -68,7 +66,7 @@ class DayClass : Fragment() {
 //        var activity = Activity(0,2,1,May 04 09:51:52 CDT 2009,13 )
         dayViewModel.dayWithActivities.observe(viewLifecycleOwner, Observer { data ->
             if (data != null) {
-                adapter.setData(data.activityWithCategory.sortedBy { it.activity.hour_from })
+                (adapter as RecyclerDayAdapter).setData(data.activityWithCategory.sortedBy { it.activity.hour_from })
             }
         })
 
@@ -91,23 +89,7 @@ class DayClass : Fragment() {
             startActivity(intent)
         }
 
-//        tabLayout = requireActivity().findViewById(R.id.tabLayout)
-//        viewPager = requireActivity().findViewById(R.id.viewPager)
-//        //TODO my fragments
-//        tabLayout!!.addTab(tabLayout!!.newTab().setText("Dzień"))
-//        tabLayout!!.addTab(tabLayout!!.newTab().setText("Kalendarz"))
-//        tabLayout!!.addTab(tabLayout!!.newTab().setText("Statystyki"))
-//        val pagerAdapter = DayActivityPagerAdapter(requireContext(), requireActivity().supportFragmentManager, tabLayout!!.tabCount)
-//        viewPager!!.adapter =  pagerAdapter
-//        viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-//        tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-//            override fun onTabSelected(tab: TabLayout.Tab) {
-//                viewPager!!.currentItem = tab.position
-//            }
-//            override fun onTabUnselected(tab: TabLayout.Tab) {}
-//            override fun onTabReselected(tab: TabLayout.Tab) {}
-//        }
-//        )
+
 
         return view
     }
@@ -129,7 +111,19 @@ class DayClass : Fragment() {
     }
 
 
+    companion object
+    {
+        lateinit var instance: DayClass
+        fun getViewmodel(): DayViewModel
+        {
+            return instance.dayViewModel
+        }
+        fun getCalendar(): Calendar
+        {
+            return instance.calendar
+        }
 
+    }
 
 
 }
