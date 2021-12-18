@@ -41,6 +41,15 @@ class StatisticsClass : Fragment() {
     private var ActivitiesBeofre6 = emptyList<Activity>()
     private var ActivitiesBeofre30 = emptyList<Activity>()
 
+    private var timeSpentSport = 0
+    private var timeSpentNauka = 0
+    private var timeSpentSen = 0
+    private var timeSpentGry = 0
+    private var timeSpentRelaks = 0
+    private var timeSpentPraca = 0
+    private var timeSpentSpotkania = 0
+
+
     private var ratings7 = emptyList<Rating>()
     private var ratings6 = emptyList<Rating>()
     private var ratings30 = emptyList<Rating>()
@@ -51,6 +60,7 @@ class StatisticsClass : Fragment() {
 
     lateinit var DayListViewModel: DayListViewModel
     private lateinit var pieChart: PieChart
+    private lateinit var pieChart2: PieChart
     var Sport = 0
     var Nauka = 0
     var Praca = 0
@@ -69,11 +79,13 @@ class StatisticsClass : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.statistics_page, container, false)
+        val view: View = inflater.inflate(R.layout.statistics_page2, container, false)
         val spinner = view.findViewById<Spinner>(R.id.spinner3)
         pieChart = view.findViewById(R.id.pieChart)
+        pieChart2 = view.findViewById(R.id.pieChart2)
 
         initPieChart()
+        initPieChart2()
 
         Log.i("tutajjse1",calendar1.timeInMillis.toString())
         calendar1[Calendar.HOUR_OF_DAY] = 0
@@ -127,18 +139,48 @@ class StatisticsClass : Fragment() {
                         Spotkania = 0
                         Nauka = 0
 
+                        timeSpentSport = 0
+                        timeSpentNauka = 0
+                        timeSpentSen = 0
+                        timeSpentGry = 0
+                        timeSpentRelaks = 0
+                        timeSpentPraca = 0
+                        timeSpentSpotkania = 0
+
                         for(list in ActivitiesBeofre7){
 
                                 Log.i("siema",list.category_id.toString())
                             //                Sport+=1
-                                when(list.category_id){
-                                    3   ->{Sport += 1}
-                                    4   ->{Nauka += 1}
-                                    5   ->{Praca += 1}
-                                    6   ->{Sen += 1}
-                                    7   ->{Gry += 1     }
-                                    8   ->{Relaks += 1}
-                                    9   ->{ Spotkania += 1}
+                                when(list.category_id) {
+                                    3 -> {
+                                        Sport += 1
+                                        timeSpentSport += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                    }
+                                    4 -> {
+                                        Nauka += 1
+                                        timeSpentNauka += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                        }
+                                    5   ->{
+                                        Praca += 1
+                                        timeSpentPraca += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                        }
+                                    6   ->{
+                                        Sen += 1
+                                        timeSpentSen += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                        }
+                                    7   ->{
+                                        Gry += 1
+                                        timeSpentGry += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                        }
+                                    8   ->{
+                                        Relaks += 1
+                                        timeSpentRelaks += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                        }
+                                    9   ->
+                                        {
+                                        Spotkania += 1
+                                        timeSpentSpotkania += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                        }
 
                                 }
 //
@@ -161,6 +203,9 @@ class StatisticsClass : Fragment() {
                         loop = 0
                         gradeMean = 0
                         setDataToPieChart()
+                        setDataToPieChart2()
+
+
 
                     }
 
@@ -173,18 +218,48 @@ class StatisticsClass : Fragment() {
                         Spotkania = 0
                         Nauka = 0
 
+                        timeSpentSport = 0
+                        timeSpentNauka = 0
+                        timeSpentSen = 0
+                        timeSpentGry = 0
+                        timeSpentRelaks = 0
+                        timeSpentPraca = 0
+                        timeSpentSpotkania = 0
+
                         for(list in ActivitiesBeofre30){
 
                             Log.i("siema",list.category_id.toString())
                             //                Sport+=1
-                            when(list.category_id){
-                                3   ->{Sport += 1}
-                                4   ->{Nauka += 1}
-                                5   ->{Praca += 1}
-                                6   ->{Sen += 1}
-                                7   ->{Gry += 1     }
-                                8   ->{Relaks += 1}
-                                9   ->{ Spotkania += 1}
+                            when(list.category_id) {
+                                3 -> {
+                                    Sport += 1
+                                    timeSpentSport += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                4 -> {
+                                    Nauka += 1
+                                    timeSpentNauka += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                5   ->{
+                                    Praca += 1
+                                    timeSpentPraca += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                6   ->{
+                                    Sen += 1
+                                    timeSpentSen += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                7   ->{
+                                    Gry += 1
+                                    timeSpentGry += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                8   ->{
+                                    Relaks += 1
+                                    timeSpentRelaks += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                9   ->
+                                {
+                                    Spotkania += 1
+                                    timeSpentSpotkania += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
 
                             }
 //
@@ -211,7 +286,7 @@ class StatisticsClass : Fragment() {
                         loop = 0
                         gradeMean = 0
                         setDataToPieChart()
-
+                        setDataToPieChart2()
 
                     }
 
@@ -227,18 +302,48 @@ class StatisticsClass : Fragment() {
                         Spotkania = 0
                         Nauka = 0
 
+                        timeSpentSport = 0
+                        timeSpentNauka = 0
+                        timeSpentSen = 0
+                        timeSpentGry = 0
+                        timeSpentRelaks = 0
+                        timeSpentPraca = 0
+                        timeSpentSpotkania = 0
+
                         for(list in ActivitiesBeofre6){
 
                             Log.i("siema",list.category_id.toString())
                             //                Sport+=1
-                            when(list.category_id){
-                                3   ->{Sport += 1}
-                                4   ->{Nauka += 1}
-                                5   ->{Praca += 1}
-                                6   ->{Sen += 1}
-                                7   ->{Gry += 1     }
-                                8   ->{Relaks += 1}
-                                9   ->{ Spotkania += 1}
+                            when(list.category_id) {
+                                3 -> {
+                                    Sport += 1
+                                    timeSpentSport += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                4 -> {
+                                    Nauka += 1
+                                    timeSpentNauka += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                5   ->{
+                                    Praca += 1
+                                    timeSpentPraca += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                6   ->{
+                                    Sen += 1
+                                    timeSpentSen += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                7   ->{
+                                    Gry += 1
+                                    timeSpentGry += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                8   ->{
+                                    Relaks += 1
+                                    timeSpentRelaks += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
+                                9   ->
+                                {
+                                    Spotkania += 1
+                                    timeSpentSpotkania += (list.hour_to.time.toInt() - list.hour_from.time.toInt())/60/60/1000
+                                }
 
                             }
 //
@@ -265,7 +370,7 @@ class StatisticsClass : Fragment() {
                         loop = 0
                         gradeMean = 0
                         setDataToPieChart()
-
+                        setDataToPieChart2()
 
                     }
                 }
@@ -285,12 +390,13 @@ class StatisticsClass : Fragment() {
         pieChart.setTouchEnabled(false)
         pieChart.setDrawEntryLabels(false)
         //adding padding
-        pieChart.setExtraOffsets(20f, 0f, 0f, 50f)
+        pieChart.setExtraOffsets(20f, 0f, 20f, 50f)
         pieChart.setUsePercentValues(true)
         pieChart.isRotationEnabled = false
         pieChart.setDrawEntryLabels(false)
         pieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
         pieChart.legend.isWordWrapEnabled = true
+        pieChart.legend.textSize=13f
 
     }
 
@@ -336,11 +442,88 @@ class StatisticsClass : Fragment() {
 
         //add text in center
         pieChart.setDrawCenterText(true);
-        pieChart.centerText = "Kategorie aktywności w zazanczonym okresie"
+        pieChart.centerText = "Ilość aktywności o określonej kategorii"
+        pieChart.setCenterTextSize(20f)
+
 
 
 
         pieChart.invalidate()
+
+    }
+
+    private fun initPieChart2() {
+        pieChart2.setUsePercentValues(true)
+        pieChart2.description.text = ""
+
+        //hollow pie chart
+        pieChart2.isDrawHoleEnabled = false
+        pieChart2.setTouchEnabled(false)
+        pieChart2.setDrawEntryLabels(false)
+        //adding padding
+        pieChart2.setExtraOffsets(0f, 0f, 20f, 20f)
+        pieChart2.setUsePercentValues(true)
+        pieChart2.isRotationEnabled = false
+        pieChart2.setDrawEntryLabels(false)
+        pieChart2.legend.orientation = Legend.LegendOrientation.VERTICAL
+        pieChart2.legend.isWordWrapEnabled = true
+        pieChart2.legend.textSize=12f
+        pieChart2.legend.horizontalAlignment=Legend.LegendHorizontalAlignment.LEFT
+
+
+    }
+
+    private fun setDataToPieChart2() {
+        pieChart2.setUsePercentValues(false)
+        val dataEntries = ArrayList<PieEntry>()
+
+        dataEntries.add(PieEntry(timeSpentSport.toFloat(), "Sport"))
+        dataEntries.add(PieEntry(timeSpentNauka.toFloat(), "Nauka"))
+        dataEntries.add(PieEntry(timeSpentPraca.toFloat(), "Praca"))
+        dataEntries.add(PieEntry(timeSpentSen.toFloat(), "Sen"))
+        dataEntries.add(PieEntry(timeSpentGry.toFloat(), "Gry"))
+        dataEntries.add(PieEntry(timeSpentRelaks.toFloat(), "Relaks"))
+        dataEntries.add(PieEntry(timeSpentSpotkania.toFloat(), "Spotkania"))
+
+
+        val colors: ArrayList<Int> = ArrayList()
+        colors.add(Color.parseColor("#"+Integer.toHexString(15423901)))
+        colors.add(Color.parseColor("#"+Integer.toHexString(15423969)))
+        colors.add(Color.parseColor("#"+Integer.toHexString(5383122)))
+        colors.add(Color.parseColor("#"+Integer.toHexString(2347730)))
+        colors.add(Color.parseColor("#"+Integer.toHexString(2347608)))
+        colors.add(Color.parseColor("#"+Integer.toHexString(13816355)))
+        colors.add(Color.parseColor("#"+Integer.toHexString(13795619)))
+
+
+        val dataSet = PieDataSet(dataEntries, "")
+        val data = PieData(dataSet)
+
+        // In Percentage
+        data.setValueFormatter(PercentFormatter())
+        dataSet.sliceSpace = 3f
+        dataSet.colors = colors
+        pieChart2.data = data
+        data.setValueTextSize(15f)
+        pieChart2.setExtraOffsets(0f, 10f, 0f, 20f)
+        pieChart2.animateY(1400, Easing.EaseInOutQuad)
+
+        //create hole in center
+        pieChart2.holeRadius = 58f
+        pieChart2.transparentCircleRadius = 61f
+        pieChart2.isDrawHoleEnabled = true
+        pieChart2.setHoleColor(Color.WHITE)
+
+
+        //add text in center
+        pieChart2.setDrawCenterText(true);
+        pieChart2.centerText = "Czas poświęcony na poszczególne kategorie w godzinach"
+        pieChart2.setCenterTextSize(20f)
+
+
+
+
+        pieChart2.invalidate()
 
     }
 
