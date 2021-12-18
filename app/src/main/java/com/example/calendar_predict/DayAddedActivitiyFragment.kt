@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.lifecycle.ViewModelProvider
 import com.DataBase.Activity.ActivityWithCategory
 import com.DataBase.Day.DayViewModel
 import com.example.calendar_predict.dzien.AddDayActivity
@@ -22,20 +21,11 @@ import java.util.*
 /**
  * A fragment representing a list of Items.
  */
-class DayAddedActivitiyFragment(val dayViewModel: DayViewModel) : Fragment() {
+class DayAddedActivitiyFragment(var dayViewModel: DayViewModel, val calendarcheck: Calendar) : Fragment() {
     var recyclerView: RecyclerView?=null
 
     private var columnCount = 1
-    var calendarcheck: Calendar = Calendar.getInstance()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        instance = this
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
+    val adapter = RecyclerDayAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,14 +34,7 @@ class DayAddedActivitiyFragment(val dayViewModel: DayViewModel) : Fragment() {
         val view = inflater.inflate(R.layout.added_activitiy_day_list, container, false)
 
         val rvActivity = view.findViewById<View>(R.id.dayEditRecyclerS) as RecyclerView
-        val adapter = RecyclerDayAdapter()
-//        rvActivity.layoutManager = LinearLayoutManager(context)
-//        rvActivity.adapter = adapter
-//        dayViewModel = DayViewModelFactory(calendar.time)
-//        val factory = (requireActivity() as EditDay).defaultViewModelProviderFactory
-//        dayViewModel = ViewModelProvider(this, factory).get(DayViewModel::class.java)
-//
-////        var activity = Activity(0,2,1,May 04 09:51:52 CDT 2009,13 )
+
         dayViewModel.dayWithActivities.observe(viewLifecycleOwner, { data ->
             if (data != null) {
                 adapter.setData(data.activityWithCategory.sortedBy { it.activity.hour_from })
@@ -59,8 +42,7 @@ class DayAddedActivitiyFragment(val dayViewModel: DayViewModel) : Fragment() {
         })
         rvActivity.adapter = adapter
         rvActivity.layoutManager = LinearLayoutManager(requireContext())
-//
-//
+
         if(calendarcheck.time < DayClass.getCalendar().time){
             requireActivity().findViewById<Button>(R.id.podsumowanko).visibility = View.INVISIBLE
         }
@@ -74,22 +56,18 @@ class DayAddedActivitiyFragment(val dayViewModel: DayViewModel) : Fragment() {
 
 
     companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-//        // TODO: Customize parameter initialization
-//        @JvmStatic
-//        fun newInstance(columnCount: Int) =
-//            DayAddedActivitiyFragment().apply {
-//                arguments = Bundle().apply {
-//                    putInt(ARG_COLUMN_COUNT, columnCount)
-//                }
-//            }
-
-
         private lateinit var instance: DayAddedActivitiyFragment
-
+        fun setModel(model: DayViewModel)
+        {
+            if(this::instance.isInitialized) {
+                instance.dayViewModel = model
+                instance.dayViewModel.dayWithActivities.observe(instance.viewLifecycleOwner, { data ->
+                    if (data != null) {
+                        instance.adapter.setData(data.activityWithCategory.sortedBy { it.activity.hour_from })
+                    }
+                })
+            }
+        }
 
 
         fun showPopup(v:View, activityWithCategory: ActivityWithCategory){

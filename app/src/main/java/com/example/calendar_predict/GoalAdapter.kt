@@ -17,7 +17,6 @@ class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
     private var goalList = emptyList<ObjectiveWithCategory>()
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-
         val goalNameTextView: TextView = itemView.findViewById<TextView>(R.id.goalNameTextView)
         val amountDoneTextView: TextView = itemView.findViewById<TextView>(R.id.amountDoneTextView)
         val nextDueTextView: TextView = itemView.findViewById<TextView>(R.id.nextDueTextView)

@@ -5,24 +5,28 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.DataBase.Day.DayViewModel
+import com.DataBase.Objective.ObjectiveListViewModel
+import java.util.*
 
 @Suppress("DEPRECATION")
 internal class DayActivityPagerAdapter (
     var context: Context,
     fm: FragmentManager,
     var totalTabs: Int,
-    val viewModel: DayViewModel
+    val viewModel: DayViewModel,
+    val viewModel2: ObjectiveListViewModel,
+    val calendar: Calendar
 ) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
-                DayAddedActivitiyFragment(viewModel)
+                DayAddedActivitiyFragment(viewModel, calendar)
             }
             1 -> {
-                GoalsDayFragment()
+                GoalsDayFragment(viewModel2)
             }
             2 -> {
-                GoalLongtermFragment()
+                GoalLongtermFragment(viewModel2)
             }
             3 -> {
                 GoalAlgorithmFragment()
