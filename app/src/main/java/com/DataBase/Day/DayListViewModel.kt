@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.DataBase.AppDataBase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class DayListViewModel(application: Application): AndroidViewModel(application) {
     val allDaysWithActivities: LiveData<List<DayWithActivities>>
+
     private val dayListRepository: DayListRepository
 
     init {
@@ -19,6 +21,7 @@ class DayListViewModel(application: Application): AndroidViewModel(application) 
 
         dayListRepository = DayListRepository(appDBDao)
         allDaysWithActivities = dayListRepository.allDaysWithActivities
+
     }
 
     fun addDay(day: Day){

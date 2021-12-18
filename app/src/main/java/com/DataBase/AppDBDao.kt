@@ -81,9 +81,19 @@ interface AppDBDao {
     @Transaction
     @Query("select * from day_table")
     fun readAllDays():LiveData<List<Day>>
-
 //Rating
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addRating(rating: Rating)
+
+//Statistics
+    @Query("select * from activity_table where hour_from >= :date")
+    fun readAllActivitieswithCategories(date: Date): List<Activity>
+
+    @Query("select * from rating_table as r, day_table as d where d.date>= :date and  d.evaluated =1 and d.id =r.day_id")
+    fun readAllRates(date: Date): List<Rating>
+
+
+
+
 }

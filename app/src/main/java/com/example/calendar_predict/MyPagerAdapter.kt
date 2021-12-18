@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.calendar_predict.dzien.Calendar
 import com.example.calendar_predict.dzien.DayClass
+import com.example.calendar_predict.statistics.StatisticsClass
 
 @Suppress("DEPRECATION")
 internal class MyPagerAdapter(
