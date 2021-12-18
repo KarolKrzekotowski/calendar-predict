@@ -1,5 +1,6 @@
 package com.example.calendar_predict
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -52,7 +53,7 @@ class Goals: AppCompatActivity() {
 
         rvTask.layoutManager = LinearLayoutManager(this)
 
-        objectiveListViewModel = ViewModelProvider(this).get(ObjectiveListViewModel::class.java)
+        objectiveListViewModel = ViewModelProvider(this)[ObjectiveListViewModel::class.java]
 
         //TODO: nie zaciągać przeterminowanych celów
         objectiveListViewModel.allObjectiveWithCategory.observe(this, Observer { it->
@@ -68,6 +69,14 @@ class Goals: AppCompatActivity() {
     companion object {
         private lateinit var instance: Goals
 
+        fun getViewmodel(): ObjectiveListViewModel? {
+            if (!this::instance.isInitialized)
+            {
+                return null
+            }
+            return instance.objectiveListViewModel
+        }
+
         fun showPopup(v: View, objectiveWithCategory: ObjectiveWithCategory) {
             val popup = PopupMenu(instance.applicationContext, v, Gravity.END)
             val inflater: MenuInflater = popup.menuInflater
@@ -80,7 +89,6 @@ class Goals: AppCompatActivity() {
                                 .setTitle("Usuwanie celu")
                                 .setMessage("Czy na pewno chcesz usunąć ten cel?")
                                 .setPositiveButton("Potwierdż") { _, _ ->
-                                    Log.e("1234567890", objectiveWithCategory.objective.id.toString())
                                     instance.objectiveListViewModel.deleteObjective(objectiveWithCategory.objective)
                                 }
                                 .setNegativeButton("Anuluj", null)

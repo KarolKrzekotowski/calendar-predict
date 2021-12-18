@@ -2,6 +2,7 @@ package com.example.calendar_predict.dzien
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.DataBase.Day.DayViewModel
 import com.DataBase.Day.DayViewModelFactory
+import com.example.calendar_predict.DayAddedActivitiyFragment
 import com.example.calendar_predict.MyPagerAdapter
 import com.example.calendar_predict.R
 import com.google.android.material.tabs.TabLayout
@@ -114,8 +116,14 @@ class DayClass : Fragment() {
     companion object
     {
         lateinit var instance: DayClass
-        fun getViewmodel(): DayViewModel
+        fun getViewmodel(calendar: Calendar): DayViewModel
         {
+            instance.calendar = calendar
+            val factory = DayViewModelFactory(instance.requireActivity().application, instance.calendar.time)
+            instance.dayViewModel = ViewModelProvider(instance, factory).get(DayViewModel::class.java)
+
+            Log.i("calendar", "moja data " + instance.calendar.time)
+            DayAddedActivitiyFragment.setModel(instance.dayViewModel)
             return instance.dayViewModel
         }
         fun getCalendar(): Calendar

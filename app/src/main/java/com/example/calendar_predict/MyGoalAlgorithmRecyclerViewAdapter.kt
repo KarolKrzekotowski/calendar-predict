@@ -1,5 +1,6 @@
 package com.example.calendar_predict
 
+import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,8 @@ class MyGoalAlgorithmRecyclerViewAdapter(
         val item = values[position]
         holder.idView.text = item.id
         holder.contentView.text = item.content
+//        var backgroundColor = Integer.toHexString(item. .category.colour)
+//        holder.itemView.setBackgroundColor(Color.parseColor("#"+ backgroundColor))
     }
 
     override fun getItemCount(): Int = values.size

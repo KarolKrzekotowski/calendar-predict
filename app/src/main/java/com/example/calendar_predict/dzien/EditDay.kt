@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.calendar_predict.R
 
 import kotlinx.android.synthetic.main.edit_day.*
 import androidx.core.content.ContextCompat.startActivity
@@ -18,8 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.DataBase.Activity.ActivityWithCategory
-import com.DataBase.Day.DayViewModel
-import com.DataBase.Day.DayViewModelFactory
+import com.DataBase.Objective.ObjectiveListViewModel
+import com.example.calendar_predict.*
 import com.example.calendar_predict.DayActivityPagerAdapter
 import com.example.calendar_predict.databinding.EditDayBinding
 import com.google.android.material.tabs.TabLayout
@@ -34,7 +33,7 @@ class EditDay: AppCompatActivity() {
     var year:String?=null
     var edycja:String?=null
     private lateinit var binding: EditDayBinding
-    val calendar = Calendar.getInstance()
+    val calendar: Calendar = Calendar.getInstance()
 
     var tabLayout: TabLayout? = null
     var viewPager: ViewPager? = null
@@ -68,7 +67,6 @@ class EditDay: AppCompatActivity() {
         calendar[Calendar.MINUTE] = 0
         calendar[Calendar.SECOND] = 0
         calendar[Calendar.MILLISECOND] = 0
-        Log.i("tutaj",month.toString())
 
         tabLayout = findViewById(R.id.tabLayout2)
         viewPager = findViewById(R.id.viewPager2)
@@ -77,7 +75,12 @@ class EditDay: AppCompatActivity() {
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Codzienne"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Długoterminowe"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Sugestie"))
-        val pagerAdapter = DayActivityPagerAdapter(this, supportFragmentManager, tabLayout!!.tabCount, DayClass.getViewmodel())
+
+        var viewModel: ObjectiveListViewModel? = Goals.getViewmodel()
+        if (viewModel == null) {
+            viewModel = ViewModelProvider(this)[ObjectiveListViewModel::class.java]
+        }
+        val pagerAdapter = DayActivityPagerAdapter(this, supportFragmentManager, tabLayout!!.tabCount, DayClass.getViewmodel(calendar), viewModel, calendar)
         viewPager!!.adapter =  pagerAdapter
         viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -88,8 +91,6 @@ class EditDay: AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         }
         )
-
-
     }
 
     fun sumuj(view:View){
@@ -103,7 +104,6 @@ class EditDay: AppCompatActivity() {
 
 
     fun addActivity(view:View){
-        Log.e("123456","$together")
         val intent = Intent(this,AddDayActivity::class.java)
         intent.putExtra("day",day.toString())
         intent.putExtra("month",month.toString())
@@ -116,10 +116,6 @@ class EditDay: AppCompatActivity() {
 
 
         finish()
-    }
-
-    override fun getDefaultViewModelProviderFactory(): DayViewModelFactory {
-        return DayViewModelFactory(application, calendar.time)
     }
 
     fun getEdycjaa(): String? {
