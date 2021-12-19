@@ -146,6 +146,7 @@ class StatisticsClass : Fragment() {
                         timeSpentRelaks = 0
                         timeSpentPraca = 0
                         timeSpentSpotkania = 0
+                        gradeLowest = 100
 
                         for(list in ActivitiesBeofre7){
 
@@ -185,6 +186,9 @@ class StatisticsClass : Fragment() {
                                 }
 //
                             }
+                        if (ratings7.isEmpty()){
+                            gradeLowest = 0
+                        }
                         for (list in ratings7){
                             if (list.rate > gradeHighest)
                                 gradeHighest = list.rate
@@ -225,6 +229,7 @@ class StatisticsClass : Fragment() {
                         timeSpentRelaks = 0
                         timeSpentPraca = 0
                         timeSpentSpotkania = 0
+                        gradeLowest = 100
 
                         for(list in ActivitiesBeofre30){
 
@@ -266,7 +271,9 @@ class StatisticsClass : Fragment() {
 
 //
                         }
-
+                        if (ratings30.isEmpty()){
+                            gradeLowest = 0
+                        }
                         for (list in ratings30){
                             if (list.rate > gradeHighest)
                                 gradeHighest = list.rate
@@ -309,6 +316,7 @@ class StatisticsClass : Fragment() {
                         timeSpentRelaks = 0
                         timeSpentPraca = 0
                         timeSpentSpotkania = 0
+                        gradeLowest = 100
 
                         for(list in ActivitiesBeofre6){
 
@@ -349,6 +357,9 @@ class StatisticsClass : Fragment() {
 //
 
 //
+                        }
+                        if (ratings6.isEmpty()){
+                            gradeLowest = 0
                         }
                         for (list in ratings6){
                             if (list.rate > gradeHighest)
