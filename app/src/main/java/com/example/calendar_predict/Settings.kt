@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.example.calendar_predict.googleCalendar.UpdateGoogleCalendarActivity
 import com.google.android.material.tabs.TabLayout
 
 
@@ -39,6 +40,7 @@ class Settings : AppCompatActivity() {
     }
 
     fun openExport(view: View){
-        Log.i(null, "EXPORT DO NAPISANIA")
+        val intent = Intent(this, UpdateGoogleCalendarActivity::class.java)
+        startActivity(intent)
     }
 }
