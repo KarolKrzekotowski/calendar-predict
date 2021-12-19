@@ -27,6 +27,7 @@ class UpdateGoogleCalendarActivity : AppCompatActivity(){
     lateinit var dataPickerDateFrom : DatePicker
     lateinit var dataPickerDateTo : DatePicker
     private val PERMISSION_REQUEST_CODE = 200
+    private val PERMISSION_REQUEST_CODE_2 = 201
     lateinit var googleCalendarUpdateViewModel: GoogleCalendarUpdateViewModel
 
     @Override
@@ -45,13 +46,13 @@ class UpdateGoogleCalendarActivity : AppCompatActivity(){
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_CALENDAR), PERMISSION_REQUEST_CODE)
         } else if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_CALENDAR), PERMISSION_REQUEST_CODE)
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_CALENDAR), PERMISSION_REQUEST_CODE_2)
         }
         else {
             val dateFrom = java.util.Calendar.getInstance()
-            dateFrom[java.util.Calendar.YEAR] = dataPickerDateFrom.dayOfMonth
+            dateFrom[java.util.Calendar.YEAR] = dataPickerDateFrom.year
             dateFrom[java.util.Calendar.MONTH] = dataPickerDateFrom.month
-            dateFrom[java.util.Calendar.DAY_OF_MONTH] = dataPickerDateFrom.year
+            dateFrom[java.util.Calendar.DAY_OF_MONTH] = dataPickerDateFrom.dayOfMonth
             dateFrom[java.util.Calendar.HOUR_OF_DAY] = 0
             dateFrom[java.util.Calendar.MINUTE] = 0
             dateFrom[java.util.Calendar.SECOND] = 0
@@ -59,28 +60,45 @@ class UpdateGoogleCalendarActivity : AppCompatActivity(){
 
 
             val dateTo = java.util.Calendar.getInstance()
-            dateFrom[java.util.Calendar.YEAR] = dataPickerDateTo.dayOfMonth
-            dateFrom[java.util.Calendar.MONTH] = dataPickerDateTo.month
-            dateFrom[java.util.Calendar.DAY_OF_MONTH] = dataPickerDateTo.year
-            dateFrom[java.util.Calendar.HOUR_OF_DAY] = 0
-            dateFrom[java.util.Calendar.MINUTE] = 0
-            dateFrom[java.util.Calendar.SECOND] = 0
-            dateFrom[java.util.Calendar.MILLISECOND] = 0
+            dateTo[java.util.Calendar.YEAR] = dataPickerDateTo.year
+            dateTo[java.util.Calendar.MONTH] = dataPickerDateTo.month
+            dateTo[java.util.Calendar.DAY_OF_MONTH] = dataPickerDateTo.dayOfMonth
+            dateTo[java.util.Calendar.HOUR_OF_DAY] = 0
+            dateTo[java.util.Calendar.MINUTE] = 0
+            dateTo[java.util.Calendar.SECOND] = 0
+            dateTo[java.util.Calendar.MILLISECOND] = 0
 
+
+            //Log.d(null, dateFrom.time.toString() + " "+ dateTo.time.toString())
             val listToUpdate = googleCalendarUpdateViewModel.getDaysList(dateFrom.time , dateTo.time)
 
 
 
             lifecycleScope.launch(Dispatchers.IO) {
+
                 val calId = getCalendarId(applicationContext)
                 for (dayWithActivities in listToUpdate) {
+
+                    var calendarDay = Calendar.getInstance();
+                    calendarDay.time = dayWithActivities.day.date
+
                     for (activityWithCategory in dayWithActivities.activityWithCategory) {
+
+
+                            var calendarFrom = Calendar.getInstance();
+                            calendarFrom.time = activityWithCategory.activity.hour_from
+
+                            var calendarTo = Calendar.getInstance();
+                            calendarTo.time = activityWithCategory.activity.hour_to
+
+
+                            Log.d(null, activityWithCategory.activity.name + " "+ calendarDay.get(Calendar.YEAR) + " "+ calendarDay.get(Calendar.MONTH)+ " " +calendarDay.get(Calendar.DAY_OF_MONTH))
                         val startMillis: Long = Calendar.getInstance().run {
-                            set(dayWithActivities.day.date.year, dayWithActivities.day.date.month, dayWithActivities.day.date.day, activityWithCategory.activity.hour_from.hours, activityWithCategory.activity.hour_from.minutes)
+                            set(calendarDay.get(Calendar.YEAR), calendarDay.get(Calendar.MONTH), calendarDay.get(Calendar.DAY_OF_MONTH), calendarFrom.get(Calendar.HOUR), calendarFrom.get(Calendar.MINUTE))
                             timeInMillis
                         }
                         val endMillis: Long = Calendar.getInstance().run {
-                            set(dayWithActivities.day.date.year, dayWithActivities.day.date.month, dayWithActivities.day.date.day, activityWithCategory.activity.hour_to.hours, activityWithCategory.activity.hour_to.minutes)
+                            set(calendarDay.get(Calendar.YEAR), calendarDay.get(Calendar.MONTH), calendarDay.get(Calendar.DAY_OF_MONTH), calendarTo.get(Calendar.HOUR), calendarTo.get(Calendar.MINUTE))
                             timeInMillis
                         }
 
@@ -97,6 +115,7 @@ class UpdateGoogleCalendarActivity : AppCompatActivity(){
                     }
                 }
             }
+            finish()
         }
     }
 }
