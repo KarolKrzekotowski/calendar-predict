@@ -43,7 +43,7 @@ class DayAddedActivitiyFragment(var dayViewModel: DayViewModel, val calendarchec
         rvActivity.adapter = adapter
         rvActivity.layoutManager = LinearLayoutManager(requireContext())
 
-        if(calendarcheck.time < DayClass.getCalendar().time){
+        if(calendarcheck.time > DayClass.getCalendar().time){
             requireActivity().findViewById<Button>(R.id.podsumowanko).visibility = View.INVISIBLE
         }
 

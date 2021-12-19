@@ -64,7 +64,7 @@ class GradeDay : AppCompatActivity(){
 
 
     fun AcceptGrade(view: View){
-        if(mark.text==null || mark.text.toString().toInt()>100 || mark.text.toString().toInt()<0) {
+        if(mark.text.toString()=="" || mark.text.toString().toInt()>100 || mark.text.toString().toInt()<0) {
             Toast.makeText(this,"Podaj liczbę od 1 do 100",Toast.LENGTH_SHORT).show()
         }
         else {
