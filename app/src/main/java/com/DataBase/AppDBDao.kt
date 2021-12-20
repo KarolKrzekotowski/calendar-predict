@@ -9,8 +9,8 @@ import com.DataBase.Day.DayWithActivities
 import com.DataBase.Objective.Objective
 import com.DataBase.Objective.ObjectiveWithCategory
 import com.DataBase.Rating.Rating
-import com.DataBase.Rating.RatingWithActivities
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Dao
 interface AppDBDao {
@@ -100,12 +100,15 @@ interface AppDBDao {
     @Query("select * from rating_table as r, day_table as d where d.date>= :date and  d.evaluated =1 and d.id =r.day_id")
     fun readAllRates(date: Date): List<Rating>
 
-    //Prediction & objective agreg
+//Prediction & objective agreg
 
-//    @Query("select * from activity_table")
-//    fun getAllActivity(): List<Activity>
+    @Query("select * from activity_table")
+    fun getAllActivity(): List<Activity>
 
     @Query("select * from rating_table")
-    fun getAllRatings(): List<RatingWithActivities>
+    fun getAllRatings(): List<Rating>
+
+    @Query("select * from objective_table as o where o.date_to <= :date")
+    fun getAllObjective(date: Date): List<Objective>
 
 }

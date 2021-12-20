@@ -1,12 +1,23 @@
-package com.example.calendar_predict.statistics
+package com.example.calendar_predict.prediction
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.DataBase.AppDBDao
+import com.DataBase.AppDataBase
+import com.DataBase.Objective.Objective
+import com.example.calendar_predict.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.sql.Date
+import kotlin.random.Random
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.widget.AdapterView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
@@ -14,40 +25,23 @@ import androidx.lifecycle.Transformations.map
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.DataBase.AppDBDao
-import com.DataBase.AppDataBase
 import com.example.calendar_predict.GoalAdapter
 import com.example.calendar_predict.MygoalsDayRecyclerViewAdapter
-import com.example.calendar_predict.R
-import java.sql.Date
 import kotlin.collections.ArrayList
-import kotlin.random.Random
 import com.example.calendar_predict.prediction.Tools
 import kotlinx.android.synthetic.main.statistics_page.*
 import java.util.*
 
-class PredictionClass : Fragment() {
-    private lateinit var adapter: GoalAdapter
+class PredictionViewModel(application: Application): AndroidViewModel(application) {
+
     private lateinit var weights : DoubleArray
     private var bias = 0.0
     val tool = Tools()
-
     var appDBDao: AppDBDao = AppDataBase.getDatabase(
-        requireContext()
+        application
     ).appDBDao()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view: View = inflater.inflate(R.layout.statistics_page2, container, false)
-        val appDBDao = AppDataBase.getDatabase(
-            requireContext()
-        ).appDBDao()
 
-        return view
-    }
 
     fun forwardPropogate(x: DoubleArray): Double {
         return tool.dot(this.weights, x) + bias
@@ -85,14 +79,15 @@ class PredictionClass : Fragment() {
 
     fun Predict(dataY: IntArray, dataX: ArrayList<MutableSet<Pair<Int, Int>>>, amountCategory: Int): MutableMap<Int, Int> {
         val listOfList = MutableList(dataX.size) { DoubleArray(amountCategory) }
-        var classIndexes = mutableMapOf<Int, Int>()
+        val classIndexes = mutableMapOf<Int, Int>()
         var mainCounter = 0
-        var counter = 0
+        var counter = 1
         var spam: Pair<Int, Int>
         var category: Int
         var time: Int
         var tmp = mutableListOf<Int>()
-        // sorry ale wciaz trzeba prepare data
+        var sumActivityTime = 0
+        tmp.add(0)
         for (list in dataX) {
             while (!list.isEmpty()){
                 spam = list.drop(1)[0]
@@ -101,22 +96,26 @@ class PredictionClass : Fragment() {
                 if (!classIndexes.containsKey(category)) {
                     classIndexes[category] = counter
                     tmp.add(time)
+                    sumActivityTime += time
                     counter += 1
                 }else {
                     tmp[classIndexes.getValue(category)] += time
                 }
-
             }
+            tmp[0] = sumActivityTime
+            sumActivityTime = 0
             listOfList[mainCounter] = tmp.map { it.toDouble() }.toDoubleArray()
-            tmp.clear()
+            tmp = tmp.map { 0 } as MutableList<Int>
             mainCounter += 1
         }
+
         val newDataY = dataY.map { it.toDouble() }.toDoubleArray()
         fit(listOfList.toTypedArray(), newDataY, 5, 32)
         val result = mutableMapOf<Int, Int>()
         for (idx in classIndexes.keys) {
             result[idx] = weights[classIndexes.getValue(idx)].toInt()
         }
+        result[0] = weights[0].toInt()
         return result
     }
 
@@ -154,7 +153,6 @@ class PredictionClass : Fragment() {
             }
         }
 
-
         val Categories = mutableSetOf<Int>()
         for (list in data) {
             Categories.add(list[4] as Int)
@@ -162,7 +160,7 @@ class PredictionClass : Fragment() {
         val amountCategory = Categories.size
         val random = Random(1)
         val weights = DoubleArray(amountCategory)
-        for (x in 0 until amountCategory) {
+        for (x in 0 until amountCategory+1) {
             weights[x] = random.nextFloat().toDouble()
         }
         this.weights = weights
@@ -184,4 +182,5 @@ class PredictionClass : Fragment() {
         }
         return Predict(dataY, dataX, amountCategory)
     }
+
 }
