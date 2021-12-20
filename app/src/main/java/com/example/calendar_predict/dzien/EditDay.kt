@@ -87,9 +87,9 @@ class EditDay: AppCompatActivity() {
         }
 
         val factory = DayViewModelFactory(application, calendar.time)
-        dayViewModel = ViewModelProvider(this, factory).get(DayViewModel::class.java)
+        dayViewModel = ViewModelProvider(this, factory)[DayViewModel::class.java]
 
-        val categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+        val categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java]
         val categories = categoryViewModel.allCategories
 
         val pagerAdapter = DayActivityPagerAdapter(this, supportFragmentManager, tabLayout!!.tabCount, dayViewModel, viewModel, categories, calendar)
