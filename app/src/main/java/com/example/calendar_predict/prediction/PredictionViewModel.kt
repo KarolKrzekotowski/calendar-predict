@@ -159,7 +159,7 @@ class PredictionViewModel(application: Application): AndroidViewModel(applicatio
         }
         val amountCategory = Categories.size
         val random = Random(1)
-        val weights = DoubleArray(amountCategory)
+        val weights = DoubleArray(amountCategory+1)
         for (x in 0 until amountCategory+1) {
             weights[x] = random.nextFloat().toDouble()
         }

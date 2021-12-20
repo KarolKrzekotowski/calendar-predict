@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,7 @@ class GoalAlgorithmFragment(private val categories: List<Category>) : Fragment()
         rvTask.layoutManager = LinearLayoutManager(requireContext())
 
         val predictionMap = PredictionViewModel(requireActivity().application).preparePredict()
+        Log.i("teststsde", "" + predictionMap.size)
         adapter.setData(predictionMap)
         return view
     }

@@ -15,6 +15,7 @@ import java.time.LocalTime
 class MygoalsDayRecyclerViewAdapter()  : RecyclerView.Adapter<MygoalsDayRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
     private var goalList = emptyList<ObjectiveWithCategory>()
+    private lateinit var agregationList: Map<Int, Int>
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val goalNameTextView: TextView = itemView.findViewById<TextView>(R.id.goalNameTextView)
@@ -38,7 +39,7 @@ class MygoalsDayRecyclerViewAdapter()  : RecyclerView.Adapter<MygoalsDayRecycler
         title.text = goal.category.name
         val amount = viewHolder.amountDoneTextView
         //TODO: set and get
-        amount.text = "15 / " + goal.objective.targetAmount
+        amount.text = "" + agregationList[goal.category.id] + " / " + goal.objective.targetAmount
         if (15 < goal.objective.targetAmount) {
             amount.setTextColor(Color.RED)
         }
@@ -86,7 +87,7 @@ class MygoalsDayRecyclerViewAdapter()  : RecyclerView.Adapter<MygoalsDayRecycler
         return goalList[position]
     }
 
-    fun setData(data: List<ObjectiveWithCategory>){
+    fun setData(data: List<ObjectiveWithCategory>, aggregated: Map<Int, Int>){
         val tmp = mutableListOf<ObjectiveWithCategory>()
         for (int in data)
         {
@@ -96,6 +97,8 @@ class MygoalsDayRecyclerViewAdapter()  : RecyclerView.Adapter<MygoalsDayRecycler
             }
         }
         this.goalList = tmp
+        this.agregationList = aggregated
+
         notifyDataSetChanged()
     }
 }

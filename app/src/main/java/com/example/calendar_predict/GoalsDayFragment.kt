@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.DataBase.Objective.ObjectiveListViewModel
+import com.example.calendar_predict.prediction.AgregationViewModel
 
 /**
  * A fragment representing a list of Items.
@@ -32,10 +33,11 @@ class GoalsDayFragment(private val viewModel: ObjectiveListViewModel) : Fragment
         rvTask.adapter = adapter
 
         rvTask.layoutManager = LinearLayoutManager(requireContext())
+        val viewModelag = AgregationViewModel(requireActivity().application)
 
         //TODO: nie zaciągać przeterminowanych celów
         viewModel.allObjectiveWithCategory.observe(viewLifecycleOwner, {
-            adapter.setData(it)
+            adapter.setData(it, viewModelag.prepareAgregate())
         })
         return view
     }
