@@ -83,4 +83,7 @@ dependencies {
     //chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    //regresion
+    implementation 'org.nield:kotlin-statistics:1.2.1'
+
 }
