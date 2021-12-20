@@ -1,5 +1,6 @@
 package com.example.calendar_predict
 
+import android.app.Application
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -9,12 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.DataBase.Objective.Objective
 import com.DataBase.Objective.ObjectiveWithCategory
+import com.example.calendar_predict.prediction.AgregationViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 
-class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
+class GoalAdapter(val application: Application)  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
     var context: Context? = null
     private var goalList = emptyList<ObjectiveWithCategory>()
+    private lateinit var agregationList: Map<Int, Int>
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val goalNameTextView: TextView = itemView.findViewById<TextView>(R.id.goalNameTextView)
@@ -37,8 +40,8 @@ class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
         val title = viewHolder.goalNameTextView
         title.text = goal.category.name
         val amount = viewHolder.amountDoneTextView
-        //TODO: get and set amount done
-        amount.text = "15 / " + " / " + goal.objective.targetAmount
+
+        amount.text = "" + agregationList[goal.category.id] + " / " + goal.objective.targetAmount
         if (15 < goal.objective.targetAmount) {
             amount.setTextColor(Color.RED)
         }
@@ -89,8 +92,10 @@ class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
         return goalList[position]
     }
 
-    fun setData(data: List<ObjectiveWithCategory>){
+    fun setData(data: List<ObjectiveWithCategory>, aggregated: Map<Int, Int>){
         this.goalList = data
+        this.agregationList = aggregated
+
         notifyDataSetChanged()
     }
 }

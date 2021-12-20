@@ -23,6 +23,7 @@ import com.DataBase.Objective.Objective
 import com.DataBase.Objective.ObjectiveListViewModel
 import com.DataBase.Objective.ObjectiveWithCategory
 import com.example.calendar_predict.databinding.GoalsBinding
+import com.example.calendar_predict.prediction.AgregationViewModel
 
 class Goals: AppCompatActivity() {
     private lateinit var binding: GoalsBinding
@@ -48,16 +49,18 @@ class Goals: AppCompatActivity() {
         decoration.setDrawable(ColorDrawable(Color.WHITE))
         rvTask.addItemDecoration(decoration)
 
-        adapter = GoalAdapter()
+        adapter = GoalAdapter(application)
         rvTask.adapter = adapter
 
         rvTask.layoutManager = LinearLayoutManager(this)
 
         objectiveListViewModel = ViewModelProvider(this)[ObjectiveListViewModel::class.java]
 
+        val viewModel = AgregationViewModel(application)
+
         //TODO: nie zaciągać przeterminowanych celów
         objectiveListViewModel.allObjectiveWithCategory.observe(this, Observer { it->
-            adapter.setData(it)
+            adapter.setData(it, viewModel.prepareAgregate())
         })
     }
 

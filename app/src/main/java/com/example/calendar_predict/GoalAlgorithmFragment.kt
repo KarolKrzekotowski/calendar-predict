@@ -1,5 +1,6 @@
 package com.example.calendar_predict
 
+import android.app.Application
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.DataBase.Category.Category
 import com.DataBase.Objective.ObjectiveListViewModel
+import com.example.calendar_predict.prediction.PredictionViewModel
 
 /**
  * A fragment representing a list of Items.
@@ -35,8 +37,8 @@ class GoalAlgorithmFragment(private val categories: List<Category>) : Fragment()
 
         rvTask.layoutManager = LinearLayoutManager(requireContext())
 
-        //TODO: algortihm.get and adapter.set
-//            adapter.setData(it)
+        val predictionMap = PredictionViewModel(requireActivity().application).preparePredict()
+        adapter.setData(predictionMap)
         return view
     }
 }

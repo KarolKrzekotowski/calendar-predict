@@ -26,7 +26,7 @@ import com.example.calendar_predict.prediction.Tools
 import kotlinx.android.synthetic.main.statistics_page.*
 import java.util.*
 
-class PredictionClass : Fragment() {
+class Prediction : Fragment() {
     private lateinit var adapter: GoalAdapter
     private lateinit var weights : DoubleArray
     private var bias = 0.0

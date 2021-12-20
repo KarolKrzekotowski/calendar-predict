@@ -33,7 +33,7 @@ import com.example.calendar_predict.prediction.Tools
 import kotlinx.android.synthetic.main.statistics_page.*
 import java.util.*
 
-class AgregationViewModelViewModel(application: Application): AndroidViewModel(application) {
+class AgregationViewModel(application: Application): AndroidViewModel(application) {
 
     var appDBDao: AppDBDao = AppDataBase.getDatabase(
         application
