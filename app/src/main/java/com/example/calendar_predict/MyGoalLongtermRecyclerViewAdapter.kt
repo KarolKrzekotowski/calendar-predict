@@ -36,6 +36,7 @@ class MyGoalLongtermRecyclerViewAdapter()  : RecyclerView.Adapter<MyGoalLongterm
         val title = viewHolder.goalNameTextView
         title.text = goal.category.name
         val amount = viewHolder.amountDoneTextView
+        //TODO: set and get
         amount.text = "15 / "  + goal.objective.targetAmount
         if (15 < goal.objective.targetAmount) {
             amount.setTextColor(Color.RED)

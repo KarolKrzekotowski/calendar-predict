@@ -8,14 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.DataBase.Activity.ActivityWithCategory
-
-import com.example.calendar_predict.placeholder.PlaceholderContent.PlaceholderItem
 import java.util.*
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
 class MyDayAddedActivitiyRecyclerViewAdapter : RecyclerView.Adapter<MyDayAddedActivitiyRecyclerViewAdapter.ViewHolder>() {
 
 

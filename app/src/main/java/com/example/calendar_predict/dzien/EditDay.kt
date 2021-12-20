@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.DataBase.Activity.ActivityWithCategory
+import com.DataBase.Category.CategoryViewModel
 import com.DataBase.Day.DayViewModel
 import com.DataBase.Day.DayViewModelFactory
 import com.DataBase.Objective.ObjectiveListViewModel
@@ -75,7 +76,6 @@ class EditDay: AppCompatActivity() {
 
         tabLayout = findViewById(R.id.tabLayout2)
         viewPager = findViewById(R.id.viewPager2)
-        //TODO my fragments
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Dzień"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Codzienne"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Długoterminowe"))
@@ -88,7 +88,11 @@ class EditDay: AppCompatActivity() {
 
         val factory = DayViewModelFactory(application, calendar.time)
         dayViewModel = ViewModelProvider(this, factory).get(DayViewModel::class.java)
-        val pagerAdapter = DayActivityPagerAdapter(this, supportFragmentManager, tabLayout!!.tabCount, dayViewModel, viewModel, calendar)
+
+        val categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+        val categories = categoryViewModel.allCategories
+
+        val pagerAdapter = DayActivityPagerAdapter(this, supportFragmentManager, tabLayout!!.tabCount, dayViewModel, viewModel, categories, calendar)
         viewPager!!.adapter =  pagerAdapter
         viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

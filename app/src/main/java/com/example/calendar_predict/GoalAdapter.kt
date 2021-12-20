@@ -37,6 +37,7 @@ class GoalAdapter()  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
         val title = viewHolder.goalNameTextView
         title.text = goal.category.name
         val amount = viewHolder.amountDoneTextView
+        //TODO: get and set amount done
         amount.text = "15 / " + " / " + goal.objective.targetAmount
         if (15 < goal.objective.targetAmount) {
             amount.setTextColor(Color.RED)

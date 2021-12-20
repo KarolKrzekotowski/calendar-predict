@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.DataBase.Category.Category
 import com.DataBase.Day.DayViewModel
 import com.DataBase.Objective.ObjectiveListViewModel
 import java.util.*
@@ -15,6 +16,7 @@ internal class DayActivityPagerAdapter (
     var totalTabs: Int,
     val viewModel: DayViewModel,
     val viewModel2: ObjectiveListViewModel,
+    val categories: List<Category>,
     val calendar: Calendar
 ) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
@@ -29,7 +31,7 @@ internal class DayActivityPagerAdapter (
                 GoalLongtermFragment(viewModel2)
             }
             3 -> {
-                GoalAlgorithmFragment()
+                GoalAlgorithmFragment(categories)
             }
 
             else -> getItem(position)
