@@ -9,7 +9,7 @@ import com.DataBase.Objective.Objective
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CategoryViewModel(application: Application, testScheduler: Any): AndroidViewModel(application) {
+class CategoryViewModel(application: Application): AndroidViewModel(application) {
 
     val allCategories: List<Category>
     private val categoryListRepository: CategoryListRepository
