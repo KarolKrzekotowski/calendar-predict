@@ -37,7 +37,7 @@ class GoalAlgorithmFragment(private val categories: List<Category>) : Fragment()
         rvTask.adapter = adapter
 
         rvTask.layoutManager = LinearLayoutManager(requireContext())
-
+        Log.i("HHHHHHHHHHHHHHHHHHHHHHHHHH", "HHHHHHHHHHHHHHHHHHHHH")
         val predictionMap = PredictionViewModel(requireActivity().application).preparePredict()
         Log.i("teststsde", "" + predictionMap.size)
         adapter.setData(predictionMap)
