@@ -203,7 +203,6 @@ class PredictionViewModel(application: Application): AndroidViewModel(applicatio
         for (el in dataY) {
             Log.e("GGGGGG", el.toString())
         }
-        Log.e("ZZZZZZ", dataX.toString() + "" + dataY[0] )
         for (key in classIndexes.keys) {
             classIndexes[key] = classIndexes.getValue(key) + 1
         }
