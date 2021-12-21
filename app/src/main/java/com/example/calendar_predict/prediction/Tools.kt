@@ -1,7 +1,5 @@
 package com.example.calendar_predict.prediction
 
-import java.sql.Date
-
 class Tools {
 
     fun dot ( a : DoubleArray , b : DoubleArray ) : Double {
@@ -57,8 +55,8 @@ class Tools {
         return data.chunked( batchSize )
     }
 
-    fun countTime(from_hour: Date, to_hour: Date): Int {
-        val diff: Long = from_hour.getTime() - to_hour.getTime()
+    fun countTime(from_hour: java.util.Date, to_hour: java.util.Date): Int {
+        val diff: Long =  to_hour.getTime() - from_hour.getTime()
         val seconds = diff / 1000
         val minutes = seconds / 60
         return minutes.toInt()

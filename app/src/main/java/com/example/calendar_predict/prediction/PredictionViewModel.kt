@@ -1,36 +1,12 @@
 package com.example.calendar_predict.prediction
 
 import android.app.Application
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
 import com.DataBase.AppDBDao
 import com.DataBase.AppDataBase
-import com.DataBase.Objective.Objective
-import com.example.calendar_predict.R
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.sql.Date
 import kotlin.random.Random
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.widget.AdapterView
-import android.widget.Spinner
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Transformations.map
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.calendar_predict.GoalAdapter
-import com.example.calendar_predict.MygoalsDayRecyclerViewAdapter
+import android.util.Log
 import kotlin.collections.ArrayList
-import com.example.calendar_predict.prediction.Tools
-import kotlinx.android.synthetic.main.statistics_page.*
-import java.util.*
 
 class PredictionViewModel(application: Application): AndroidViewModel(application) {
 
@@ -38,7 +14,7 @@ class PredictionViewModel(application: Application): AndroidViewModel(applicatio
     private var bias = 0.0
     val tool = Tools()
     var appDBDao: AppDBDao = AppDataBase.getDatabase(
-        application
+            application
     ).appDBDao()
 
 
@@ -77,45 +53,50 @@ class PredictionViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
-    fun Predict(dataY: IntArray, dataX: ArrayList<MutableSet<Pair<Int, Int>>>, amountCategory: Int): MutableMap<Int, Int> {
-        val listOfList = MutableList(dataX.size) { DoubleArray(amountCategory) }
-        val classIndexes = mutableMapOf<Int, Int>()
+    fun Predict(dataY: IntArray, dataX: ArrayList<MutableSet<Pair<Int, Int>>>, amountCategory: Int, categoryIndexes: MutableMap<Int, Int>): MutableMap<Int, Int> {
+        val listOfList = MutableList(dataX.size) { DoubleArray(amountCategory-1) }
         var mainCounter = 0
-        var counter = 1
         var spam: Pair<Int, Int>
         var category: Int
         var time: Int
         var tmp = mutableListOf<Int>()
         var sumActivityTime = 0
-        tmp.add(0)
+        for (x in 0..amountCategory) {
+            tmp.add(0)
+        }
+
         for (list in dataX) {
-            while (!list.isEmpty()){
-                spam = list.drop(1)[0]
+            for (el in list){
+                spam = el
                 category = spam.first
                 time = spam.second
-                if (!classIndexes.containsKey(category)) {
-                    classIndexes[category] = counter
-                    tmp.add(time)
-                    sumActivityTime += time
-                    counter += 1
-                }else {
-                    tmp[classIndexes.getValue(category)] += time
-                }
+                tmp[categoryIndexes.getValue(category)] += time
+                sumActivityTime += time
             }
-            tmp[0] = sumActivityTime
+            //1440 ilosc minut w dniu
+            tmp[0] = (1440 - sumActivityTime)
             sumActivityTime = 0
-            listOfList[mainCounter] = tmp.map { it.toDouble() }.toDoubleArray()
+            listOfList[mainCounter] = tmp.map { it.toDouble() / 1440.0 }.toDoubleArray()
             tmp = tmp.map { 0 } as MutableList<Int>
             mainCounter += 1
         }
-
-        val newDataY = dataY.map { it.toDouble() }.toDoubleArray()
-        fit(listOfList.toTypedArray(), newDataY, 5, 32)
+        val mean = dataY.sum()/dataY.size
+        val newDataY = dataY.map { ((it.toDouble() - mean) / 100.0) }.toDoubleArray()
+        fit(listOfList.toTypedArray(), newDataY, 3000, 1)
         val result = mutableMapOf<Int, Int>()
-        for (idx in classIndexes.keys) {
-            result[idx] = weights[classIndexes.getValue(idx)].toInt()
+        var plusWeights = weights.filter { it > 0 }.sum()
+        for (idx in categoryIndexes.keys) {
+            result[idx] = (weights[categoryIndexes.getValue(idx)] * 1000000).toInt()
         }
-        result[0] = weights[0].toInt()
+        for (idx in categoryIndexes.keys) {
+            result[idx] = (result.getValue(idx).toDouble() / plusWeights / 1000000.0 * 1440).toInt()
+            result[idx] = result.getValue(idx) - result.getValue(idx) % 15
+            if (result.getValue(idx) < 0) {
+                result.remove(idx)
+            }
+        }
+
+        result.remove(0)
         return result
     }
 
@@ -136,51 +117,91 @@ class PredictionViewModel(application: Application): AndroidViewModel(applicatio
         }
         // 0,      1,           2,         3,       4
         // day_id, category_id, hour_from, hour_to, rate
-        val data = MutableList(counter) { listOf<Any>() }
+        var data = MutableList(counter) { listOf<Any>() }
         for (listA in activityList) {
             for (listR in ratingList) {
                 if (listA.day_id == listR.day_id) {
                     data.add(
-                        listOf(
-                            listA.day_id,
-                            listA.category_id,
-                            listA.hour_from,
-                            listA.hour_to,
-                            listR.rate
-                        )
+                            listOf(
+                                    listA.day_id,
+                                    listA.category_id,
+                                    listA.hour_from,
+                                    listA.hour_to,
+                                    listR.rate
+                            )
                     )
                 }
             }
         }
+        var egg = listOf<Any>()
 
         val Categories = mutableSetOf<Int>()
+        counter = 1
+        val categoryIndexes = mutableMapOf<Int, Int>()
+        data.removeIf { it == egg }
         for (list in data) {
-            Categories.add(list[4] as Int)
+            if (!Categories.contains(list[1])) {
+                categoryIndexes[list[1] as Int] = counter
+                counter +=1
+            }
+
+            Categories.add(list[1] as Int)
         }
-        val amountCategory = Categories.size
+        val amountCategory = Categories.size + 1
         val random = Random(1)
         val weights = DoubleArray(amountCategory+1)
-        for (x in 0 until amountCategory+1) {
+        for (x in 0 until amountCategory + 1) {
             weights[x] = random.nextFloat().toDouble()
         }
         this.weights = weights
 
-        val doneDays: MutableSet<Int> = mutableSetOf()
-        val dataY = IntArray(amountCategory)
+        var doneDays: MutableSet<Int> = mutableSetOf()
+
         // Para(kategoria, czas)
-        val dataX = ArrayList<MutableSet<Pair<Int, Int>>>()
+        var counterSecond = 0
+        for (list in data) {
+            if (!doneDays.contains(list[0])) {
+
+                counterSecond += 1
+            }
+        }
+        var dataX = mutableListOf<MutableSet<Pair<Int, Int>>>()
+
         counter = 0
         var time = 0
+        doneDays = mutableSetOf()
+        for (list in data) {
+            if (!doneDays.contains(list[0])) {
+                doneDays.add(list[0] as Int)
+                dataX.add(mutableSetOf())
+                counter += 1
+            }
+        }
+        val dataY = IntArray(counter)
+        doneDays = mutableSetOf()
+        counter = 0
+        val classIndexes = mutableMapOf<Int, Int>()
         for (list in data) {
             if (!doneDays.contains(list[0])) {
                 doneDays.add(list[0] as Int)
                 dataY[counter] = list[4] as Int
-                time = tool.countTime(list[2] as Date, list[3] as Date)
+                time = tool.countTime(list[2] as java.util.Date, list[3] as java.util.Date)
+                Log.e("QQQQQQQQQQQQQQQQQQQ", "" + list)
                 dataX[counter].add(Pair(list[1], time) as Pair<Int, Int>)
+                classIndexes[list[0] as Int] = counter
                 counter += 1
+            } else {
+                dataX[classIndexes.getValue(list[0] as Int)].add(Pair(list[1], tool.countTime(list[2] as java.util.Date, list[3] as java.util.Date)) as Pair<Int, Int>)
             }
         }
-        return Predict(dataY, dataX, amountCategory)
+        for (el in dataY) {
+            Log.e("GGGGGG", el.toString())
+        }
+        Log.e("ZZZZZZ", dataX.toString() + "" + dataY[0] )
+        for (key in classIndexes.keys) {
+            classIndexes[key] = classIndexes.getValue(key) + 1
+        }
+        return Predict(dataY, dataX as ArrayList<MutableSet<Pair<Int, Int>>>, amountCategory, categoryIndexes)
     }
 
 }
