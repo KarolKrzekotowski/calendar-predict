@@ -19,11 +19,12 @@ import java.util.*
 class MyGoalAlgorithmRecyclerViewAdapter(val categories: List<Category>)  : RecyclerView.Adapter<MyGoalAlgorithmRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
     private var goalList = emptyList<ObjectiveWithCategory>()
+    private lateinit var aggregated: Map<Int, Int>
     private lateinit var categoryViewModel: CategoryViewModel
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-        val goalNameTextView: TextView = itemView.findViewById<TextView>(R.id.goalNameTextView)
-        val amountDoneTextView: TextView = itemView.findViewById<TextView>(R.id.amountDoneTextView)
+        val goalNameTextView: TextView = itemView.findViewById<TextView>(R.id.goalNameTextViewAlgorithm)
+        val amountDoneTextView: TextView = itemView.findViewById<TextView>(R.id.amountDoneTextViewAlgorithm)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyGoalAlgorithmRecyclerViewAdapter.ViewHolder {
@@ -41,7 +42,8 @@ class MyGoalAlgorithmRecyclerViewAdapter(val categories: List<Category>)  : Recy
         val title = viewHolder.goalNameTextView
         title.text = goal.category.name
         val amount = viewHolder.amountDoneTextView
-        amount.text = "15 / "  + goal.objective.targetAmount
+        amount.text = "" + aggregated[goal.category.id] + " / " + goal.objective.targetAmount
+
         if (15 < goal.objective.targetAmount) {
             amount.setTextColor(Color.RED)
         }
@@ -75,7 +77,7 @@ class MyGoalAlgorithmRecyclerViewAdapter(val categories: List<Category>)  : Recy
         return goalList[position]
     }
 
-    fun setData(data: Map<Int, Int>) {
+    fun setData(data: Map<Int, Int>, agg: Map<Int, Int>) {
         val tmp = mutableListOf<ObjectiveWithCategory>()
 
         for (category in categories)
@@ -90,6 +92,8 @@ class MyGoalAlgorithmRecyclerViewAdapter(val categories: List<Category>)  : Recy
             }
         }
         this.goalList = tmp
+        this.aggregated = agg
+
         notifyDataSetChanged()
     }
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.DataBase.Category.Category
 import com.DataBase.Objective.ObjectiveListViewModel
+import com.example.calendar_predict.prediction.AgregationViewModel
 import com.example.calendar_predict.prediction.PredictionViewModel
 
 /**
@@ -40,7 +41,9 @@ class GoalAlgorithmFragment(private val categories: List<Category>) : Fragment()
 
         val predictionMap = PredictionViewModel(requireActivity().application).preparePredict()
         Log.i("teststsde", "" + predictionMap.size)
-        adapter.setData(predictionMap)
+        val viewModelag = AgregationViewModel(requireActivity().application)
+
+        adapter.setData(predictionMap, viewModelag.prepareAgregate())
         return view
     }
 }
