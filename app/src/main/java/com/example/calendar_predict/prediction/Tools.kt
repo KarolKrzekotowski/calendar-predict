@@ -1,5 +1,7 @@
 package com.example.calendar_predict.prediction
 
+import kotlin.math.pow
+
 class Tools {
 
     fun dot ( a : DoubleArray , b : DoubleArray ) : Double {
@@ -46,8 +48,8 @@ class Tools {
         return arrayOf( dJ_dW , dJ_dB )
     }
 
-    private fun meanSquaredErrorDerivative( predY : Double , targetY : Double ) : Double {
-        return 2 * ( predY - targetY )
+    fun meanSquaredErrorDerivative( predY : Double , targetY : Double ) : Double {
+        return  2 * (predY - targetY)
     }
 
     fun batch ( x : Array<DoubleArray> , y : DoubleArray , batchSize : Int ) : List<List<Pair<DoubleArray,Double>>> {

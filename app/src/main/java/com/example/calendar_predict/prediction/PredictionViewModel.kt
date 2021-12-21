@@ -11,7 +11,7 @@ import kotlin.collections.ArrayList
 class PredictionViewModel(application: Application): AndroidViewModel(application) {
 
     private lateinit var weights : DoubleArray
-    private var bias = 0.0
+    var bias = 0.0
     val tool = Tools()
     var appDBDao: AppDBDao = AppDataBase.getDatabase(
             application
@@ -82,7 +82,7 @@ class PredictionViewModel(application: Application): AndroidViewModel(applicatio
         }
         val mean = dataY.sum()/dataY.size
         val newDataY = dataY.map { ((it.toDouble() - mean) / 100.0) }.toDoubleArray()
-        fit(listOfList.toTypedArray(), newDataY, 3000, 1)
+        fit(listOfList.toTypedArray(), newDataY, 300, 2)
         val result = mutableMapOf<Int, Int>()
         var plusWeights = weights.filter { it > 0 }.sum()
         for (idx in categoryIndexes.keys) {
@@ -176,6 +176,9 @@ class PredictionViewModel(application: Application): AndroidViewModel(applicatio
                 dataX.add(mutableSetOf())
                 counter += 1
             }
+        }
+        if (counter == 0) {
+            return mutableMapOf<Int, Int>()
         }
         val dataY = IntArray(counter)
         doneDays = mutableSetOf()
