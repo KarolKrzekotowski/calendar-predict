@@ -21,7 +21,6 @@ import android.graphics.drawable.ColorDrawable
 import android.widget.AdapterView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Transformations.map
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
