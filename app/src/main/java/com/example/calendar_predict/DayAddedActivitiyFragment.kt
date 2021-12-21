@@ -25,12 +25,13 @@ class DayAddedActivitiyFragment(var dayViewModel: DayViewModel, val calendarchec
     var recyclerView: RecyclerView?=null
 
     private var columnCount = 1
-    val adapter = RecyclerDayAdapter()
+    val adapter = MyDayAddedActivitiyRecyclerViewAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        instance = this
         val view = inflater.inflate(R.layout.added_activitiy_day_list, container, false)
 
         val rvActivity = view.findViewById<View>(R.id.dayEditRecyclerS) as RecyclerView
