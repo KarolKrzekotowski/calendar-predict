@@ -59,7 +59,7 @@ class AddGoalActivity : AppCompatActivity() {
             }
 
             //can be problematic if we allow to delete categories
-            binding.spinner.setSelection(goal!!.category.id - 1)
+            binding.spinner.setSelection(goal!!.category.id - 3)
 
             amount = goal!!.objective.targetAmount
             binding.targetMinutes.text = "$amount minut"
