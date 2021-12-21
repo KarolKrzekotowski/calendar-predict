@@ -82,18 +82,21 @@ class PredictionViewModel(application: Application): AndroidViewModel(applicatio
         }
         val mean = dataY.sum()/dataY.size
         val newDataY = dataY.map { ((it.toDouble() - mean) / 100.0) }.toDoubleArray()
-        fit(listOfList.toTypedArray(), newDataY, 300, 2)
+        fit(listOfList.toTypedArray(), newDataY, 40000, 2)
         val result = mutableMapOf<Int, Int>()
         var plusWeights = weights.filter { it > 0 }.sum()
+        var meanPlusWeights = plusWeights / weights.filter { it > 0 }.size
         for (idx in categoryIndexes.keys) {
             result[idx] = (weights[categoryIndexes.getValue(idx)] * 1000000).toInt()
         }
         for (idx in categoryIndexes.keys) {
-            result[idx] = (result.getValue(idx).toDouble() / plusWeights / 1000000.0 * 1440).toInt()
-            result[idx] = result.getValue(idx) - result.getValue(idx) % 15
-            if (result.getValue(idx) < 0) {
+            if (result.getValue(idx) < meanPlusWeights * 1000000) {
                 result.remove(idx)
+            }else {
+                result[idx] = (result.getValue(idx).toDouble() / plusWeights / 1000000.0 * 1440).toInt()
+                result[idx] = result.getValue(idx) - result.getValue(idx) % 15
             }
+
         }
 
         result.remove(0)
