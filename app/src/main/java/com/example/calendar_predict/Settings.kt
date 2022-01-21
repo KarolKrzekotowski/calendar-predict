@@ -5,10 +5,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.calendar_predict.googleCalendar.UpdateGoogleCalendarActivity
 import com.google.android.material.tabs.TabLayout
+import androidx.annotation.NonNull
+
+import com.google.android.gms.tasks.OnCompleteListener
+
+import com.firebase.ui.auth.AuthUI
+
+
+
 
 
 lateinit var button_wyloguj: Button
@@ -29,10 +38,17 @@ class Settings : AppCompatActivity() {
     }
     fun openWyloguj(view: View){
         Log.i(null, "WYLOGUJ SIE DO NAPISANIA")
+        AuthUI.getInstance()
+            .signOut(this)
+            .addOnCompleteListener {
+                //TODO zmienic guzik na zaloguj?
+                Toast.makeText(this, "Pomyślnie wylogowano", Toast.LENGTH_SHORT).show()
+            }
     }
 
     fun openZnajomi(view: View){
-        Log.i(null, "ZNAJOMI DO NAPISANIA")
+        val intent = Intent(this, FriendsListActivity::class.java)
+        startActivity(intent)
     }
 
     fun openWydarzenia(view: View){
