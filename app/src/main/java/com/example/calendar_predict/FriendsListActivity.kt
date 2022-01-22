@@ -10,6 +10,7 @@ import android.view.Gravity
 import android.view.MenuInflater
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -21,6 +22,7 @@ import com.DataBase.Objective.ObjectiveListViewModel
 import com.DataBase.Objective.ObjectiveWithCategory
 import com.example.calendar_predict.databinding.ActivityFriendsListBinding
 import com.example.calendar_predict.prediction.AgregationViewModel
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -69,6 +71,29 @@ class FriendsListActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val view = binding.root
         setContentView(view)
+        val myRef = MainActivity.getMyRef()
+        val friends = myRef.child("friends").get().addOnSuccessListener {
+            Toast.makeText(this, "ładowanie listy znajomych powiodło się ${ it.value }", Toast.LENGTH_LONG).show()
+        }.addOnFailureListener {
+            Toast.makeText(this, "ładowanie listy znajomych nie powiodło się", Toast.LENGTH_LONG).show()
+        }
+
+//        myRef.addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                // This method is called once with the initial value and again
+//                // whenever data at this location is updated.
+//                val value = dataSnapshot.getValue<String>()
+//                Log.d("12312", "Value is: $value")
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                // Failed to read value
+//                Log.w("12312", "Failed to read value.", error.toException())
+//            }
+//        })
+
+//        myRef.setValue("Hello, World!")
+
         init()
     }
 

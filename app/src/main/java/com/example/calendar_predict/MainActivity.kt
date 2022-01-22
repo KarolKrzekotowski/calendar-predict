@@ -17,6 +17,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
@@ -80,6 +82,9 @@ class MainActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
             user = FirebaseAuth.getInstance().currentUser!!
+
+            val database = Firebase.database("https://calendar-predict-default-rtdb.europe-west1.firebasedatabase.app/")
+            userRef = database.getReference("users/" + (Firebase.auth.currentUser!!.email?.replace('.', ' ') ?: 0))
             auth = FirebaseAuth.getInstance()
             Toast.makeText(this, "Welcome " + user.displayName, Toast.LENGTH_SHORT).show()
 
@@ -99,5 +104,12 @@ class MainActivity : AppCompatActivity() {
         signInLauncher.launch(signInIntent)
     }
 
+    companion object {
+        private lateinit var userRef: DatabaseReference
 
+        public fun getMyRef(): DatabaseReference
+        {
+            return userRef
+        }
+    }
 }
