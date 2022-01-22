@@ -3,32 +3,17 @@ package com.example.calendar_predict
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
-import android.view.MenuInflater
 import android.view.View
-import android.widget.PopupMenu
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.DataBase.Objective.ObjectiveListViewModel
-import com.DataBase.Objective.ObjectiveWithCategory
-import com.example.calendar_predict.databinding.ActivityFriendsListBinding
-import com.example.calendar_predict.prediction.AgregationViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
-import com.google.firebase.ktx.Firebase
+import com.example.calendar_predict.databinding.ActivityPendingInvitesBinding
 
-class FriendsListActivity : AppCompatActivity() {
+class PendingInvitesActivity: AppCompatActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_friends_list)
@@ -57,15 +42,15 @@ class FriendsListActivity : AppCompatActivity() {
 //
 //    }
 
-    private lateinit var binding: ActivityFriendsListBinding
-    private lateinit var adapter: FriendsAdapter
+    private lateinit var binding: ActivityPendingInvitesBinding
+    private lateinit var adapter: PendingAdapter
 //    lateinit var objectiveListViewModel: ObjectiveListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-         binding = ActivityFriendsListBinding.inflate(layoutInflater)
+        binding = ActivityPendingInvitesBinding.inflate(layoutInflater)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val view = binding.root
         setContentView(view)
@@ -73,17 +58,17 @@ class FriendsListActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        val rvTask = findViewById<View>(R.id.recyclerViewFriends) as RecyclerView
+        val rvTask = findViewById<View>(R.id.recyclerViewPending) as RecyclerView
         val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         decoration.setDrawable(ColorDrawable(Color.WHITE))
         rvTask.addItemDecoration(decoration)
 
-        adapter = FriendsAdapter()
+        adapter = PendingAdapter()
         rvTask.adapter = adapter
 
         rvTask.layoutManager = LinearLayoutManager(this)
 
-        adapter.setData(listOf(Friend("Joe"), Friend("Bob"), Friend("Alice")))
+        adapter.setData(listOf(Friend("Ada"), Friend("Joe"), Friend("Bob"), Friend("Alice")))
 
 //        objectiveListViewModel = ViewModelProvider(this)[ObjectiveListViewModel::class.java]
 //
@@ -138,14 +123,25 @@ class FriendsListActivity : AppCompatActivity() {
 //            popup.show()
 //        }
 //    }
+//
+//    fun addFriend(view: android.view.View) {
+//        val intent = Intent(this, AddFriendActivity::class.java)
+//        startActivity(intent)
+//    }
+//
+//    fun showPendingInvites(view: android.view.View) {
+//        val intent = Intent(this, PendingInvitesActivity::class.java)
+//        startActivity(intent)
 
-    fun addFriend(view: android.view.View) {
-        val intent = Intent(this, AddFriendActivity::class.java)
-        startActivity(intent)
+    fun acceptPending(view: View) {
+        //TODO implement
+
+        Toast.makeText(this, "Accepted " + adapter.getFriend(view.id).name, Toast.LENGTH_SHORT).show()
     }
 
-    fun showPendingInvites(view: android.view.View) {
-        val intent = Intent(this, PendingInvitesActivity::class.java)
-        startActivity(intent)
+    fun cancelPending(view: View) {
+        //TODO implement
+        Toast.makeText(this, "Cancelled " + adapter.getFriend(view.id).name, Toast.LENGTH_SHORT).show()
+
     }
 }

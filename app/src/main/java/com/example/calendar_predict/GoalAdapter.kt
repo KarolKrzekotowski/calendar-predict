@@ -8,9 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.DataBase.Objective.Objective
 import com.DataBase.Objective.ObjectiveWithCategory
-import com.example.calendar_predict.prediction.AgregationViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -21,8 +19,8 @@ class GoalAdapter(val application: Application)  : RecyclerView.Adapter<GoalAdap
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val goalNameTextView: TextView = itemView.findViewById<TextView>(R.id.goalNameTextView)
-        val amountDoneTextView: TextView = itemView.findViewById<TextView>(R.id.amountDoneTextView)
-        val nextDueTextView: TextView = itemView.findViewById<TextView>(R.id.nextDueTextView)
+        val amountDoneTextView: TextView = itemView.findViewById<TextView>(R.id.cancelPendingButton)
+        val nextDueTextView: TextView = itemView.findViewById<TextView>(R.id.acceptPendingButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalAdapter.ViewHolder {

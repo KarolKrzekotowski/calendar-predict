@@ -35,9 +35,36 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setContentView(R.layout.activity_main)
 
 
-        setContentView(R.layout.activity_firebase_ui)
+        tablayout = findViewById(R.id.tabLayout)
+        viewPager = findViewById(R.id.viewPager)
+        tablayout.addTab(tablayout.newTab().setText("Dzień"))
+        tablayout.addTab(tablayout.newTab().setText("Kalendarz"))
+        tablayout.addTab(tablayout.newTab().setText("Statystyki"))
+        val adapter = MyPagerAdapter(this,supportFragmentManager,tablayout.tabCount)
+        viewPager.adapter =  adapter
+        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tablayout))
+        tablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewPager.currentItem = tab.position
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        }
+        )
+
+        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+
+        // Create and launch sign-in intent
+        val signInIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .build()
+        signInLauncher.launch(signInIntent)
+
+//        setContentView(R.layout.activity_firebase_ui)
     }
     fun openSettings(view: View){
         val myintent = Intent(this,Settings::class.java)
@@ -55,26 +82,6 @@ class MainActivity : AppCompatActivity() {
             user = FirebaseAuth.getInstance().currentUser!!
             auth = FirebaseAuth.getInstance()
             Toast.makeText(this, "Welcome " + user.displayName, Toast.LENGTH_SHORT).show()
-
-            setContentView(R.layout.activity_main)
-
-
-            tablayout = findViewById(R.id.tabLayout)
-            viewPager = findViewById(R.id.viewPager)
-            tablayout.addTab(tablayout.newTab().setText("Dzień"))
-            tablayout.addTab(tablayout.newTab().setText("Kalendarz"))
-            tablayout.addTab(tablayout.newTab().setText("Statystyki"))
-            val adapter = MyPagerAdapter(this,supportFragmentManager,tablayout.tabCount)
-            viewPager.adapter =  adapter
-            viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tablayout))
-            tablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    viewPager.currentItem = tab.position
-                }
-                override fun onTabUnselected(tab: TabLayout.Tab) {}
-                override fun onTabReselected(tab: TabLayout.Tab) {}
-            }
-            )
 
         } else {
             Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()

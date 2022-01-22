@@ -18,8 +18,8 @@ class MyGoalLongtermRecyclerViewAdapter()  : RecyclerView.Adapter<MyGoalLongterm
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val goalNameTextView: TextView = itemView.findViewById<TextView>(R.id.goalNameTextView)
-        val amountDoneTextView: TextView = itemView.findViewById<TextView>(R.id.amountDoneTextView)
-        val nextDueTextView: TextView = itemView.findViewById<TextView>(R.id.nextDueTextView)
+        val amountDoneTextView: TextView = itemView.findViewById<TextView>(R.id.cancelPendingButton)
+        val nextDueTextView: TextView = itemView.findViewById<TextView>(R.id.acceptPendingButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyGoalLongtermRecyclerViewAdapter.ViewHolder {

@@ -15,9 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Calendarpredict">
         <activity
+            android:name=".AddFriendActivity"
+            android:exported="false" />
+        <activity
             android:name=".FriendsListActivity"
             android:exported="false"
             android:label="@string/title_activity_friends_list"
+            android:theme="@style/Theme.Calendarpredict.NoActionBar" />
+        <activity
+            android:name=".PendingInvitesActivity"
+            android:exported="false"
             android:theme="@style/Theme.Calendarpredict.NoActionBar" />
         <activity android:name=".dzien.SurvivedDay" />
         <activity
