@@ -22,6 +22,7 @@ import com.DataBase.Objective.ObjectiveListViewModel
 import com.DataBase.Objective.ObjectiveWithCategory
 import com.example.calendar_predict.databinding.ActivityFriendsListBinding
 import com.example.calendar_predict.prediction.AgregationViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,68 +32,18 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 
 class FriendsListActivity : AppCompatActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_friends_list)
-//
-//        val database = Firebase.database
-//        val myRef = database.getReference("message")
-//
-//        myRef.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                val value = dataSnapshot.getValue<String>()
-//                Log.d("12312", "Value is: $value")
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                // Failed to read value
-//                Log.w("12312", "Failed to read value.", error.toException())
-//            }
-//        })
-//
-//        myRef.setValue("Hello, World!")
-//
-//
-//
-//
-//    }
 
     private lateinit var binding: ActivityFriendsListBinding
     private lateinit var adapter: FriendsAdapter
-//    lateinit var objectiveListViewModel: ObjectiveListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-         binding = ActivityFriendsListBinding.inflate(layoutInflater)
+        binding = ActivityFriendsListBinding.inflate(layoutInflater)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val view = binding.root
         setContentView(view)
-        val myRef = MainActivity.getMyRef()
-        val friends = myRef.child("friends").get().addOnSuccessListener {
-            Toast.makeText(this, "ładowanie listy znajomych powiodło się ${ it.value }", Toast.LENGTH_LONG).show()
-        }.addOnFailureListener {
-            Toast.makeText(this, "ładowanie listy znajomych nie powiodło się", Toast.LENGTH_LONG).show()
-        }
-
-//        myRef.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                val value = dataSnapshot.getValue<String>()
-//                Log.d("12312", "Value is: $value")
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                // Failed to read value
-//                Log.w("12312", "Failed to read value.", error.toException())
-//            }
-//        })
-
-//        myRef.setValue("Hello, World!")
 
         init()
     }
@@ -108,65 +59,79 @@ class FriendsListActivity : AppCompatActivity() {
 
         rvTask.layoutManager = LinearLayoutManager(this)
 
-        adapter.setData(listOf(Friend("Joe"), Friend("Bob"), Friend("Alice")))
+        val myRef = MainActivity.getMyRef()
 
-//        objectiveListViewModel = ViewModelProvider(this)[ObjectiveListViewModel::class.java]
-//
-//        val viewModel = AgregationViewModel(application)
-//
-//        //TODO: nie zaciągać przeterminowanych celów
-//        objectiveListViewModel.allObjectiveWithCategory.observe(this, Observer { it->
-//            adapter.setData(it, viewModel.prepareAgregate())
-//        })
+        myRef.child("friends").get().addOnSuccessListener {
+            val list = mutableListOf<Friend>()
+            for (friend in it.children) {
+                list.add(Friend(friend.value.toString().replace(' ', '.')))
+            }
+            adapter.setData(list)
+        }.addOnFailureListener {
+            Toast.makeText(this, "Niepowodzenie: $it", Toast.LENGTH_SHORT).show()
+        }
+
     }
-
-//    companion object {
-//        private lateinit var instance: Goals
-//
-//        fun getViewmodel(): ObjectiveListViewModel? {
-//            if (!this::instance.isInitialized)
-//            {
-//                return null
-//            }
-//            return instance.objectiveListViewModel
-//        }
-//
-//        fun showPopup(v: View, objectiveWithCategory: ObjectiveWithCategory) {
-//            val popup = PopupMenu(instance.applicationContext, v, Gravity.END)
-//            val inflater: MenuInflater = popup.menuInflater
-//            inflater.inflate(R.menu.goals_context_menu, popup.menu)
-//
-//            popup.setOnMenuItemClickListener { item ->
-//                when (item.itemId) {
-//                    R.id.usun -> {
-//                        AlertDialog.Builder(instance)
-//                            .setTitle("Usuwanie celu")
-//                            .setMessage("Czy na pewno chcesz usunąć ten cel?")
-//                            .setPositiveButton("Potwierdż") { _, _ ->
-//                                instance.objectiveListViewModel.deleteObjective(objectiveWithCategory.objective)
-//                            }
-//                            .setNegativeButton("Anuluj", null)
-//                            .setIcon(android.R.drawable.ic_dialog_alert)
-//                            .create()
-//                            .show()
-//                    }
-//                    R.id.edytuj_cel -> {
-//                        val intent = Intent(instance, AddGoalActivity::class.java)
-//                        intent.putExtra("goal", objectiveWithCategory)
-//
-//                        ContextCompat.startActivity(instance, intent, null)
-//                    }
-//                }
-//                true
-//            }
-//
-//            popup.show()
-//        }
-//    }
 
     fun addFriend(view: android.view.View) {
         val intent = Intent(this, AddFriendActivity::class.java)
         startActivity(intent)
+    }
+
+
+    fun deleteFriend(view: View) {
+        val myRef = MainActivity.getMyRef()
+
+        //delete me from friends friend list
+        val myEmail = FirebaseAuth.getInstance().currentUser?.email
+        myRef.parent?.child(adapter.getFriend(view.id).name)?.child("friends")?.get()?.addOnSuccessListener {
+            for (friend in it.children) {
+                if (friend.value.toString().replace(' ', '.') == myEmail)
+                {
+                    myRef.parent?.child(adapter.getFriend(view.id).name)?.child("friends")?.child(friend.key!!)?.setValue(null)
+                }
+            }
+            //delete messages to that friend
+            myRef.parent?.child(adapter.getFriend(view.id).name)?.child("messages")?.get()?.addOnSuccessListener {
+                for (message in it.children) {
+                    if (message.child("sender").value == myEmail)
+                    {
+                        myRef.parent?.child(adapter.getFriend(view.id).name)?.child("messages")?.child(message.key!!)?.setValue(null)
+                    }
+                }
+
+                //delete messages from that friend
+                myRef.child("messages").get().addOnSuccessListener {
+                    for (message in it.children) {
+                        if (message.child("sender").value == adapter.getFriend(view.id).name) {
+                            myRef.child("messages").child(message.key!!).setValue(null)
+                        }
+                    }
+
+                    //delete friend from my friend list
+                    myRef.child("friends").get().addOnSuccessListener {
+                        for (friend in it.children) {
+                            if (friend.value.toString().replace(' ', '.') == adapter.getFriend(view.id).name)
+                            {
+                                myRef.child("friends").child(friend.key!!).setValue(null)
+                            }
+                        }
+
+
+                    }.addOnFailureListener {
+                        Toast.makeText(this, "Usunięto z listy znajomych: " + adapter.getFriend(view.id), Toast.LENGTH_LONG).show()
+                    }
+
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Niepowodzenie: $it", Toast.LENGTH_SHORT).show()
+                }
+            }?.addOnFailureListener {
+                Toast.makeText(this, "Niepowodzenie: $it", Toast.LENGTH_SHORT).show()
+            }
+
+        }?.addOnFailureListener {
+            Toast.makeText(this, "Niepowodzenie: $it", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun showPendingInvites(view: android.view.View) {

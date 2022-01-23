@@ -60,12 +60,13 @@ class MainActivity : AppCompatActivity() {
         val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
 
         // Create and launch sign-in intent
-        val signInIntent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .build()
-        signInLauncher.launch(signInIntent)
-
+        if (!isUserInitialised()) {
+            val signInIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build()
+            signInLauncher.launch(signInIntent)
+        }
 //        setContentView(R.layout.activity_firebase_ui)
     }
     fun openSettings(view: View){
@@ -85,27 +86,36 @@ class MainActivity : AppCompatActivity() {
 
             val database = Firebase.database("https://calendar-predict-default-rtdb.europe-west1.firebasedatabase.app/")
             userRef = database.getReference("users/" + (Firebase.auth.currentUser!!.email?.replace('.', ' ') ?: 0))
+            userRef.child("friends")
+            userRef.child("messages").child("0").setValue("0")
+
             auth = FirebaseAuth.getInstance()
-            Toast.makeText(this, "Welcome " + user.displayName, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Witaj " + user.displayName, Toast.LENGTH_SHORT).show()
 
         } else {
-            Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Logowanie nie powiodło się", Toast.LENGTH_SHORT).show()
         }
     }
 
     fun signIn(view: android.view.View) {
-        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-
-        // Create and launch sign-in intent
-        val signInIntent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .build()
-        signInLauncher.launch(signInIntent)
+//        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+//
+//        // Create and launch sign-in intent
+//        val signInIntent = AuthUI.getInstance()
+//            .createSignInIntentBuilder()
+//            .setAvailableProviders(providers)
+//            .build()
+//        signInLauncher.launch(signInIntent)
     }
 
     companion object {
-        private lateinit var userRef: DatabaseReference
+        lateinit var userRef: DatabaseReference
+        fun isUserInitialised() = ::userRef.isInitialized
+//
+//        private fun signIn()
+//        {
+//
+//        }
 
         public fun getMyRef(): DatabaseReference
         {
