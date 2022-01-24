@@ -48,6 +48,22 @@ class FriendsListActivity : AppCompatActivity() {
         init()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        val myRef = MainActivity.getMyRef()
+
+        myRef.child("friends").get().addOnSuccessListener {
+            val list = mutableListOf<Friend>()
+            for (friend in it.children) {
+                list.add(Friend(friend.value.toString().replace(' ', '.')))
+            }
+            adapter.setData(list)
+        }.addOnFailureListener {
+            Toast.makeText(this, "Niepowodzenie: $it", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun init() {
         val rvTask = findViewById<View>(R.id.recyclerViewFriends) as RecyclerView
         val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
@@ -84,26 +100,26 @@ class FriendsListActivity : AppCompatActivity() {
 
         //delete me from friends friend list
         val myEmail = FirebaseAuth.getInstance().currentUser?.email
-        myRef.parent?.child(adapter.getFriend(view.id).name)?.child("friends")?.get()?.addOnSuccessListener {
+        myRef.parent?.child(adapter.getFriend(view.id - 1).name.replace('.', ' '))?.child("friends")?.get()?.addOnSuccessListener {
             for (friend in it.children) {
                 if (friend.value.toString().replace(' ', '.') == myEmail)
                 {
-                    myRef.parent?.child(adapter.getFriend(view.id).name)?.child("friends")?.child(friend.key!!)?.setValue(null)
+                    myRef.parent?.child(adapter.getFriend(view.id - 1).name.replace('.', ' '))?.child("friends")?.child(friend.key!!)?.setValue(null)
                 }
             }
             //delete messages to that friend
-            myRef.parent?.child(adapter.getFriend(view.id).name)?.child("messages")?.get()?.addOnSuccessListener {
+            myRef.parent?.child(adapter.getFriend(view.id - 1).name.replace('.', ' '))?.child("messages")?.get()?.addOnSuccessListener {
                 for (message in it.children) {
                     if (message.child("sender").value == myEmail)
                     {
-                        myRef.parent?.child(adapter.getFriend(view.id).name)?.child("messages")?.child(message.key!!)?.setValue(null)
+                        myRef.parent?.child(adapter.getFriend(view.id - 1).name.replace('.', ' '))?.child("messages")?.child(message.key!!)?.setValue(null)
                     }
                 }
 
                 //delete messages from that friend
                 myRef.child("messages").get().addOnSuccessListener {
                     for (message in it.children) {
-                        if (message.child("sender").value == adapter.getFriend(view.id).name) {
+                        if (message.child("sender").value == adapter.getFriend(view.id - 1).name) {
                             myRef.child("messages").child(message.key!!).setValue(null)
                         }
                     }
@@ -111,15 +127,16 @@ class FriendsListActivity : AppCompatActivity() {
                     //delete friend from my friend list
                     myRef.child("friends").get().addOnSuccessListener {
                         for (friend in it.children) {
-                            if (friend.value.toString().replace(' ', '.') == adapter.getFriend(view.id).name)
+                            if (friend.value.toString().replace(' ', '.') == adapter.getFriend(view.id - 1).name)
                             {
                                 myRef.child("friends").child(friend.key!!).setValue(null)
                             }
                         }
 
-
+                        Toast.makeText(this, "Usunięto z listy znajomych: " + adapter.getFriend(view.id - 1), Toast.LENGTH_LONG).show()
+                        adapter.deleteFriend(view.id - 1)
                     }.addOnFailureListener {
-                        Toast.makeText(this, "Usunięto z listy znajomych: " + adapter.getFriend(view.id), Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Niepowodzenie: $it", Toast.LENGTH_SHORT).show()
                     }
 
                 }.addOnFailureListener {

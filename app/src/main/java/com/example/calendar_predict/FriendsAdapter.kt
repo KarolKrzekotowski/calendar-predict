@@ -15,7 +15,7 @@ import java.time.LocalTime
 
 class FriendsAdapter : RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
     var context: Context? = null
-    private var friendsList = emptyList<Friend>()
+    private var friendsList = mutableListOf<Friend>()
 //    private lateinit var agregationList: Map<Int, Int>
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
@@ -33,13 +33,14 @@ class FriendsAdapter : RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(viewHolder: FriendsAdapter.ViewHolder, position: Int) {
+
         // Get the data model based on position
         val friend = friendsList[position]
         // Set item views based on your views and data model
         val title = viewHolder.friendNameTextView
         title.text = friend.name
 
-        viewHolder.deleteButton.id = position
+        viewHolder.deleteButton.id = position + 1
 
 //        viewHolder.itemView.setOnLongClickListener {
 //            Goals.showPopup(it, goal)
@@ -57,8 +58,12 @@ class FriendsAdapter : RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
         return friendsList[position]
     }
 
+    fun deleteFriend(position: Int) {
+        friendsList.remove(getFriend(position))
+        notifyDataSetChanged()
+    }
 
-    fun setData(friends: List<Friend>){
+    fun setData(friends: MutableList<Friend>){
         this.friendsList = friends
 //        this.agregationList = aggregated
 

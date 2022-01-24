@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -70,18 +71,18 @@ class PendingInvitesActivity: AppCompatActivity() {
             {
                 if (message.key != "0")
                 {
-                    if (message.child("type").value == "friend-invitation" && message.child("sender").value == adapter.getFriend(view.id).name)
+                    if (message.child("type").value == "friend-invitation" && message.child("sender").value == adapter.getFriend(view.id - 1).name)
                     {
                         myRef.child("messages").child(message.key!!).setValue(null)
                     }
                 }
             }
+            myRef.child("friends").push().setValue(adapter.getFriend(view.id - 1).name.replace('.', ' '))
+            myRef.parent?.child(adapter.getFriend(view.id - 1).name.replace('.', ' '))?.child("friends")?.push()?.setValue(FirebaseAuth.getInstance().currentUser?.email)
+
+            Toast.makeText(this, "Zaakceptowano zaproszenie od: " + adapter.getFriend(view.id - 1).name, Toast.LENGTH_SHORT).show()
+            adapter.deleteFriend(view.id - 1)
         }
-
-        myRef.child("friends").push().setValue(adapter.getFriend(view.id).name.replace('.', ' '))
-        myRef.parent?.child(adapter.getFriend(view.id).name.replace('.', ' '))?.child("friends")?.push()?.setValue(FirebaseAuth.getInstance().currentUser?.email)
-
-        Toast.makeText(this, "Zaakceptowano zaproszenie od: " + adapter.getFriend(view.id).name, Toast.LENGTH_SHORT).show()
     }
 
     fun cancelPending(view: View) {
@@ -91,14 +92,16 @@ class PendingInvitesActivity: AppCompatActivity() {
             {
                 if (message.key != "0")
                 {
-                    if (message.child("type").value == "friend-invitation" && message.child("sender").value == adapter.getFriend(view.id).name)
+                    if (message.child("type").value == "friend-invitation" && message.child("sender").value == adapter.getFriend(view.id - 1).name)
                     {
                         myRef.child("messages").child(message.key!!).setValue(null)
                     }
                 }
             }
-        }
 
-        Toast.makeText(this, "Odrzucono zaproszenie od: " + adapter.getFriend(view.id).name, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Odrzucono zaproszenie od: " + adapter.getFriend(view.id - 1).name, Toast.LENGTH_SHORT).show()
+
+            adapter.deleteFriend(view.id - 1)
+        }
     }
 }

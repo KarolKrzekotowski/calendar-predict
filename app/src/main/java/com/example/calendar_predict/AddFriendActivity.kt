@@ -16,8 +16,11 @@ class AddFriendActivity : AppCompatActivity() {
     fun sendFriendInvitation(view: android.view.View) {
         val myRef = MainActivity.getMyRef()
 
-        val email = findViewById<EditText>(R.id.editTextTextEmailAddress).text.replace(Regex("\\."), " ")
-        if (email != FirebaseAuth.getInstance().currentUser?.email ?: 0) {
+
+        if (findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString() != FirebaseAuth.getInstance().currentUser?.email ?: 0) {
+
+            val email = findViewById<EditText>(R.id.editTextTextEmailAddress).text.replace(Regex("\\."), " ")
+
             myRef.parent?.child(email)
                 ?.get()
                 ?.addOnSuccessListener {

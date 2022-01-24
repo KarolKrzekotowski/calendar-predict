@@ -119,6 +119,7 @@ class MainActivity : AppCompatActivity() {
 
         public fun getMyRef(): DatabaseReference
         {
+
             return userRef
         }
     }
