@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "aebcbe06024a8fc1465ba052b2491fab",
+    "identityHash": "0ed7db582b2b874ee8a6b77edbc4af45",
     "entities": [
       {
         "tableName": "activity_table",
@@ -126,7 +126,7 @@
       },
       {
         "tableName": "objective_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `category_id` INTEGER NOT NULL, `date_from` INTEGER NOT NULL, `date_to` INTEGER NOT NULL, `kind` TEXT NOT NULL, `targetAmount` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `category_id` INTEGER NOT NULL, `date_from` INTEGER NOT NULL, `date_to` INTEGER, `kind` TEXT NOT NULL, `targetAmount` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -150,7 +150,7 @@
             "fieldPath": "date_to",
             "columnName": "date_to",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "kind",
@@ -210,7 +210,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aebcbe06024a8fc1465ba052b2491fab')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0ed7db582b2b874ee8a6b77edbc4af45')"
     ]
   }
 }

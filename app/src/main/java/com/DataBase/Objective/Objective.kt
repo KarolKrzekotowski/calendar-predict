@@ -14,7 +14,7 @@ data class Objective(
     val id: Int,
     var category_id: Int,
     var date_from : Date,
-    var date_to : Date,
+    var date_to : Date?,
     var kind : String,
     var targetAmount: Int
 ): Parcelable
