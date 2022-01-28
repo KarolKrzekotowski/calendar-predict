@@ -54,6 +54,9 @@
             android:name=".googleCalendar.UpdateGoogleCalendarActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity android:name=".activityInvitation.InviteToActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"

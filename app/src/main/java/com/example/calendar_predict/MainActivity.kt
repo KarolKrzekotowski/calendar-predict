@@ -3,6 +3,7 @@ package com.example.calendar_predict
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TableLayout
 import android.widget.Toast
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
+        Log.i("kod", result.toString())
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
             user = FirebaseAuth.getInstance().currentUser!!

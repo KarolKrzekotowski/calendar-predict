@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.DataBase.Activity.ActivityWithCategory
 import com.DataBase.Day.DayViewModel
+import com.example.calendar_predict.activityInvitation.InviteToActivity
 import com.example.calendar_predict.dzien.AddDayActivity
 import com.example.calendar_predict.dzien.DayClass
 import com.example.calendar_predict.dzien.EditDay
@@ -96,6 +97,11 @@ class DayAddedActivitiyFragment(var dayViewModel: DayViewModel, val calendarchec
                         editintent.putExtra("activity",activityWithCategory )
                         ContextCompat.startActivity(instance.requireContext(), editintent, null)
 
+                    }
+                    R.id.zapros ->{
+                        val intentInvite = Intent(instance.requireContext(), InviteToActivity::class.java)
+                        intentInvite.putExtra("activity",activityWithCategory)
+                        ContextCompat.startActivity(instance.requireContext(),intentInvite,null)
                     }
                 }
                 true

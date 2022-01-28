@@ -7,5 +7,7 @@
             />
         <item android:id="@+id/usun_aktywność"
             android:title="usuń aktywność" />
+        <item android:id = "@+id/zapros"
+                android:title = "zaproś" />
 
 </menu>

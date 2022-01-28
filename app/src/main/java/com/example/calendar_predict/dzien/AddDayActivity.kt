@@ -1,6 +1,8 @@
 package com.example.calendar_predict.dzien
 
+import android.app.Activity.RESULT_OK
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,10 +19,12 @@ import com.DataBase.Day.DayViewModel
 import com.DataBase.Day.DayViewModelFactory
 import com.example.calendar_predict.GoalsCategorySpinner
 import com.example.calendar_predict.GoalsCategorySpinnerAdapter
+import com.example.calendar_predict.MainActivity
 
 
 import com.example.calendar_predict.R
 import kotlinx.android.synthetic.main.add_activity.*
+import java.lang.Thread.sleep
 import java.util.Calendar
 
 
@@ -50,8 +54,14 @@ class AddDayActivity: AppCompatActivity() {
     var dateConflict = false
     lateinit var dayViewModel:DayViewModel
     private var DayEditActivitiesList = emptyList<ActivityWithCategory>()
-
+    var FriendCalendarFrom = Calendar.getInstance()
+    var FriendCalendarTo = Calendar.getInstance()
+    var FriendFrom :String ?= null
+    var FriendTo :String ?= null
+    var FriendActivity :String?= null
     var calendar = Calendar.getInstance()
+    var Friend = false
+    var InviteTime: String ?= null
     ///////////////////////////////////////////////////////
     private var spinnerList: MutableList<GoalsCategorySpinner> = mutableListOf()
 
@@ -71,7 +81,11 @@ class AddDayActivity: AppCompatActivity() {
             day = datereceived?.getString("day")
             month = datereceived?.getString("month")
             aktywnosc = datereceived?.getParcelable("activity")
+            FriendFrom = datereceived?.getString("calendar1")
+            FriendTo = datereceived?.getString("calendar2")
+            FriendActivity = datereceived?.getString("nameofactivity")
             together = (day+" "+(month?.toInt()?.plus(1)).toString())
+            InviteTime = datereceived.getString("sentTime")
             if(aktywnosc!=null) {
 
                 editMode = true
@@ -98,6 +112,34 @@ class AddDayActivity: AppCompatActivity() {
                 hour2 = godzina2
                 minute = minuta1
                 minute2 = minuta2
+            }
+
+            else if (FriendFrom != null && FriendTo != null){
+                Friend =true
+
+                calendarFrom2.timeInMillis = FriendFrom!!.toLong()
+                godzina1 = calendarFrom2[Calendar.HOUR_OF_DAY]
+                minuta1 = calendarFrom2[Calendar.MINUTE]
+                day =calendarFrom2[Calendar.DAY_OF_MONTH].toString()
+                month = calendarFrom2[Calendar.MONTH].toString()
+
+                calendarTo2.timeInMillis = FriendTo!!.toLong()
+                godzina2 = calendarTo2[Calendar.HOUR_OF_DAY]
+                minuta2 = calendarTo2[Calendar.MINUTE]
+
+                start.setText(displayCorrectTime(godzina1, minuta1))
+                zakonczenie.setText((displayCorrectTime(godzina2, minuta2)))
+
+                nameofactivity.setText(FriendActivity)
+
+                calendardate.text =
+                    (calendarFrom2[Calendar.DAY_OF_MONTH].toString() + "  " + calendarFrom2[Calendar.MONTH].toString())
+                hour = godzina1
+                hour2 = godzina2
+                minute = minuta1
+                minute2 = minuta2
+
+
             }
             else{
                 calendardate.setText(together)
@@ -183,24 +225,21 @@ class AddDayActivity: AppCompatActivity() {
         return "$hourString:$minuteString"
     }
 
-    fun addActivity(view: View){
+    fun addActivity(view: View) {
         name = nameofactivity.text.toString()
         hour_from = start.text.toString()
         hour_to = zakonczenie.text.toString()
 //        category = mark.text.toString()
-        category =1.toString()
-        Log.i("od",hour.toString())
-        if (hour>hour2 || (hour==hour2 && minute> minute2)  ){
+        category = 1.toString()
+        Log.i("od", hour.toString())
+        if (hour > hour2 || (hour == hour2 && minute > minute2)) {
             Toast.makeText(this, "Błędne godziny ", Toast.LENGTH_SHORT).show()
 
-        }
-        else if(name ==""){
+        } else if (name == "") {
             Toast.makeText(this, "Brak nazwy ", Toast.LENGTH_SHORT).show()
-        }
-        else if(category==""){
+        } else if (category == "") {
             Toast.makeText(this, "Brak kategorii ", Toast.LENGTH_SHORT).show()
-        }
-        else {
+        } else {
 
 
             val calendarFrom = Calendar.getInstance()
@@ -220,77 +259,110 @@ class AddDayActivity: AppCompatActivity() {
             calendarTo[Calendar.MINUTE] = minute2.toInt()
             calendarTo[Calendar.SECOND] = 0
             calendarTo[Calendar.MILLISECOND] = 0
+            Log.d("Friend1", Friend.toString())
             if (editMode == false) {
 
                 var activity1 = Activity(
-                        0,
-                        dayUpdateViewModel.day.id,
-                        dayUpdateViewModel.allCategories[spinner.selectedItemPosition].id,
-                        calendarFrom.time,
-                        calendarTo.time,
-                        name!!
+                    0,
+                    dayUpdateViewModel.day.id,
+                    dayUpdateViewModel.allCategories[spinner.selectedItemPosition].id,
+                    calendarFrom.time,
+                    calendarTo.time,
+                    name!!
                 )
-                for(list in DayEditActivitiesList ) {
+                for (list in DayEditActivitiesList) {
                     if ((activity1.hour_from < list.activity.hour_from && activity1.hour_to <= list.activity.hour_from) ||
-                            (activity1.hour_from > list.activity.hour_from && activity1.hour_from >= list.activity.hour_to)) {
+                        (activity1.hour_from > list.activity.hour_from && activity1.hour_from >= list.activity.hour_to)
+                    ) {
                         continue
                     } else {
                         dateConflict = true
                         break
                     }
                 }
-                if (dateConflict){
-                    Toast.makeText(this,"Zmień plan i ponów dodanie aktywności1",Toast.LENGTH_SHORT).show()
-                    finish()
+
+                if (Friend == true) {
+                    if (dateConflict) {
+                        Toast.makeText(
+                            this,
+                            "Zmień plan i ponów dodanie aktywności2",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        finish()
+                    } else {
+
+
+
+                        dayUpdateViewModel.updateActivity(activity1)
+                        Log.i("Friend", Friend.toString())
+//                        val myRef = MainActivity.getMyRef()
+//                        myRef.child("invite").child(InviteTime!!).removeValue()
+
+
+
+
+                        finish()
+                    }
                 }
-                else{
-                    dayUpdateViewModel.addActivity(activity1)
-                    finish()
+                    if (dateConflict) {
+                        Toast.makeText(
+                            this,
+                            "Zmień plan i ponów dodanie aktywności1",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        finish()
+                    } else {
+                        dayUpdateViewModel.addActivity(activity1)
+                        finish()
+                    }
+
+
+                } else {
+                    var counterOfConflict = 0
+                    var activity2 = Activity(
+                        editId,
+                        dayUpdateViewModel.day.id,
+                        dayUpdateViewModel.allCategories[spinner.selectedItemPosition].id,
+                        calendarFrom.time,
+                        calendarTo.time,
+                        name!!
+                    )
+
+                    for (list in DayEditActivitiesList) {
+
+
+                        if ((activity2.hour_from < list.activity.hour_from && activity2.hour_to <= list.activity.hour_from) ||
+                            (activity2.hour_from > list.activity.hour_from && activity2.hour_from >= list.activity.hour_to)
+                        ) {
+                            continue
+
+                        } else if (activity2.id != list.activity.id) {
+                            dateConflict = true
+
+                        } else {
+                            counterOfConflict++
+
+                        }
+                    }
+
+
+                    if (dateConflict) {
+                        Toast.makeText(
+                            this,
+                            "Zmień plan i ponów dodanie aktywności2",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        finish()
+                    } else {
+                        dayUpdateViewModel.updateActivity(activity2)
+                        finish()
+                    }
+
+
                 }
-
-
-
 
 
             }
-            else{
-                var counterOfConflict = 0
-                var activity2 = Activity(editId,dayUpdateViewModel.day.id,dayUpdateViewModel.allCategories[spinner.selectedItemPosition].id,calendarFrom.time,calendarTo.time,name!!)
-
-                for(list in DayEditActivitiesList ) {
-
-
-                    if ((activity2.hour_from < list.activity.hour_from && activity2.hour_to <= list.activity.hour_from) ||
-                            (activity2.hour_from > list.activity.hour_from && activity2.hour_from >= list.activity.hour_to)){
-                        continue
-
-                    }
-                    else if (activity2.id!=list.activity.id){
-                        dateConflict=true
-
-                    }else
-                    {
-                        counterOfConflict++
-
-                    }
-                }
-                if (dateConflict){
-                    Toast.makeText(this,"Zmień plan i ponów dodanie aktywności2",Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                else{
-                    dayUpdateViewModel.updateActivity(activity2)
-                    finish()
-                }
-
-
-
-
-            }
-
-
-
-
         }
     }
-}
