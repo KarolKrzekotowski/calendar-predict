@@ -81,6 +81,8 @@ class EditDay: AppCompatActivity() {
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Długoterminowe"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Sugestie"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Zaproszenia"))
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Zaakceptowane"))
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Odrzucone"))
         tabLayout!!.tabMode = TabLayout.MODE_AUTO
 
         var viewModel: ObjectiveListViewModel? = Goals.getViewmodel()

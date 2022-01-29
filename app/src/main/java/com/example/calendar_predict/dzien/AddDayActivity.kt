@@ -2,6 +2,7 @@ package com.example.calendar_predict.dzien
 
 import android.app.Activity.RESULT_OK
 import android.app.TimePickerDialog
+import android.app.appsearch.AppSearchResult.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,8 @@ import com.example.calendar_predict.MainActivity
 
 
 import com.example.calendar_predict.R
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.add_activity.*
 import java.lang.Thread.sleep
 import java.util.Calendar
@@ -62,6 +65,7 @@ class AddDayActivity: AppCompatActivity() {
     var calendar = Calendar.getInstance()
     var Friend = false
     var InviteTime: String ?= null
+    var FriendName : String ?=null
     ///////////////////////////////////////////////////////
     private var spinnerList: MutableList<GoalsCategorySpinner> = mutableListOf()
 
@@ -85,7 +89,8 @@ class AddDayActivity: AppCompatActivity() {
             FriendTo = datereceived?.getString("calendar2")
             FriendActivity = datereceived?.getString("nameofactivity")
             together = (day+" "+(month?.toInt()?.plus(1)).toString())
-            InviteTime = datereceived.getString("sentTime")
+            InviteTime = datereceived?.getString("sentTime")
+            FriendName = datereceived?.getString("FriendName")
             if(aktywnosc!=null) {
 
                 editMode = true
@@ -288,21 +293,36 @@ class AddDayActivity: AppCompatActivity() {
                             "Zmień plan i ponów dodanie aktywności2",
                             Toast.LENGTH_SHORT
                         ).show()
-
+                        val myintent = Intent()
+                        val success = false
+                        myintent.putExtra("success", success)
+                        setResult(RESULT_OK, myintent)
                         finish()
+
                     } else {
 
 
 
                         dayUpdateViewModel.updateActivity(activity1)
                         Log.i("Friend", Friend.toString())
-//                        val myRef = MainActivity.getMyRef()
+                        val myRef = MainActivity.getMyRef()
+                        val firedatabase = Firebase.database("https://calendar-predict-default-rtdb.europe-west1.firebasedatabase.app/")
+                        val friendRef  = firedatabase.getReference("users")
+                        val friendEmail = FriendName.toString()
+                        val fireFriendEmail = friendEmail.replace('.',' ')
 //                        myRef.child("invite").child(InviteTime!!).removeValue()
 
+                        friendRef.child(fireFriendEmail).child("Positive").child(InviteTime.toString()).child("name").setValue(name)
+                        friendRef.child(fireFriendEmail).child("Positive").child(InviteTime.toString()).child("Friend").setValue(FriendName)
+                        friendRef.child(fireFriendEmail).child("Positive").child(InviteTime.toString()).child("Sent").setValue(InviteTime.toString())
 
-
-
+                        val myintent = Intent()
+                        val success = true
+                        myintent.putExtra("success", success)
+                        setResult(RESULT_OK, myintent)
+                        Log.i("WYNIK1", myintent.toString())
                         finish()
+
                     }
                 }
                     if (dateConflict) {
@@ -313,6 +333,7 @@ class AddDayActivity: AppCompatActivity() {
                         ).show()
                         finish()
                     } else {
+
                         dayUpdateViewModel.addActivity(activity1)
                         finish()
                     }

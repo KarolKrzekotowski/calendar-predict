@@ -7,7 +7,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.DataBase.Category.Category
 import com.DataBase.Day.DayViewModel
 import com.DataBase.Objective.ObjectiveListViewModel
+import com.example.calendar_predict.activityInvitation.Accepted
 import com.example.calendar_predict.activityInvitation.ActivityInvitationFragment
+import com.example.calendar_predict.activityInvitation.Rejected
 import java.util.*
 
 @Suppress("DEPRECATION")
@@ -36,6 +38,12 @@ internal class DayActivityPagerAdapter (
             }
             4 -> {
                 ActivityInvitationFragment()
+            }
+            5 -> {
+               Accepted()
+            }
+            6 -> {
+                Rejected()
             }
 
             else -> getItem(position)
