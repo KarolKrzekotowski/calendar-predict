@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.DataBase.Objective.ObjectiveWithCategory
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.*
 
 class MyGoalLongtermRecyclerViewAdapter()  : RecyclerView.Adapter<MyGoalLongtermRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
@@ -92,7 +94,8 @@ class MyGoalLongtermRecyclerViewAdapter()  : RecyclerView.Adapter<MyGoalLongterm
         {
             if (int.objective.kind != GoalKind.DAY.string)
             {
-                tmp.add(int)
+                if(int.objective.date_to == null || (int.objective.date_to != null && int.objective.date_to!! > Date.from(Instant.now())))
+                    tmp.add(int)
             }
         }
         this.goalList = tmp

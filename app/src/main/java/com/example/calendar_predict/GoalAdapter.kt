@@ -3,18 +3,21 @@ package com.example.calendar_predict
 import android.app.Application
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.DataBase.Objective.ObjectiveWithCategory
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.*
 
 class GoalAdapter(val application: Application)  : RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
     var context: Context? = null
-    private var goalList = emptyList<ObjectiveWithCategory>()
+    private var goalList = mutableListOf<ObjectiveWithCategory>()
     private lateinit var agregationList: Map<Int, Int>
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
@@ -91,8 +94,18 @@ class GoalAdapter(val application: Application)  : RecyclerView.Adapter<GoalAdap
     }
 
     fun setData(data: List<ObjectiveWithCategory>, aggregated: Map<Int, Int>){
-        this.goalList = data
+        this.goalList = mutableListOf()
         this.agregationList = aggregated
+
+        for (int in data)
+        {
+            if (int.objective.kind != GoalKind.DAY.string)
+            {
+                Log.i("Recyclker", "" + int.objective.date_to + Date.from(Instant.now()))
+//                if(int.objective.date_to == null || (int.objective.date_to != null && int.objective.date_to!! > Date.from(Instant.now())))
+                    this.goalList.add(int)
+            }
+        }
 
         notifyDataSetChanged()
     }

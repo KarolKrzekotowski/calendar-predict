@@ -153,8 +153,7 @@ class AddGoalActivity : AppCompatActivity() {
         if (editingMode) {
             if (finishDate == null) {
                 goal!!.objective.category_id = id
-                //TODO nullable date
-//                    goal!!.objective.date_to = null
+                goal!!.objective.date_to = null
                 goal!!.objective.kind = goalKind.string
                 goal!!.objective.targetAmount = amount
                 categoryViewModel.updateObjective(goal!!.objective)
@@ -168,8 +167,7 @@ class AddGoalActivity : AppCompatActivity() {
             }
         } else {
             if (finishDate == null) {
-                //TODO nullable date
-//                    categoryViewModel.addObjective(Objective(0, id, null, null, goalKind, amount))
+                categoryViewModel.addObjective(Objective(0, id, Date.from(Instant.now()), null, goalKind.string, amount))
             }
             else {
                 categoryViewModel.addObjective(Objective(0, id, Date.from(Instant.now()), finishDate!!, goalKind.string, amount))
