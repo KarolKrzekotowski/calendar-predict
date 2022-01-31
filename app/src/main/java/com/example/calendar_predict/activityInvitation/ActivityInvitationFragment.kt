@@ -49,10 +49,7 @@ class ActivityInvitationFragment : Fragment() {
             if (successfull ==true){
                 myRef.child(sentTime.toString()).removeValue()
             }
-//
-////            myRef.child("invite").child(calendar1).removeValue()
-//
-//        }
+
         }
     }
     override fun onCreateView(
@@ -76,7 +73,7 @@ class ActivityInvitationFragment : Fragment() {
 
 
 
-        Log.i("Read", ReadRef.toString())
+
         val options = FirebaseRecyclerOptions.Builder<Invitation>()
             .setQuery(
                 ReadRef,
@@ -84,7 +81,7 @@ class ActivityInvitationFragment : Fragment() {
             ).build()
         adapter = inviteAdapter(options)
         rvInvite?.adapter = adapter
-        Log.i("Read", adapter.toString())
+
 
         return layout
     }
@@ -120,24 +117,7 @@ class ActivityInvitationFragment : Fragment() {
             instance.sentTime = model.sentTime
             instance.launchSomeActivity.launch(intent)
 
-//        sleep(1000)
-//        val myRef = MainActivity.getMyRef()
-//        val myEmail = FirebaseAuth.getInstance().currentUser?.email
-//        val myFireEmail = myEmail.toString().replace(".", " ")
-//        val friendEmail = model.Friend
-//        val fireFriendEmail = friendEmail.replace('.',' ')
-//        val firedatabase = Firebase.database("https://calendar-predict-default-rtdb.europe-west1.firebasedatabase.app/")
-//        val friendRef  = firedatabase.getReference("users")
-//        val calendar1 = model.sentTime
-//
-//        val succesfull2 = instance.succesfull2
-//        Log.i("WEszlo?", succesfull2.toString())
-//        if (succesfull2){
-//
-////            myRef.child("invite").child(calendar1).removeValue()
-//
-//        }
-            //firebase
+
         }
 
 
@@ -167,36 +147,7 @@ class ActivityInvitationFragment : Fragment() {
     }
 
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        @Suppress("DEPRECATION")
-//        super.onActivityResult(requestCode, resultCode, data)
-//        val successfull = data?.getStringExtra("successfull").toBoolean()
-//        Log.i("kurwa", "kurwa")
-//        if (successfull) {
-//            val myEmail = FirebaseAuth.getInstance().currentUser?.email
-//            val myFireEmail = myEmail.toString().replace(".", " ")
-//            val myRef = MainActivity.getMyRef()
-//            val firedatabase =
-//                Firebase.database("https://calendar-predict-default-rtdb.europe-west1.firebasedatabase.app/")
-//            val friendRef = firedatabase.getReference("users")
-//            val friendEmail = ActivityInvitationFragment.FriendName.toString()
-//            val fireFriendEmail = friendEmail.replace('.', ' ')
-//            myRef.child("invite").child(ActivityInvitationFragment.calendar1!!).removeValue()
-//            friendRef.child(fireFriendEmail).child("Positive")
-//                .child(ActivityInvitationFragment.calendar1!!).child("name").setValue(
-//                ActivityInvitationFragment.name
-//            )
-//            friendRef.child(fireFriendEmail).child("Positive")
-//                .child(ActivityInvitationFragment.calendar1.toString()).child("Friend")
-//                .setValue(myFireEmail)
-//            friendRef.child(fireFriendEmail).child("Positive")
-//                .child(ActivityInvitationFragment.calendar1.toString()).child("Sent").setValue(
-//                ActivityInvitationFragment.calendar1.toString()
-//            )
-//
-//        }
-//
-//    }
+
 
 }
 

@@ -37,12 +37,12 @@ class Rejected : Fragment() {
         decoration.setDrawable(ColorDrawable(Color.WHITE))
         rvRejected?.addItemDecoration(decoration)
 
-//friendRef.child(fireFriendEmail).child("Positive").child(InviteTime.toString()).child("name").setValue(name)
+
         rvRejected?.layoutManager = LinearLayoutManager(context)
 
 
 
-        Log.i("Read", ReadRef.toString())
+
         val options = FirebaseRecyclerOptions.Builder<InviteChoice>()
             .setQuery(
                 ReadRef,
@@ -50,7 +50,7 @@ class Rejected : Fragment() {
             ).build()
         adapter = RejectedAdapter(options)
         rvRejected?.adapter = adapter
-        Log.i("Read", adapter.toString())
+
 
         return layout
     }

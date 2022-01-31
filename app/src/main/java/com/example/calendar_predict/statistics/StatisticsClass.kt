@@ -87,7 +87,7 @@ class StatisticsClass : Fragment() {
         initPieChart()
         initPieChart2()
 
-        Log.i("tutajjse1",calendar1.timeInMillis.toString())
+
         calendar1[Calendar.HOUR_OF_DAY] = 0
         calendar1[Calendar.MINUTE] = 0
         calendar1[Calendar.SECOND] = 0
@@ -150,7 +150,7 @@ class StatisticsClass : Fragment() {
 
                         for(list in ActivitiesBeofre7){
 
-                                Log.i("siema",list.category_id.toString())
+
                             //                Sport+=1
                                 when(list.category_id) {
                                     3 -> {
@@ -233,7 +233,7 @@ class StatisticsClass : Fragment() {
 
                         for(list in ActivitiesBeofre30){
 
-                            Log.i("siema",list.category_id.toString())
+
                             //                Sport+=1
                             when(list.category_id) {
                                 3 -> {
@@ -320,7 +320,7 @@ class StatisticsClass : Fragment() {
 
                         for(list in ActivitiesBeofre6){
 
-                            Log.i("siema",list.category_id.toString())
+
                             //                Sport+=1
                             when(list.category_id) {
                                 3 -> {

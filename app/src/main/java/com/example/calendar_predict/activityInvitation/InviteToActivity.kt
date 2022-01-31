@@ -50,7 +50,7 @@ class InviteToActivity : AppCompatActivity() {
         val datarecived = intent.extras
         if( datarecived != null){
             //
-            Log.i("weszlo", "weszlo")
+
             aktywność = datarecived?.getParcelable("activity")
             name = aktywność!!.activity.name
             calendar1.time = aktywność!!.activity.hour_from

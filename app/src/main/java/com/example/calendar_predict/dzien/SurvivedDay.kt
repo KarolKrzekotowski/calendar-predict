@@ -60,8 +60,7 @@ class SurvivedDay : AppCompatActivity() {
         val factory = DayViewModelFactory(application, calendar.time)
         dayViewModel = ViewModelProvider(this, factory).get(DayViewModel::class.java)
 
-        dayViewModel.dayWithActivities.observe(this,{it->
-            //Log.e("1234456780", it.activityWithCategory)
+        dayViewModel.dayWithActivities.observe(this,{it ->
             if (it != null) {
                 adapter.setData(it.activityWithCategory.sortedBy { it.activity.hour_from })
             }

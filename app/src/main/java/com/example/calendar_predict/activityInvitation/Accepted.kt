@@ -43,7 +43,7 @@ class Accepted : Fragment() {
 
 
 
-        Log.i("Read", ReadRef.toString())
+
         val options = FirebaseRecyclerOptions.Builder<InviteChoice>()
             .setQuery(
                 ReadRef,
@@ -51,7 +51,7 @@ class Accepted : Fragment() {
             ).build()
         adapter = AcceptedAdapter(options)
         rvAccepted?.adapter = adapter
-        Log.i("Read", adapter.toString())
+
 
         return layout
     }

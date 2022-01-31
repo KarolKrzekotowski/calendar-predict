@@ -122,7 +122,7 @@ class DayClass : Fragment() {
             val factory = DayViewModelFactory(instance.requireActivity().application, instance.calendar.time)
             instance.dayViewModel = ViewModelProvider(instance, factory).get(DayViewModel::class.java)
 
-            Log.i("calendar", "moja data " + instance.calendar.time)
+
             DayAddedActivitiyFragment.setModel(instance.dayViewModel)
             return instance.dayViewModel
         }

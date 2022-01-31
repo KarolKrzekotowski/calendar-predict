@@ -117,6 +117,7 @@ class AddDayActivity: AppCompatActivity() {
                 hour2 = godzina2
                 minute = minuta1
                 minute2 = minuta2
+                calendar.time = calendarFrom2.time
             }
 
             else if (FriendFrom != null && FriendTo != null){
@@ -143,7 +144,7 @@ class AddDayActivity: AppCompatActivity() {
                 hour2 = godzina2
                 minute = minuta1
                 minute2 = minuta2
-
+                calendar.time = calendarFrom2.time
 
             }
             else{
@@ -156,7 +157,7 @@ class AddDayActivity: AppCompatActivity() {
             calendar[Calendar.MINUTE] = 0
             calendar[Calendar.SECOND] = 0
             calendar[Calendar.MILLISECOND] = 0
-            Log.i("tutaj","jestem")
+
             val factory = DayUpdateViewModelFactory(application, calendar.time)
             dayUpdateViewModel = ViewModelProvider(this, factory).get(DayUpdateViewModel::class.java)
 
@@ -236,7 +237,7 @@ class AddDayActivity: AppCompatActivity() {
         hour_to = zakonczenie.text.toString()
 //        category = mark.text.toString()
         category = 1.toString()
-        Log.i("od", hour.toString())
+
         if (hour > hour2 || (hour == hour2 && minute > minute2)) {
             Toast.makeText(this, "Błędne godziny ", Toast.LENGTH_SHORT).show()
 
@@ -264,7 +265,7 @@ class AddDayActivity: AppCompatActivity() {
             calendarTo[Calendar.MINUTE] = minute2.toInt()
             calendarTo[Calendar.SECOND] = 0
             calendarTo[Calendar.MILLISECOND] = 0
-            Log.d("Friend1", Friend.toString())
+
             if (editMode == false) {
 
                 var activity1 = Activity(
@@ -304,7 +305,7 @@ class AddDayActivity: AppCompatActivity() {
 
 
                         dayUpdateViewModel.updateActivity(activity1)
-                        Log.i("Friend", Friend.toString())
+
                         val myRef = MainActivity.getMyRef()
                         val firedatabase = Firebase.database("https://calendar-predict-default-rtdb.europe-west1.firebasedatabase.app/")
                         val friendRef  = firedatabase.getReference("users")
@@ -320,7 +321,7 @@ class AddDayActivity: AppCompatActivity() {
                         val success = true
                         myintent.putExtra("success", success)
                         setResult(RESULT_OK, myintent)
-                        Log.i("WYNIK1", myintent.toString())
+
                         finish()
 
                     }

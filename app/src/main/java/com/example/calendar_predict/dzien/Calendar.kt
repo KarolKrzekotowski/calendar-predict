@@ -44,7 +44,7 @@ class Calendar :Fragment() {
             year = myear.toString()
             month = mmonth
             dayOfMonth = mdayOfMonth.toString()
-            Log.i("halo",mdayOfMonth.toString())
+
             calendar[Calendar.DAY_OF_MONTH] = dayOfMonth.toInt()
             calendar[Calendar.MONTH] = month.toInt()
             calendar[Calendar.YEAR] = year.toInt()
@@ -60,8 +60,7 @@ class Calendar :Fragment() {
                 myDays = data
             })
 
-            Log.i("evaluacja", dayOfMonth.toString()+month)
-            //Log.i("evaluacja", myDay.toString())
+
 
 
             var tempDay = myDays.filter {it.date == calendar.time}
@@ -82,7 +81,7 @@ class Calendar :Fragment() {
                 //intent.putExtra("month",(month+1).toString())
                 intent.putExtra("month", month.toString())
                 intent.putExtra("year", year.toString())
-                Log.i("dacisko",(dayOfMonth.toString() + month).toString())
+
                 startActivity(intent)
             }
 
