@@ -99,12 +99,8 @@ class GoalAdapter(val application: Application)  : RecyclerView.Adapter<GoalAdap
 
         for (int in data)
         {
-            if (int.objective.kind != GoalKind.DAY.string)
-            {
-                Log.i("Recyclker", "" + int.objective.date_to + Date.from(Instant.now()))
-//                if(int.objective.date_to == null || (int.objective.date_to != null && int.objective.date_to!! > Date.from(Instant.now())))
-                    this.goalList.add(int)
-            }
+            if(int.objective.date_to == null || (int.objective.date_to != null && int.objective.date_to!! > Date.from(Instant.now())))
+                this.goalList.add(int)
         }
 
         notifyDataSetChanged()
