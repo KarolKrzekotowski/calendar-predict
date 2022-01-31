@@ -49,6 +49,10 @@ interface AppDBDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addActivity(activity: Activity)
 
+    //Activity
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addActivityT(activity: Activity)
+
     @Update
     suspend fun updateActivity(activity: Activity)
 
@@ -87,6 +91,10 @@ interface AppDBDao {
     @Transaction
     @Query("select * from day_table")
     fun readAllDays():LiveData<List<Day>>
+
+    @Transaction
+    @Query("select * from day_table")
+    fun readAllDaysT():List<Day>
 
 //Rating
 
