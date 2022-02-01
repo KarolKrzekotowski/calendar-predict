@@ -42,8 +42,16 @@ class GoalAdapter(val application: Application)  : RecyclerView.Adapter<GoalAdap
         title.text = goal.category.name
         val amount = viewHolder.amountDoneTextView
 
-        amount.text = "" + agregationList[goal.category.id] + " / " + goal.objective.targetAmount
-        if (15 < goal.objective.targetAmount) {
+        amount.text = ""
+        if (agregationList[goal.category.id] != null) {
+            amount.text = amount.text.toString() + agregationList[goal.category.id]
+        }
+        else {
+            amount.text = amount.text.toString() + "0"
+        }
+        amount.text = amount.text.toString() + " / " + goal.objective.targetAmount
+
+        if (agregationList[goal.category.id] == null || agregationList[goal.category.id]!! < goal.objective.targetAmount) {
             amount.setTextColor(Color.RED)
         }
         else {

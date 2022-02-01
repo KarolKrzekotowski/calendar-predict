@@ -41,10 +41,18 @@ class MyGoalAlgorithmRecyclerViewAdapter(val categories: List<Category>)  : Recy
         // Set item views based on your views and data model
         val title = viewHolder.goalNameTextView
         title.text = goal.category.name
-        val amount = viewHolder.amountDoneTextView
-        amount.text = "" + aggregated[goal.category.id] + " / " + goal.objective.targetAmount
 
-        if (15 < goal.objective.targetAmount) {
+        val amount = viewHolder.amountDoneTextView
+        amount.text = ""
+        if (aggregated[goal.category.id] != null) {
+            amount.text = amount.text.toString() + aggregated[goal.category.id]
+        }
+        else {
+            amount.text = amount.text.toString() + "0"
+        }
+        amount.text = amount.text.toString() + " / " + goal.objective.targetAmount
+
+        if (aggregated[goal.category.id] == null || aggregated[goal.category.id]!! < goal.objective.targetAmount) {
             amount.setTextColor(Color.RED)
         }
         else {
