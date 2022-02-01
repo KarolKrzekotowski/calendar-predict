@@ -21,34 +21,45 @@ class AddFriendActivity : AppCompatActivity() {
 
             val email = findViewById<EditText>(R.id.editTextTextEmailAddress).text.replace(Regex("\\."), " ")
 
-            myRef.parent?.child(email)
-                ?.get()
-                ?.addOnSuccessListener {
-                    Log.i("Firebasetest", it.value.toString() + " " + email + "op")
-                    for (category in it.children) {
-                        if (category.key.equals("messages")) {
-                            val invitation = mutableMapOf<String, String>()
-                            invitation.putIfAbsent("type", "friend-invitation")
-                            FirebaseAuth.getInstance().currentUser?.email?.let {
-                                invitation.putIfAbsent(
-                                    "sender",
-                                    it
-                                )
-                            }
-                            invitation.putIfAbsent("type", "friend-invitation")
-
-                            myRef.parent?.child(email)!!.child("messages").push()
-                                .setValue(invitation)
-                            Toast.makeText(this, "Zaproszenie zostało wysłane", Toast.LENGTH_LONG).show()
-
-                            finish()
-                            return@addOnSuccessListener
-                        }
+            myRef.child("friends").get().addOnSuccessListener {
+                val list = mutableListOf<Friend>()
+                for (friend in it.children) {
+                    if (findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString() == friend.value.toString().replace(' ', '.'))
+                    {
+                        Toast.makeText(this, "Ten użytkownik jest już twoim znajomym!", Toast.LENGTH_LONG).show()
+                        return@addOnSuccessListener
                     }
-                    Toast.makeText(this, "Użytkownik nie istnieje", Toast.LENGTH_LONG).show()
-                }?.addOnFailureListener {
-                    Toast.makeText(this, "Niepowodzenie: $it", Toast.LENGTH_SHORT).show()
                 }
+
+                myRef.parent?.child(email)
+                    ?.get()
+                    ?.addOnSuccessListener {
+                        Log.i("Firebasetest", it.value.toString() + " " + email + "op")
+                        for (category in it.children) {
+                            if (category.key.equals("messages")) {
+                                val invitation = mutableMapOf<String, String>()
+                                invitation.putIfAbsent("type", "friend-invitation")
+                                FirebaseAuth.getInstance().currentUser?.email?.let {
+                                    invitation.putIfAbsent(
+                                        "sender",
+                                        it
+                                    )
+                                }
+                                invitation.putIfAbsent("type", "friend-invitation")
+
+                                myRef.parent?.child(email)!!.child("messages").push()
+                                    .setValue(invitation)
+                                Toast.makeText(this, "Zaproszenie zostało wysłane", Toast.LENGTH_LONG).show()
+
+                                finish()
+                                return@addOnSuccessListener
+                            }
+                        }
+                        Toast.makeText(this, "Użytkownik nie istnieje", Toast.LENGTH_LONG).show()
+                    }?.addOnFailureListener {
+                        Toast.makeText(this, "Niepowodzenie: $it", Toast.LENGTH_SHORT).show()
+                    }
+            }
         }
         else
         {
